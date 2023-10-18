@@ -1,4 +1,4 @@
-import { verifyInteractionRequest } from "@/discord/verify-incoming-request";
+import { verifyInteractionRequest } from "@/services/discord/verify-incoming-request";
 import {
   InteractionResponseType,
   InteractionType,
