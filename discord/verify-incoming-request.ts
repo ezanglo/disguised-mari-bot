@@ -1,10 +1,11 @@
 import {
-  APIChatInputApplicationCommandInteraction,
-  APIPingInteraction,
-  APIApplicationCommandAutocompleteInteraction,
   APIInteraction,
+  APIInteractionResponse,
+  APIApplicationCommandAutocompleteInteraction as AutocompleteInteraction,
+  APIApplicationCommandInteraction as CommandInteraction,
 } from "discord-api-types/v10";
 import nacl from "tweetnacl";
+import { autocomplete, reply } from "./interaction";
 
 type VerifyWithNaclArgs = {
   appPublicKey: string;
@@ -30,7 +31,14 @@ type VerifyDiscordRequestResult =
   | { isValid: false }
   | {
       isValid: true;
-      interaction: APIInteraction;
+      interaction: APIInteraction & {
+        reply: (
+          interaction: CommandInteraction
+        ) => Promise<APIInteractionResponse>;
+        autocomplete: (
+          interaction: AutocompleteInteraction
+        ) => Promise<APIInteractionResponse>;
+      };
     };
 
 /**
@@ -57,8 +65,14 @@ export async function verifyInteractionRequest(
     return { isValid: false };
   }
 
+  const interaction = JSON.parse(rawBody) as APIInteraction;
+
   return {
-    interaction: JSON.parse(rawBody),
+    interaction: {
+      ...interaction,
+      reply: () => reply(interaction as CommandInteraction),
+      autocomplete: () => autocomplete(interaction as AutocompleteInteraction),
+    },
     isValid: true,
   };
 }

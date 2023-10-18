@@ -1,6 +1,4 @@
 import { verifyInteractionRequest } from "@/discord/verify-incoming-request";
-import { getAutoCompleteChoices } from "@/lib/autocomplete";
-import { executeCommand } from "@/lib/commands";
 import {
   InteractionResponseType,
   InteractionType,
@@ -33,22 +31,25 @@ export async function POST(request: Request) {
   }
   const { interaction } = verifyResult;
 
+  let response;
+
   switch (interaction.type) {
     case InteractionType.Ping:
-      return NextResponse.json({ type: InteractionResponseType.Pong });
+      response = {
+        type: InteractionResponseType.Pong,
+      };
+      break;
     case InteractionType.ApplicationCommand:
-      const commandResult = executeCommand(interaction);
-      if (commandResult) return NextResponse.json(commandResult);
+      response = await interaction.reply(interaction);
       break;
     case InteractionType.ApplicationCommandAutocomplete:
-      const autoCompleteResult = getAutoCompleteChoices(interaction);
-      if (autoCompleteResult) return NextResponse.json(autoCompleteResult);
+      response = await interaction.autocomplete(interaction);
       break;
   }
 
-  return new NextResponse("Unknown command", { status: 400 });
-}
+  if (response) {
+    return NextResponse.json(response);
+  }
 
-export async function GET() {
-  return NextResponse.json({ message: DISCORD_APP_PUBLIC_KEY });
+  return new NextResponse("Unknown command", { status: 400 });
 }

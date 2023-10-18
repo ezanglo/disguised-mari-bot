@@ -1,18 +1,26 @@
 import {
   ApplicationCommandType,
-  APIApplicationCommandInteraction,
   APIApplicationCommand,
   APIInteractionResponseChannelMessageWithSource as InteractionResponse,
+  APIApplicationCommandInteraction as CommandInteraction,
+  APIApplicationCommandAutocompleteInteraction as AutocompleteInteraction,
+  APIApplicationCommandAutocompleteResponse as AutocompleteResponse,
+  APIApplicationCommandOptionChoice,
 } from "discord-api-types/v10";
 
 export type Command = {
   data: APIApplicationCommand;
   execute: ExecuteCommand;
+  autocomplete: AutoCompleteOption;
 };
 
 export type ExecuteCommand = (
-  interaction: APIApplicationCommandInteraction
-) => InteractionResponse;
+  interaction: CommandInteraction
+) => Promise<InteractionResponse>;
+
+export type AutoCompleteOption = (
+  option?: string
+) => Promise<AutocompleteResponse>;
 
 export type CommandData = {
   name: string;
