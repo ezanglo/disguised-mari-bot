@@ -9,28 +9,29 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.38.1",
+    "@supabase/supabase-js": "^2.39.3",
+    "@tunnel/nextjs": "^0.0.11",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.0.0",
-    "discord-api-types": "^0.37.60",
-    "lucide-react": "^0.287.0",
-    "next": "13.5.5",
-    "react": "^18",
-    "react-dom": "^18",
-    "tailwind-merge": "^1.14.0",
+    "clsx": "^2.1.0",
+    "discord-api-types": "^0.37.67",
+    "lucide-react": "^0.321.0",
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10",
-    "eslint": "^8",
-    "eslint-config-next": "13.5.5",
-    "postcss": "^8",
-    "supabase": "^1.106.1",
-    "tailwindcss": "^3",
-    "typescript": "^5"
+    "@types/node": "^20.11.16",
+    "@types/react": "^18.2.52",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.1.0",
+    "postcss": "^8.4.33",
+    "supabase": "^1.136.3",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3"
   }
 }

@@ -52,9 +52,6 @@ export async function verifyInteractionRequest(
 ): Promise<VerifyDiscordRequestResult> {
   const signature = request.headers.get("x-signature-ed25519");
   const timestamp = request.headers.get("x-signature-timestamp");
-  if (typeof signature !== "string" || typeof timestamp !== "string") {
-    return { isValid: false };
-  }
 
   const rawBody = await request.text();
   const isValidRequest =
