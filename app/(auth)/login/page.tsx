@@ -1,3 +1,6 @@
+"use client";
+
+import { login } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -31,13 +34,16 @@ export default function LoginPage() {
 								Forgot your password?
 							</Link>
 						</div>
-						<Input id="password" type="password" required />
+						<Input id="password" type="password" required/>
 					</div>
 					<Button type="submit" className="w-full">
 						Login
 					</Button>
-					<Button variant="outline" className="w-full">
-						Login with Google
+					<Button
+						variant="outline" className="w-full"
+						onClick={() => login('discord')}
+					>
+						Login with Discord
 					</Button>
 				</div>
 				<div className="mt-4 text-center text-sm">
