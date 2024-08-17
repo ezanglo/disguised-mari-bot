@@ -1,5 +1,8 @@
+import { db } from "@/db/database";
+import { accounts, sessions, users, verificationTokens } from "@/db/schema/users";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth, { NextAuthConfig } from "next-auth"
-import Discord from "next-auth/providers/discord"
+import Discord from "next-auth/providers/discord";
 
 export const authConfig = {
 	providers: [Discord],
@@ -29,4 +32,13 @@ export const {
 	signIn,
 	signOut,
 	auth
-} = NextAuth(authConfig)
+} = NextAuth({
+	adapter: DrizzleAdapter(db, {
+		usersTable: users,
+		accountsTable: accounts as any,
+		sessionsTable: sessions,
+		verificationTokensTable: verificationTokens,
+	}),
+	session: { strategy: "jwt" },
+	...authConfig
+})
