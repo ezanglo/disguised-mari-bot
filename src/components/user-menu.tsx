@@ -12,12 +12,15 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { ROLES } from "@/constants/discord";
+import { ROUTES } from "@/constants/routes";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { LogOutIcon, SettingsIcon } from "lucide-react";
-import { User } from "next-auth";
+import { Session } from "next-auth";
+import Link from "next/link";
 
 type UserMenuProps = {
-	user: User
+	user: Session['user']
 }
 
 export function UserMenu({
@@ -28,7 +31,7 @@ export function UserMenu({
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost" className="hidden md:block">
 					<div className="flex flex-row gap-2 items-center">
-						<span>Welcome back, @{user.name}</span>
+						<span>Welcome back, {user.nick}</span>
 						<Avatar className="size-10 md:size-6">
 							<AvatarImage src={user.image || ''} alt={user.name || ''}/>
 						</Avatar>
@@ -45,10 +48,14 @@ export function UserMenu({
 					</div>
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator/>
-				<DropdownMenuItem>
-					<SettingsIcon className="size-4 mr-2"/>
-					Settings
-				</DropdownMenuItem>
+				{user.roles.includes(ROLES.ADMIN) && (
+					<DropdownMenuItem asChild>
+						<Link href={ROUTES.ADMIN.BASE}>
+							<SettingsIcon className="size-4 mr-2"/>
+							Admin
+						</Link>
+					</DropdownMenuItem>
+				)}
 				<DropdownMenuItem>
 					<InfoCircledIcon className="size-4 mr-2"/>
 					Support
