@@ -9,6 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "preview": "next build && next start",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node -r esbuild-register migrate.ts",
     "ui": "npx shadcn-ui@latest add"
   },
   "dependencies": {

@@ -1,4 +1,4 @@
-import { db } from "@/db/database";
+import { db } from "@/db";
 import { accounts, sessions, users, verificationTokens } from "@/db/schema/users";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth, { NextAuthConfig } from "next-auth"
