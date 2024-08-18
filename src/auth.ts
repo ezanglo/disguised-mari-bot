@@ -5,6 +5,7 @@ import NextAuth, { NextAuthConfig } from "next-auth"
 import Discord from "next-auth/providers/discord";
 
 export const authConfig = {
+	trustHost: true,
 	session: {
 		strategy: "jwt",
 		maxAge: 60 * 60 * 24 * 30,
