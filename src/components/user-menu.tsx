@@ -26,21 +26,14 @@ export function UserMenu({
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<div>
-					<Button variant="ghost" className="hidden md:block">
-						<div className="flex flex-row gap-2 items-center">
-							<span>Welcome back, @{user.name}</span>
-							<Avatar className="size-10 md:size-6">
-								<AvatarImage src={user.image || ''} alt={user.name || ''}/>
-							</Avatar>
-						</div>
-					</Button>
-					<Button variant="ghost" className="md:hidden rounded-full" size="icon">
-						<Avatar className="size-8">
+				<Button variant="ghost" className="hidden md:block">
+					<div className="flex flex-row gap-2 items-center">
+						<span>Welcome back, @{user.name}</span>
+						<Avatar className="size-10 md:size-6">
 							<AvatarImage src={user.image || ''} alt={user.name || ''}/>
 						</Avatar>
-					</Button>
-				</div>
+					</div>
+				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" className="min-w-52">
 				<DropdownMenuLabel className="flex flex-row gap-2 items-center">

@@ -3,12 +3,12 @@ import { auth } from "@/auth";
 // export const { auth: middleware } = NextAuth(authConfig)
 
 export default auth((req) => {
-	const isLoggedIn = !!req.auth
-	const isLandingPage = req.nextUrl.pathname === '/'
-
-	if(!isLoggedIn && !isLandingPage){
-		return Response.redirect(new URL('/', req.nextUrl))
-	}
+	// const isLoggedIn = !!req.auth
+	// const isLandingPage = req.nextUrl.pathname === '/'
+	//
+	// if(!isLoggedIn && !isLandingPage){
+	// 	return Response.redirect(new URL('/', req.nextUrl))
+	// }
 })
 
 
