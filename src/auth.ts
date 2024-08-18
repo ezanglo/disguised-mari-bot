@@ -39,6 +39,7 @@ export const {
 		sessionsTable: sessions,
 		verificationTokensTable: verificationTokens,
 	}),
+	secret: process.env.AUTH_SECRET,
 	session: { strategy: "jwt" },
 	...authConfig
 })
