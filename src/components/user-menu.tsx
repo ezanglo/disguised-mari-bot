@@ -1,7 +1,7 @@
 "use client";
 
 import { logout } from "@/actions/auth";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
@@ -20,30 +20,45 @@ import { Session } from "next-auth";
 import Link from "next/link";
 
 type UserMenuProps = {
-	user: Session['user']
+	user: Session['user'],
+	iconOnly?: boolean,
 }
 
 export function UserMenu({
-	user
+	user,
+	iconOnly = false
 }: UserMenuProps) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" className="hidden md:block">
-					<div className="flex flex-row gap-2 items-center">
-						<span>Welcome back, {user.nick}</span>
+				{iconOnly ? (
+					<Button variant="secondary" size="icon" className="rounded-full">
 						<Avatar className="size-10 md:size-6">
 							<AvatarImage src={user.image || ''} alt={user.name || ''}/>
+							<AvatarFallback>{user.name?.substring(2, 0)?.toUpperCase()}</AvatarFallback>
 						</Avatar>
-					</div>
-				</Button>
+					</Button>
+				): (
+					<Button variant="ghost">
+						<div className="flex flex-row gap-2 items-center">
+							<span>Welcome back, {user.nick}</span>
+							<Avatar className="size-10 md:size-6">
+								<AvatarImage src={user.image || ''} alt={user.name || ''}/>
+								<AvatarFallback>{user.name?.substring(2, 0)?.toUpperCase()}</AvatarFallback>
+							</Avatar>
+						</div>
+					</Button>
+				)}
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" className="min-w-52">
 				<DropdownMenuLabel className="flex flex-row gap-2 items-center">
 					<div className="flex flex-col space-y-1">
-						<p className="text-base font-medium leading-none">@{user?.name}</p>
+						<p className="text-base font-medium leading-none">Hey {user?.nick}!</p>
 						<p className="text-xs leading-none text-muted-foreground">
 							{user?.email}
+						</p>
+						<p className="text-xs leading-none text-muted-foreground">
+							@{user?.name}
 						</p>
 					</div>
 				</DropdownMenuLabel>

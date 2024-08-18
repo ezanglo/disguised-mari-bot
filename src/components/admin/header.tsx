@@ -1,7 +1,9 @@
 import { auth } from "@/auth";
 import { MobileSidebar } from "@/components/admin/mobile-sidebar";
-import { PageBreadcrumbs } from "@/components/page-breadcrumbs";
+import { NavLinks } from "@/components/admin/nav-links";
+import { Input } from "@/components/ui/input";
 import { UserMenu } from "@/components/user-menu";
+import { Search } from "lucide-react";
 import * as React from "react";
 
 export async function Header() {
@@ -10,12 +12,22 @@ export async function Header() {
 	const user = session?.user;
 	
 	return (
-		<header className="flex h-14 items-center gap-4 px-4 lg:h-[60px] lg:px-6 bg-muted/40">
+		<header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+			<NavLinks/>
 			<MobileSidebar/>
-			<div className="flex-1">
-				<PageBreadcrumbs/>
+			<div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+				<form className="ml-auto flex-1 sm:flex-initial">
+					<div className="relative">
+						<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"/>
+						<Input
+							type="search"
+							placeholder="Search products..."
+							className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
+						/>
+					</div>
+				</form>
+				{user && <UserMenu user={user} iconOnly/>}
 			</div>
-			{user && <UserMenu user={user}/>}
 		</header>
 	)
 }
