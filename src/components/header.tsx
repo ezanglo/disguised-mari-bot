@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { HeaderWrapper } from "@/components/header-wrapper";
 import { LoginButton } from "@/components/login-button";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,7 @@ export async function Header() {
 	const user = session?.user;
 	
 	return (
-		<header className="flex p-5 justify-between w-full">
+		<HeaderWrapper>
 			<div className="flex flex-row items-center gap-5 w-full">
 				<Avatar className="border-2 border-primary">
 					<AvatarImage src="/images/mari-icon.png" alt="mari" width={128} height={128}/>
@@ -29,6 +30,6 @@ export async function Header() {
 					<LoginButton/>
 				</div>
 			)}
-		</header>
+		</HeaderWrapper>
 	)
 }
