@@ -5,6 +5,7 @@ import NextAuth, { NextAuthConfig } from "next-auth"
 import Discord from "next-auth/providers/discord";
 
 export const authConfig = {
+	secret: process.env.AUTH_SECRET as string,
 	providers: [Discord],
 	callbacks: {
 		async session({session, user}) {
@@ -39,7 +40,5 @@ export const {
 		sessionsTable: sessions,
 		verificationTokensTable: verificationTokens,
 	}),
-	secret: process.env.AUTH_SECRET,
-	session: { strategy: "jwt" },
 	...authConfig
 })
