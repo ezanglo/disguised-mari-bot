@@ -1,5 +1,16 @@
+import { sql } from "drizzle-orm";
 import { integer, pgTable, primaryKey, text, timestamp, } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
+
+export const timestampColumns ={
+	createdAt: timestamp("created_at", {mode: "date"}).defaultNow(),
+	createdBy: text("created_by")
+.references(() => users.id, {onDelete: "set null"}),
+	updatedAt: timestamp('updated_at', {withTimezone: true, mode: 'string'}).defaultNow().notNull()
+.$onUpdate(() => sql`now()`),
+	updatedBy: text("updated_by")
+.references(() => users.id, {onDelete: "set null"}),
+}
 
 export const users = pgTable("user", {
 	id: text("id")
