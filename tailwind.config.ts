@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      transitionDuration: {
+        '5000': '5000ms',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -67,10 +70,30 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        shimmer: {
+          "0%, 90%, 100%": {
+            "background-position": "calc(-100% - var(--shimmer-width)) 0",
+          },
+          "30%, 60%": {
+            "background-position": "calc(100% + var(--shimmer-width)) 0",
+          },
+        },
+        'bounce': {
+          "0%, 100%": {
+            "transform": "translateY(-3%)",
+            "animation-timing-function": "cubic-bezier(0.8,0,1,1)"
+          },
+          "50%": {
+            "transform": "none",
+            "animation-timing-function": "cubic-bezier(0,0,0.2,1)"
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        shimmer: "shimmer 8s infinite",
+        "bounce-slow": "bounce 3s infinite",
       },
     },
   },
