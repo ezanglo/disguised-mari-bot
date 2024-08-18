@@ -1,7 +1,8 @@
 const BASE = '/';
 
 const ADMIN = {
-	BASE: '/admin'
+	BASE: '/admin',
+	TYPES: '/admin/types',
 }
 
 export const ROUTES = {
