@@ -44,7 +44,7 @@ export function ClassDialog({
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				{children ? children : (
-					<Button>{data ? 'Update': 'Add'}</Button>
+					<Button variant="outline">{data ? 'Update': 'Add'}</Button>
 				)}
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">

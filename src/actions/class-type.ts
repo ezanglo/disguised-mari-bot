@@ -51,7 +51,7 @@ export const insertClassType = async (payload: ClassFormSchema) => {
 		return result;
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TYPES);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }
 
@@ -97,7 +97,7 @@ export const updateClassType = async (payload: ClassFormSchema) => {
 		}).where(eq(classTypes.id, payload.id || '')).returning();
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TYPES);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }
 
@@ -122,6 +122,6 @@ export const deleteClassType = async (id: string) => {
 	}
 	
 	const response = await db.delete(classTypes).where(eq(classTypes.id, id)).returning();
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TYPES);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }

@@ -50,7 +50,7 @@ export const insertTierType = async (payload: TierFormSchema) => {
 		return result;
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TYPES);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }
 
@@ -96,7 +96,7 @@ export const updateTierType = async (payload: TierFormSchema) => {
 		}).where(eq(tierTypes.id, payload.id || '')).returning();
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TYPES);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }
 
@@ -121,6 +121,6 @@ export const deleteTierType = async (id: string) => {
 	}
 	
 	const response = await db.delete(tierTypes).where(eq(tierTypes.id, id)).returning();
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TYPES);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }

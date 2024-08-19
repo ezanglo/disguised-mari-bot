@@ -50,7 +50,7 @@ export const insertAttributeType = async (payload: AttributeFormSchema) => {
 		return result;
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TYPES);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }
 
@@ -96,7 +96,7 @@ export const updateAttributeType = async (payload: AttributeFormSchema) => {
 		}).where(eq(attributeTypes.id, payload.id || '')).returning();
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TYPES);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }
 
@@ -121,6 +121,6 @@ export const deleteAttributeType = async (id: string) => {
 	}
 	
 	const response = await db.delete(attributeTypes).where(eq(attributeTypes.id, id)).returning();
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TYPES);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }

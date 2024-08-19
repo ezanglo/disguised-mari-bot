@@ -7,9 +7,9 @@ import { usePathname } from "next/navigation";
 
 const links = [
 	{label: 'General', href: ROUTES.ADMIN.SETTINGS.BASE},
-	{label: 'Types', href: ROUTES.ADMIN.SETTINGS.TYPES},
 	{label: 'Traits', href: ROUTES.ADMIN.SETTINGS.TRAITS},
 	{label: 'Equips', href: ROUTES.ADMIN.SETTINGS.EQUIPS},
+	{label: 'Resources', href: ROUTES.ADMIN.SETTINGS.RESOURCES},
 ]
 
 export function SettingsSidebar() {
