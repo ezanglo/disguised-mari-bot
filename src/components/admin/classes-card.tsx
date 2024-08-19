@@ -1,19 +1,26 @@
+import { ClassDialog } from "@/components/admin/class-dialog";
+import { ClassesTable } from "@/components/admin/classes-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { db } from "@/db";
+import { classTypes } from "@/db/schema/types";
 
-export function ClassesCard() {
+export async function ClassesCard() {
+	
+	const result = await db.select().from(classTypes);
+	
 	return (
 		<Card>
-			<CardHeader>
-				<CardTitle>Classes</CardTitle>
-				<CardDescription>
-					Used to identify classes of Heroes, Pets and more.
-				</CardDescription>
+			<CardHeader className="flex flex-row justify-between items-center gap-2">
+				<div>
+					<CardTitle>Classes</CardTitle>
+					<CardDescription>
+						Used to identify classes of Heroes, Pets and more.
+					</CardDescription>
+				</div>
+				<ClassDialog/>
 			</CardHeader>
 			<CardContent>
-				<form>
-					<Input placeholder="Store Name"/>
-				</form>
+				<ClassesTable data={result}/>
 			</CardContent>
 		</Card>
 	)

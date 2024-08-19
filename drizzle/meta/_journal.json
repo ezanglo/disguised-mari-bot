@@ -15,6 +15,13 @@
       "when": 1724005726488,
       "tag": "0001_dazzling_valeria_richards",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1724026673822,
+      "tag": "0002_tan_solo",
+      "breakpoints": true
     }
   ]
 }

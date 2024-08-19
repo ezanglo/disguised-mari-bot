@@ -4,6 +4,7 @@ import { integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
 export const classTypes = pgTable("class_type", {
 	id: uuid("id").primaryKey().defaultRandom(),
 	name: text("name").notNull(),
+	color: text("color"),
 	image: text("image"),
 	discordEmote: text("discord_emote"),
 	order: integer("order"),
