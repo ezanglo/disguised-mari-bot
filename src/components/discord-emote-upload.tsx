@@ -24,24 +24,24 @@ export function DiscordEmoteUpload({
 	const [loading, setLoading] = useState(false);
 	
 	const handleUploader = async (name: string, image: string) => {
-		const response = await UploadDiscordEmote({
-			name,
-			image,
-		});
-		
-		if(response){
-			if('errors' in response){
-				response.errors.forEach((error) => {
-					toast.error(error.message)
-				})
-			}
-			else {
-				toast.error('Emoji has been uploaded')
+		try {
+			const response = await UploadDiscordEmote({
+				name,
+				image,
+			});
+			
+			if(response){
+				toast.success('Emoji has been uploaded')
 				const emoteUrl = `https://cdn.discordapp.com/emojis/${response.id}.webp?size=32&quality=lossless`
 				onUpload?.(emoteUrl)
 			}
 		}
-		setLoading(false);
+		catch(error){
+			toast.error((error as Error).message)
+		}
+		finally {
+			setLoading(false);
+		}
 	}
 	
 	return (

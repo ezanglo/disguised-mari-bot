@@ -35,9 +35,6 @@ export const insertAttributeType = async (payload: AttributeFormSchema) => {
 				image: payload.image,
 			})
 			if(image){
-				if('errors' in image){
-					throw new Error(image.errors[0].message)
-				}
 				const emoteUrl = `https://cdn.discordapp.com/emojis/${image.id}.webp?size=32&quality=lossless`
 				return trx.update(attributeTypes).set({
 					discordEmote: image.id,
@@ -82,9 +79,6 @@ export const updateAttributeType = async (payload: AttributeFormSchema) => {
 				image: payload.image,
 			})
 			if(image){
-				if('errors' in image){
-					throw new Error(image.errors[0].message)
-				}
 				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp?size=32&quality=lossless`;
 				payload.discordEmote = image.id;
 			}
