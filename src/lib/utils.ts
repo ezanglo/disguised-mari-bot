@@ -21,5 +21,5 @@ export function getDiscordApiErrors(error: RESTError) {
 }
 
 export function GetDiscordEmoteName(prefix: string, name: string, id: string){
-	return [prefix, name, id.split('-')[0]].join('_')
+	return [prefix, name.toLowerCase(), id.split('-')[0]].join('_')
 }

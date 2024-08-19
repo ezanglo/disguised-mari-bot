@@ -7,8 +7,8 @@ import { UpgradeTypesCard } from "@/components/admin/upgrade-types-card";
 export default function TypesPage() {
 	return (
 		<div className="grid gap-6">
-			<ClassesCard/>
 			<TiersCard/>
+			<ClassesCard/>
 			<AttributesCard/>
 			<UpgradeTypesCard/>
 			<SkillTypesCard/>

@@ -50,7 +50,7 @@ export function ClassesTable({
 							</div>
 						</TableCell>
 						<TableCell className="hidden sm:table-cell md:hidden lg:table-cell">
-							<ColorPicker value={item.color || ''} disabled/>
+							<ColorPicker value={item.color || ''} aria-readonly/>
 						</TableCell>
 						<TableCell className="hidden sm:table-cell md:hidden lg:table-cell">{item.discordEmote}</TableCell>
 						<TableCell className="text-right">
