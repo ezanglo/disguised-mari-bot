@@ -1,8 +1,8 @@
-import { AttributesCard } from "@/components/admin/attributes-card";
-import { ClassesCard } from "@/components/admin/classes-card";
-import { SkillTypesCard } from "@/components/admin/skill-types-card";
-import { TiersCard } from "@/components/admin/tiers-card";
-import { UpgradeTypesCard } from "@/components/admin/upgrade-types-card";
+import { AttributesCard } from "@/components/admin/settings/attributes-card";
+import { ClassesCard } from "@/components/admin/settings/classes-card";
+import { SkillTypesCard } from "@/components/admin/settings/skill-types-card";
+import { TiersCard } from "@/components/admin/settings/tiers-card";
+import { UpgradeTypesCard } from "@/components/admin/settings/upgrade-types-card";
 
 export default function TypesPage() {
 	return (

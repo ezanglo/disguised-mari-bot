@@ -1,7 +1,7 @@
 "use client";
 
 import { insertClassType, updateClassType } from "@/actions/class-type";
-import { ClassForm, ClassFormSchema } from "@/components/admin/class-form";
+import { ClassForm, ClassFormSchema } from "@/components/admin/settings/class-form";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { classTypes } from "@/db/schema/types";

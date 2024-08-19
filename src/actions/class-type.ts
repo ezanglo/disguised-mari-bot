@@ -2,7 +2,7 @@
 
 import { DeleteDiscordEmote, UploadDiscordEmote } from "@/actions/discord";
 import { auth } from "@/auth";
-import { ClassFormSchema } from "@/components/admin/class-form";
+import { ClassFormSchema } from "@/components/admin/settings/class-form";
 import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";

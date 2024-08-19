@@ -1,5 +1,5 @@
-import { ClassDialog } from "@/components/admin/class-dialog";
-import { ClassesTable } from "@/components/admin/classes-table";
+import { ClassDialog } from "@/components/admin/settings/class-dialog";
+import { ClassesTable } from "@/components/admin/settings/classes-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/db";
 import { classTypes } from "@/db/schema/types";

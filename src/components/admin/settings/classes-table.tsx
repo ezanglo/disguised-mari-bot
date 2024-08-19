@@ -1,7 +1,7 @@
 "use client";
 
 import { deleteClassType } from "@/actions/class-type";
-import { ClassDialog } from "@/components/admin/class-dialog";
+import { ClassDialog } from "@/components/admin/settings/class-dialog";
 import { ColorPicker } from "@/components/color-picker";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
