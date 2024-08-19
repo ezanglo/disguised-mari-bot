@@ -1,19 +1,26 @@
+import { AttributeDialog } from "@/components/admin/settings/attribute-dialog";
+import { AttributesTable } from "@/components/admin/settings/attributes-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { db } from "@/db";
+import { attributeTypes } from "@/db/schema";
 
-export function AttributesCard() {
+export async function AttributesCard() {
+	
+	const result = await db.select().from(attributeTypes);
+	
 	return (
 		<Card>
-			<CardHeader>
-				<CardTitle>Attributes</CardTitle>
-				<CardDescription>
-					Used to identify classes of Heroes, Pets and more.
-				</CardDescription>
+			<CardHeader className="flex flex-row justify-between items-center gap-2">
+				<div>
+					<CardTitle>Attributes</CardTitle>
+					<CardDescription>
+						Used to identify hero attributes.
+					</CardDescription>
+				</div>
+				<AttributeDialog/>
 			</CardHeader>
 			<CardContent>
-				<form>
-					<Input placeholder="Store Name"/>
-				</form>
+				<AttributesTable data={result}/>
 			</CardContent>
 		</Card>
 	)

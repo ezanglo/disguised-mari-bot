@@ -2,17 +2,17 @@
 
 import { DeleteDiscordEmote, UploadDiscordEmote } from "@/actions/discord";
 import { auth } from "@/auth";
-import { TierFormSchema } from "@/components/admin/settings/tier-form";
+import { AttributeFormSchema } from "@/components/admin/settings/attribute-form";
 import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
-import { tierTypes } from "@/db/schema/types";
+import { attributeTypes } from "@/db/schema/types";
 import { GetDiscordEmoteName } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 
-export const insertTierType = async (payload: TierFormSchema) => {
+export const insertAttributeType = async (payload: AttributeFormSchema) => {
 	const session = await auth();
 	const user = session?.user;
 	
@@ -21,14 +21,14 @@ export const insertTierType = async (payload: TierFormSchema) => {
 	}
 	
 	const response = await db.transaction(async (trx) => {
-		const result = await trx.insert(tierTypes).values({
+		const result = await trx.insert(attributeTypes).values({
 			name: payload.name,
 			createdBy: user.id,
 		}).returning().then((res) => res[0] ?? null);
 
 		if(payload.image){
 			
-			const emoteName = GetDiscordEmoteName('tier', payload.name, result.id);
+			const emoteName = GetDiscordEmoteName('attr', payload.name, result.id);
 			
 			const image = await UploadDiscordEmote({
 				name: emoteName,
@@ -39,11 +39,11 @@ export const insertTierType = async (payload: TierFormSchema) => {
 					throw new Error(image.errors[0].message)
 				}
 				const emoteUrl = `https://cdn.discordapp.com/emojis/${image.id}.webp?size=32&quality=lossless`
-				return trx.update(tierTypes).set({
+				return trx.update(attributeTypes).set({
 					discordEmote: image.id,
 					image: emoteUrl,
 					updatedBy: user.id,
-				}).where(eq(tierTypes.id, result.id)).returning();
+				}).where(eq(attributeTypes.id, result.id)).returning();
 			}
 		}
 
@@ -54,7 +54,7 @@ export const insertTierType = async (payload: TierFormSchema) => {
 	return response;
 }
 
-export const updateTierType = async (payload: TierFormSchema) => {
+export const updateAttributeType = async (payload: AttributeFormSchema) => {
 	const session = await auth();
 	const user = session?.user;
 	
@@ -62,21 +62,21 @@ export const updateTierType = async (payload: TierFormSchema) => {
 		throw new Error("Unauthorized");
 	}
 	
-	const tierType = await db.query.tierTypes.findFirst({
-		where: eq(tierTypes.id, payload.id || '')
+	const attributeType = await db.query.attributeTypes.findFirst({
+		where: eq(attributeTypes.id, payload.id || '')
 	})
-	if(!tierType){
+	if(!attributeType){
 		throw new Error("Class type not found");
 	}
 	
 	const response = await db.transaction(async (trx) => {
 		if(payload.image && payload.image.startsWith('data:image/png;base64,')) {
 			
-			if(tierType.discordEmote){
-				await DeleteDiscordEmote(tierType.discordEmote);
+			if(attributeType.discordEmote){
+				await DeleteDiscordEmote(attributeType.discordEmote);
 			}
 			
-			const emoteName = GetDiscordEmoteName('tier', payload.name, tierType.id);
+			const emoteName = GetDiscordEmoteName('attr', payload.name, attributeType.id);
 			const image = await UploadDiscordEmote({
 				name: emoteName,
 				image: payload.image,
@@ -90,10 +90,10 @@ export const updateTierType = async (payload: TierFormSchema) => {
 			}
 		}
 		
-		return trx.update(tierTypes).set({
+		return trx.update(attributeTypes).set({
 			...payload,
 			updatedBy: user.id,
-		}).where(eq(tierTypes.id, payload.id || '')).returning();
+		}).where(eq(attributeTypes.id, payload.id || '')).returning();
 	});
 
 	revalidatePath(ROUTES.ADMIN.SETTINGS.TYPES);
@@ -101,7 +101,7 @@ export const updateTierType = async (payload: TierFormSchema) => {
 }
 
 
-export const deleteTierType = async (id: string) => {
+export const deleteAttributeType = async (id: string) => {
 	const session = await auth();
 	const user = session?.user;
 	
@@ -109,18 +109,18 @@ export const deleteTierType = async (id: string) => {
 		throw new Error("Unauthorized");
 	}
 	
-	const tierType = await db.query.tierTypes.findFirst({
-		where: eq(tierTypes.id, id)
+	const attributeType = await db.query.attributeTypes.findFirst({
+		where: eq(attributeTypes.id, id)
 	})
-	if(!tierType){
+	if(!attributeType){
 		throw new Error("Class type not found");
 	}
 	
-	if(tierType.discordEmote){
-		await DeleteDiscordEmote(tierType.discordEmote);
+	if(attributeType.discordEmote){
+		await DeleteDiscordEmote(attributeType.discordEmote);
 	}
 	
-	const response = await db.delete(tierTypes).where(eq(tierTypes.id, id)).returning();
+	const response = await db.delete(attributeTypes).where(eq(attributeTypes.id, id)).returning();
 	revalidatePath(ROUTES.ADMIN.SETTINGS.TYPES);
 	return response;
 }
