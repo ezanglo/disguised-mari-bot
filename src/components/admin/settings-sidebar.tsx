@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 
 const links = [
 	{label: 'General', href: ROUTES.ADMIN.SETTINGS.BASE},
+	{label: 'Lists', href: ROUTES.ADMIN.SETTINGS.LISTS},
 	{label: 'Traits', href: ROUTES.ADMIN.SETTINGS.TRAITS},
 	{label: 'Equips', href: ROUTES.ADMIN.SETTINGS.EQUIPS},
 	{label: 'Resources', href: ROUTES.ADMIN.SETTINGS.RESOURCES},

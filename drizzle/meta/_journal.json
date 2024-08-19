@@ -22,6 +22,20 @@
       "when": 1724026673822,
       "tag": "0002_tan_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1724097221266,
+      "tag": "0003_omniscient_jackal",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1724097241136,
+      "tag": "0004_unknown_nextwave",
+      "breakpoints": true
     }
   ]
 }

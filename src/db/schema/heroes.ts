@@ -1,4 +1,4 @@
-import { attributeTypes, classTypes, skillTypes, tierTypes, upgradeTypes } from "@/db/schema/types";
+import { attributeTypes, classTypes, listItems, tierTypes } from "@/db/schema/types";
 import { timestampColumns } from "@/db/schema/users";
 import { integer, json, pgTable, text, uuid } from "drizzle-orm/pg-core";
 
@@ -25,9 +25,9 @@ export const skills = pgTable("skill", {
 	skill: text("skill").notNull(),
 	skillDescription: text("skill_description").notNull(),
 	skillType: uuid("skill_type").notNull()
-	.references(() => skillTypes.id),
+	.references(() => listItems.id),
 	upgradeType: uuid("upgrade_type").notNull()
-	.references(() => upgradeTypes.id),
+	.references(() => listItems.id),
 	sp: integer("sp").notNull(),
 	cooldown: integer("cooldown").notNull(),
 	description: text("description").notNull(),

@@ -7,6 +7,7 @@ const ADMIN = {
 	},
 	SETTINGS: {
 		BASE: '/admin/settings',
+		LISTS: '/admin/settings/lists',
 		TRAITS: '/admin/settings/traits',
 		EQUIPS: '/admin/settings/equips',
 		RESOURCES: '/admin/settings/resources',
