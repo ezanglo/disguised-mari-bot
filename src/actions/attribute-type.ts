@@ -1,13 +1,13 @@
 "use server"
 
-import { DeleteDiscordEmote, UploadDiscordEmote } from "@/actions/discord";
+import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
 import { auth } from "@/auth";
 import { AttributeFormSchema } from "@/components/admin/settings/attribute-form";
 import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { attributeTypes } from "@/db/schema/types";
-import { GetDiscordEmoteName } from "@/lib/utils";
+import { GetDiscordEmoteName, toCode } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -23,6 +23,7 @@ export const insertAttributeType = async (payload: AttributeFormSchema) => {
 	const response = await db.transaction(async (trx) => {
 		const result = await trx.insert(attributeTypes).values({
 			name: payload.name,
+			code: payload.code || toCode(payload.name),
 			createdBy: user.id,
 		}).returning().then((res) => res[0] ?? null);
 
@@ -67,13 +68,19 @@ export const updateAttributeType = async (payload: AttributeFormSchema) => {
 	}
 	
 	const response = await db.transaction(async (trx) => {
-		if(payload.image && payload.image.startsWith('data:image/png;base64,')) {
+		
+		const emoteName = GetDiscordEmoteName('attr', payload.name, attributeType.id);
+		
+		if(attributeType.discordEmote && payload.name !== attributeType.name){
+			await UpdateDiscordEmoteName(attributeType.discordEmote, emoteName);
+		}
+		
+		if((payload.image && payload.image.startsWith('data:image/png;base64,'))) {
 			
 			if(attributeType.discordEmote){
 				await DeleteDiscordEmote(attributeType.discordEmote);
 			}
 			
-			const emoteName = GetDiscordEmoteName('attr', payload.name, attributeType.id);
 			const image = await UploadDiscordEmote({
 				name: emoteName,
 				image: payload.image,

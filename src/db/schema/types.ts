@@ -4,6 +4,7 @@ import { integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
 export const classTypes = pgTable("class_type", {
 	id: uuid("id").primaryKey().defaultRandom(),
 	name: text("name").notNull(),
+	code: text("code").notNull().unique(),
 	color: text("color"),
 	image: text("image"),
 	discordEmote: text("discord_emote"),
@@ -14,6 +15,7 @@ export const classTypes = pgTable("class_type", {
 export const tierTypes = pgTable("tier_type", {
 	id: uuid("id").primaryKey().defaultRandom(),
 	name: text("name").notNull(),
+	code: text("code").notNull().unique(),
 	image: text("image"),
 	discordEmote: text("discord_emote"),
 	order: integer("order"),
@@ -23,24 +25,7 @@ export const tierTypes = pgTable("tier_type", {
 export const attributeTypes = pgTable("attribute_type", {
 	id: uuid("id").primaryKey().defaultRandom(),
 	name: text("name").notNull(),
-	image: text("image"),
-	discordEmote: text("discord_emote"),
-	order: integer("order"),
-	...timestampColumns
-});
-
-export const upgradeTypes = pgTable("upgrade_type", {
-	id: uuid("id").primaryKey().defaultRandom(),
-	name: text("name").notNull(),
-	image: text("image"),
-	discordEmote: text("discord_emote"),
-	order: integer("order"),
-	...timestampColumns
-});
-
-export const skillTypes = pgTable("skill_type", {
-	id: uuid("id").primaryKey().defaultRandom(),
-	name: text("name").notNull(),
+	code: text("code").notNull().unique(),
 	image: text("image"),
 	discordEmote: text("discord_emote"),
 	order: integer("order"),
@@ -68,8 +53,20 @@ export const listItems = pgTable("list_item", {
 export const traitTypes = pgTable("trait_type", {
 	id: uuid("id").primaryKey().defaultRandom(),
 	name: text("name").notNull(),
-	code: text("code").notNull(),
+	code: text("code").notNull().unique(),
 	upgradeType: text("upgrade_type").notNull()
+	.references(() => listItems.code),
+	image: text("image"),
+	discordEmote: text("discord_emote"),
+	order: integer("order"),
+	...timestampColumns
+});
+
+export const equipTypes = pgTable("equip_type", {
+	id: uuid("id").primaryKey().defaultRandom(),
+	classType: text("class_type").notNull()
+	.references(() => classTypes.code),
+	gearType: text("gear_type").notNull()
 	.references(() => listItems.code),
 	image: text("image"),
 	discordEmote: text("discord_emote"),

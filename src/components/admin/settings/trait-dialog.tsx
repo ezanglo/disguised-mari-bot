@@ -50,7 +50,7 @@ export function TraitDialog({
 				)}
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
-				<DialogTitle>{data ? `Edit ${data.name}` : 'Add List Item'}</DialogTitle>
+				<DialogTitle>{data ? `Edit ${data.name}` : 'Add Trait'}</DialogTitle>
 				<TraitForm
 					defaultValues={data}
 					upgradeTypes={upgradeTypes}

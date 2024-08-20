@@ -1,10 +1,10 @@
 "use client";
 
 import { deleteTraitType } from "@/actions/trait-type";
-import { TraitDialog } from "@/components/admin/settings/trait-dialog";
-import { UpgradeType } from "@/components/admin/settings/upgrade-types-selector";
+import { ClassType } from "@/components/admin/class-select";
+import { GearType } from "@/components/admin/gear-select";
+import { EquipDialog } from "@/components/admin/settings/equip-dialog";
 import { CopyMarkdown } from "@/components/copy-markdown";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
@@ -15,22 +15,24 @@ import {
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { traitTypes } from "@/db/schema";
+import { equipTypes } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
-export type TraitType = InferSelectModel<typeof traitTypes>;
+export type EquipType = InferSelectModel<typeof equipTypes>;
 
-type TraitsTableProps = {
-	data: TraitType[],
-	upgradeTypes: UpgradeType[],
+type EquipsTableProps = {
+	data: EquipType[],
+	classTypes: ClassType[],
+	gearTypes: GearType[],
 }
 
-export function TraitsTable({
+export function EquipsTable({
 	data,
-	upgradeTypes
-}: TraitsTableProps) {
+	classTypes,
+	gearTypes
+}: EquipsTableProps) {
 	
 	if (data.length === 0) {
 		return (
@@ -46,7 +48,7 @@ export function TraitsTable({
 				<TableRow>
 					<TableHead className="w-[100px] hidden sm:table-cell">ID</TableHead>
 					<TableHead>Name</TableHead>
-					<TableHead>Type</TableHead>
+					<TableHead>Class</TableHead>
 					<TableHead>Emote</TableHead>
 					<TableHead>
 						<span className="sr-only">Actions</span>
@@ -62,20 +64,30 @@ export function TraitsTable({
 						<TableCell>
 							<div className="flex flex-row gap-2 items-center">
 								{item.image &&
-									<Image src={item.image} alt={item.name} width={100} height={100} className="size-5"/>}
-								{item.name}
-								<Badge variant="outline" className="hidden lg:block">
-									{item.code}
-								</Badge>
+									<Image src={item.image} alt={item.gearType} width={100} height={100} className="size-5"/>}
+								{gearTypes.find(i => i.code === item.gearType)?.name}
 							</div>
 						</TableCell>
 						<TableCell>
-							<Badge variant="outline">
-								{upgradeTypes.find(i => i.code === item.upgradeType)?.name}
-							</Badge>
+							{(() => {
+								const classType = classTypes.find(i => i.code === item.classType);
+								return (
+									<div className="flex flex-row gap-1 items-center">
+										<Image
+											src={classType?.image || ''}
+											alt={item.classType}
+											width={100}
+											height={100}
+											className="size-4"
+										/>
+										<span>{classType?.name}</span>
+									</div>
+								)
+									;
+							})()}
 						</TableCell>
 						<TableCell>
-							<CopyMarkdown prefix="trait" {...item} name={item.upgradeType + item.code}/>
+							<CopyMarkdown prefix="equip" {...item} name={item.classType + item.gearType}/>
 						</TableCell>
 						<TableCell className="text-right">
 							<DropdownMenu>
@@ -91,11 +103,15 @@ export function TraitsTable({
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end">
 									<DropdownMenuLabel>Actions</DropdownMenuLabel>
-									<TraitDialog data={item} upgradeTypes={upgradeTypes}>
+									<EquipDialog
+										data={item}
+										gearTypes={gearTypes}
+										classTypes={classTypes}
+									>
 										<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
-									</TraitDialog>
+									</EquipDialog>
 									<ConfirmDialog
-										title={`Delete ${item.name}?`}
+										title={`Delete Equip?`}
 										description="This action is permanent and cannot be undone."
 										onConfirm={() => deleteTraitType(item.id)}
 									>

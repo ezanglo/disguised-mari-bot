@@ -1,13 +1,13 @@
 "use server"
 
-import { DeleteDiscordEmote, UploadDiscordEmote } from "@/actions/discord";
+import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
 import { auth } from "@/auth";
 import { TierFormSchema } from "@/components/admin/settings/tier-form";
 import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { tierTypes } from "@/db/schema/types";
-import { GetDiscordEmoteName } from "@/lib/utils";
+import { GetDiscordEmoteName, toCode } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -23,6 +23,7 @@ export const insertTierType = async (payload: TierFormSchema) => {
 	const response = await db.transaction(async (trx) => {
 		const result = await trx.insert(tierTypes).values({
 			name: payload.name,
+			code: payload.code || toCode(payload.name),
 			createdBy: user.id,
 		}).returning().then((res) => res[0] ?? null);
 
@@ -67,13 +68,18 @@ export const updateTierType = async (payload: TierFormSchema) => {
 	}
 	
 	const response = await db.transaction(async (trx) => {
+		const emoteName = GetDiscordEmoteName('tier', payload.name, tierType.id);
+		
+		if(tierType.discordEmote && payload.name !== tierType.name){
+			await UpdateDiscordEmoteName(tierType.discordEmote, emoteName);
+		}
+		
 		if(payload.image && payload.image.startsWith('data:image/png;base64,')) {
 			
 			if(tierType.discordEmote){
 				await DeleteDiscordEmote(tierType.discordEmote);
 			}
 			
-			const emoteName = GetDiscordEmoteName('tier', payload.name, tierType.id);
 			const image = await UploadDiscordEmote({
 				name: emoteName,
 				image: payload.image,

@@ -17,7 +17,9 @@ export const authConfig = {
 		async jwt({token, account, profile}) {
 			
 			if(profile){
-				token.id = profile.id;
+				if(profile.id){
+					token.id = profile.id;
+				}
 				token.roles = [];
 				token.nick = `@${profile.username as string}`;
 				

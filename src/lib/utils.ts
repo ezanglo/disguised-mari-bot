@@ -21,11 +21,14 @@ export function getDiscordApiErrors(error: RESTError) {
 }
 
 export function GetDiscordEmoteName(prefix: string, name: string, id: string){
-	name = name.replace(/[^a-z0-9\s]/gi, '').replace(/\s+/g, '_');
-	return [prefix.toLowerCase(), name.toLowerCase(), id.split('-')[0]].join('_')
+	return [prefix.toLowerCase(), toCode(name), id.split('-')[0]].join('_')
 }
 
 export function GetDiscordEmoteMarkdown(discordId: string, prefix: string, name: string, id: string){
 	const label = GetDiscordEmoteName(prefix, name, id)
 	return `<:${label}:${discordId}>`
+}
+
+export function toCode(text: string){
+	return text.replace(/[^a-z0-9\s]/gi, '').replace(/\s+/g, '_').toLowerCase()
 }

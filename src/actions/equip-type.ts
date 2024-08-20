@@ -2,17 +2,16 @@
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
 import { auth } from "@/auth";
-import { ClassFormSchema } from "@/components/admin/settings/class-form";
+import { EquipFormSchema } from "@/components/admin/settings/equip-form";
 import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
-import { classTypes } from "@/db/schema/types";
-import { GetDiscordEmoteName, toCode } from "@/lib/utils";
+import { equipTypes } from "@/db/schema/types";
+import { GetDiscordEmoteName } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-
-export const insertClassType = async (payload: ClassFormSchema) => {
+export const insertEquip = async (payload: EquipFormSchema) => {
 	const session = await auth();
 	const user = session?.user;
 	
@@ -21,16 +20,15 @@ export const insertClassType = async (payload: ClassFormSchema) => {
 	}
 	
 	const response = await db.transaction(async (trx) => {
-		const result = await trx.insert(classTypes).values({
-			name: payload.name,
-			code: payload.code || toCode(payload.name),
-			color: payload.color,
+		const result = await trx.insert(equipTypes).values({
+			classType: payload.classType,
+			gearType: payload.gearType,
 			createdBy: user.id,
 		}).returning().then((res) => res[0] ?? null);
 
 		if(payload.image){
 			
-			const emoteName = GetDiscordEmoteName('class', payload.name, result.id);
+			const emoteName = GetDiscordEmoteName('equip', payload.classType + payload.gearType, result.id);
 			
 			const image = await UploadDiscordEmote({
 				name: emoteName,
@@ -38,22 +36,22 @@ export const insertClassType = async (payload: ClassFormSchema) => {
 			})
 			if(image){
 				const emoteUrl = `https://cdn.discordapp.com/emojis/${image.id}.webp?size=32&quality=lossless`
-				return trx.update(classTypes).set({
+				return trx.update(equipTypes).set({
 					discordEmote: image.id,
 					image: emoteUrl,
 					updatedBy: user.id,
-				}).where(eq(classTypes.id, result.id)).returning();
+				}).where(eq(equipTypes.id, result.id)).returning();
 			}
 		}
 
 		return result;
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.EQUIPS);
 	return response;
 }
 
-export const updateClassType = async (payload: ClassFormSchema) => {
+export const updateEquip = async (payload: EquipFormSchema) => {
 	const session = await auth();
 	const user = session?.user;
 	
@@ -61,24 +59,26 @@ export const updateClassType = async (payload: ClassFormSchema) => {
 		throw new Error("Unauthorized");
 	}
 	
-	const classType = await db.query.classTypes.findFirst({
-		where: eq(classTypes.id, payload.id || '')
+	const equipType = await db.query.equipTypes.findFirst({
+		where: eq(equipTypes.id, payload.id || '')
 	})
-	if(!classType){
+	if(!equipType){
 		throw new Error("Class type not found");
 	}
 	
 	const response = await db.transaction(async (trx) => {
-		const emoteName = GetDiscordEmoteName('class', payload.name, classType.id);
 		
-		if(classType.discordEmote && payload.name !== classType.name){
-			await UpdateDiscordEmoteName(classType.discordEmote, emoteName);
+		const emoteName = GetDiscordEmoteName('equip', payload.classType + payload.gearType, equipType.id);
+		if(equipType.discordEmote
+			&& (payload.classType !== equipType.classType || payload.gearType !== equipType.gearType)
+		){
+			await UpdateDiscordEmoteName(equipType.discordEmote, emoteName);
 		}
 		
 		if(payload.image && payload.image.startsWith('data:image/png;base64,')) {
 			
-			if(classType.discordEmote){
-				await DeleteDiscordEmote(classType.discordEmote);
+			if(equipType.discordEmote){
+				await DeleteDiscordEmote(equipType.discordEmote);
 			}
 			
 			const image = await UploadDiscordEmote({
@@ -91,18 +91,18 @@ export const updateClassType = async (payload: ClassFormSchema) => {
 			}
 		}
 		
-		return trx.update(classTypes).set({
+		return trx.update(equipTypes).set({
 			...payload,
 			updatedBy: user.id,
-		}).where(eq(classTypes.id, payload.id || '')).returning();
+		}).where(eq(equipTypes.id, payload.id || '')).returning();
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.EQUIPS);
 	return response;
 }
 
 
-export const deleteClassType = async (id: string) => {
+export const deleteEquip = async (id: string) => {
 	const session = await auth();
 	const user = session?.user;
 	
@@ -110,18 +110,18 @@ export const deleteClassType = async (id: string) => {
 		throw new Error("Unauthorized");
 	}
 	
-	const classType = await db.query.classTypes.findFirst({
-		where: eq(classTypes.id, id)
+	const equipType = await db.query.equipTypes.findFirst({
+		where: eq(equipTypes.id, id)
 	})
-	if(!classType){
+	if(!equipType){
 		throw new Error("Class type not found");
 	}
 	
-	if(classType.discordEmote){
-		await DeleteDiscordEmote(classType.discordEmote);
+	if(equipType.discordEmote){
+		await DeleteDiscordEmote(equipType.discordEmote);
 	}
 	
-	const response = await db.delete(classTypes).where(eq(classTypes.id, id)).returning();
-	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
+	const response = await db.delete(equipTypes).where(eq(equipTypes.id, id)).returning();
+	revalidatePath(ROUTES.ADMIN.SETTINGS.EQUIPS);
 	return response;
 }

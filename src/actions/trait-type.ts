@@ -1,6 +1,6 @@
 "use server"
 
-import { DeleteDiscordEmote, UploadDiscordEmote } from "@/actions/discord";
+import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
 import { auth } from "@/auth";
 import { TraitFormSchema } from "@/components/admin/settings/trait-form";
 import { ROLES } from "@/constants/discord";
@@ -68,13 +68,21 @@ export const updateTraitType = async (payload: TraitFormSchema) => {
 	}
 	
 	const response = await db.transaction(async (trx) => {
+		
+		const emoteName = GetDiscordEmoteName('trait', payload.upgradeType + payload.code, traitType.id);
+		
+		if(traitType.discordEmote &&
+			(payload.upgradeType !== traitType.upgradeType || payload.code !== traitType.code)
+		){
+			await UpdateDiscordEmoteName(traitType.discordEmote, emoteName);
+		}
+		
 		if (payload.image && payload.image.startsWith('data:image/png;base64,')) {
 			
 			if (traitType.discordEmote) {
 				await DeleteDiscordEmote(traitType.discordEmote);
 			}
 			
-			const emoteName = GetDiscordEmoteName('trait', payload.upgradeType + payload.code, traitType.id);
 			const image = await UploadDiscordEmote({
 				name: emoteName,
 				image: payload.image,

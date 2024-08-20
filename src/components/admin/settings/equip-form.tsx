@@ -1,20 +1,11 @@
 "use client";
 
-import { UpgradeType } from "@/components/admin/settings/upgrade-types-selector";
+import { ClassSelect, ClassType } from "@/components/admin/class-select";
+import { GearSelect, GearType } from "@/components/admin/gear-select";
 import { FileInput } from "@/components/file-input";
 import { SubmitButton } from "@/components/submit-button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue
-} from "@/components/ui/select";
-import { traitTypes } from "@/db/schema/types";
+import { equipTypes } from "@/db/schema/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
 import Image from "next/image";
@@ -22,34 +13,36 @@ import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const formSchema = createInsertSchema(traitTypes, {
-	name: z.string().min(1),
-	upgradeType: z.string().min(1),
-	code: z.string().min(1),
+const formSchema = createInsertSchema(equipTypes, {
+	classType: z.string().min(1),
+	gearType: z.string().min(1),
 	image: z.string().optional(),
 })
 
-export type TraitFormSchema = z.infer<typeof formSchema>
+export type EquipFormSchema = z.infer<typeof formSchema>
 
-type TraitFormProps = {
-	upgradeTypes: UpgradeType[],
-	onSubmit?: (formData: TraitFormSchema) => Promise<void>
-	defaultValues?: TraitFormSchema
+type EquipFormProps = {
+	classTypes: ClassType[],
+	gearTypes: GearType[],
+	onSubmit?: (formData: EquipFormSchema) => Promise<void>
+	defaultValues?: EquipFormSchema
 }
 
-export function TraitForm({
-	upgradeTypes,
+export function EquipForm({
+	classTypes,
+	gearTypes,
 	defaultValues,
 	onSubmit
-}: TraitFormProps) {
+}: EquipFormProps) {
 	
 	const searchParams = useSearchParams();
 	
-	const form = useForm<TraitFormSchema>({
+	const form = useForm<EquipFormSchema>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			...defaultValues,
-			upgradeType: searchParams.get("upgradeType") || defaultValues?.upgradeType ||"",
+			gearType: searchParams.get("gearType") || defaultValues?.gearType || "",
+			classType: searchParams.get("classType") || defaultValues?.classType || "",
 		},
 	})
 	
@@ -58,12 +51,16 @@ export function TraitForm({
 			<form onSubmit={form.handleSubmit(formData => onSubmit?.(formData))} className="space-y-4">
 				<FormField
 					control={form.control}
-					name="name"
+					name="classType"
 					render={({field}) => (
 						<FormItem>
-							<FormLabel>Name</FormLabel>
+							<FormLabel>Class</FormLabel>
 							<FormControl>
-								<Input {...field} />
+								<ClassSelect
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+									data={classTypes}
+								/>
 							</FormControl>
 							<FormMessage/>
 						</FormItem>
@@ -71,37 +68,16 @@ export function TraitForm({
 				/>
 				<FormField
 					control={form.control}
-					name="upgradeType"
+					name="gearType"
 					render={({field}) => (
 						<FormItem>
-							<FormLabel>Upgrade Type</FormLabel>
+							<FormLabel>Gear Type</FormLabel>
 							<FormControl>
-								<Select onValueChange={field.onChange} defaultValue={field.value}>
-									<SelectTrigger>
-										<SelectValue placeholder="Select upgrade type" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectGroup>
-											<SelectLabel>Upgrade Types</SelectLabel>
-											{upgradeTypes.map((item, index) => (
-												<SelectItem value={item.code}>{item.name}</SelectItem>
-											))}
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-							</FormControl>
-							<FormMessage/>
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="code"
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>Code</FormLabel>
-							<FormControl>
-								<Input {...field}/>
+								<GearSelect
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+									data={gearTypes}
+								/>
 							</FormControl>
 							<FormMessage/>
 						</FormItem>

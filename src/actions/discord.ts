@@ -48,3 +48,29 @@ export const DeleteDiscordEmote = async (id: string) => {
 		return null;
 	}
 }
+
+export const UpdateDiscordEmoteName = async (id: string, name: string) => {
+	try {
+		const url = [process.env.DISCORD_API_URL, 'applications', process.env.DISCORD_BOT_APPLICATION_ID,'emojis', id].join('/')
+		const response = await fetch(url, {
+			method: 'PATCH',
+			headers: {
+				"Authorization": `Bot ${process.env.DISCORD_BOT_TOKEN}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				name
+			})
+		})
+		
+		if(!response.ok){
+			return null;
+		}
+		
+		return true
+	}
+	catch (error) {
+		console.log(error)
+		return null;
+	}
+}

@@ -1,8 +1,10 @@
 "use client";
 
+import { ClassEquipType } from "@/components/admin/settings/equips-table";
+import { TraitType } from "@/components/admin/settings/traits-table";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { attributeTypes, classTypes, tierTypes, traitTypes } from "@/db/schema";
+import { attributeTypes, classTypes, tierTypes } from "@/db/schema";
 import { GetDiscordEmoteName } from "@/lib/utils";
 import { InferSelectModel } from "drizzle-orm";
 import { CopyIcon } from "lucide-react";
@@ -17,7 +19,9 @@ type CopyMarkdownProps = ({
 	prefix: 'attr',
 } & InferSelectModel<typeof attributeTypes>) | ({
 	prefix: 'trait'
-} & InferSelectModel<typeof traitTypes>);
+} & TraitType) | ({
+	prefix: 'equip'
+} & ClassEquipType)
 
 export function CopyMarkdown({
 	prefix,

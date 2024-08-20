@@ -3,10 +3,10 @@ import { integer, pgTable, primaryKey, text, timestamp, } from "drizzle-orm/pg-c
 import type { AdapterAccount } from "next-auth/adapters";
 
 export const timestampColumns ={
-	createdAt: timestamp("created_at", {mode: "date"}).defaultNow(),
+	createdAt: timestamp("created_at", {mode: "date"}).defaultNow().notNull(),
 	createdBy: text("created_by")
 .references(() => users.id, {onDelete: "set null"}),
-	updatedAt: timestamp('updated_at', {withTimezone: true, mode: 'string'}).defaultNow().notNull()
+	updatedAt: timestamp('updated_at', {withTimezone: true, mode: 'string'}).defaultNow()
 .$onUpdate(() => sql`now()`),
 	updatedBy: text("updated_by")
 .references(() => users.id, {onDelete: "set null"}),
