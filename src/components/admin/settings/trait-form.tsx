@@ -25,26 +25,27 @@ import { z } from "zod";
 const formSchema = createInsertSchema(traitTypes, {
 	name: z.string().min(1),
 	upgradeType: z.string().min(1),
+	code: z.string().min(1),
 	image: z.string().optional(),
 })
 
-export type TraitTypeFormSchema = z.infer<typeof formSchema>
+export type TraitFormSchema = z.infer<typeof formSchema>
 
-type TraitTypeFormProps = {
+type TraitFormProps = {
 	upgradeTypes: UpgradeType[],
-	onSubmit?: (formData: TraitTypeFormSchema) => Promise<void>
-	defaultValues?: TraitTypeFormSchema
+	onSubmit?: (formData: TraitFormSchema) => Promise<void>
+	defaultValues?: TraitFormSchema
 }
 
-export function TraitTypeForm({
+export function TraitForm({
 	upgradeTypes,
 	defaultValues,
 	onSubmit
-}: TraitTypeFormProps) {
+}: TraitFormProps) {
 	
 	const searchParams = useSearchParams();
 	
-	const form = useForm<TraitTypeFormSchema>({
+	const form = useForm<TraitFormSchema>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			...defaultValues,

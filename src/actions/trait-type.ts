@@ -2,7 +2,7 @@
 
 import { DeleteDiscordEmote, UploadDiscordEmote } from "@/actions/discord";
 import { auth } from "@/auth";
-import { TraitTypeFormSchema } from "@/components/admin/settings/trait-form";
+import { TraitFormSchema } from "@/components/admin/settings/trait-form";
 import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
@@ -11,11 +11,11 @@ import { GetDiscordEmoteName } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export const insertTraitType = async (payload: TraitTypeFormSchema) => {
+export const insertTraitType = async (payload: TraitFormSchema) => {
 	const session = await auth();
 	const user = session?.user;
 	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
+	if (!user?.roles.includes(ROLES.ADMIN)) {
 		throw new Error("Unauthorized");
 	}
 	
@@ -26,8 +26,8 @@ export const insertTraitType = async (payload: TraitTypeFormSchema) => {
 			upgradeType: payload.upgradeType,
 			createdBy: user.id,
 		}).returning().then((res) => res[0] ?? null);
-
-		if(payload.image){
+		
+		if (payload.image) {
 			
 			const emoteName = GetDiscordEmoteName('trait', payload.upgradeType + payload.code, result.id);
 			
@@ -35,7 +35,7 @@ export const insertTraitType = async (payload: TraitTypeFormSchema) => {
 				name: emoteName,
 				image: payload.image,
 			})
-			if(image){
+			if (image) {
 				const emoteUrl = `https://cdn.discordapp.com/emojis/${image.id}.webp?size=32&quality=lossless`
 				return trx.update(traitTypes).set({
 					discordEmote: image.id,
@@ -44,33 +44,33 @@ export const insertTraitType = async (payload: TraitTypeFormSchema) => {
 				}).where(eq(traitTypes.id, result.id)).returning();
 			}
 		}
-
+		
 		return result;
 	});
-
+	
 	revalidatePath(ROUTES.ADMIN.SETTINGS.TRAITS);
 	return response;
 }
 
-export const updateTraitType = async (payload: TraitTypeFormSchema) => {
+export const updateTraitType = async (payload: TraitFormSchema) => {
 	const session = await auth();
 	const user = session?.user;
 	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
+	if (!user?.roles.includes(ROLES.ADMIN)) {
 		throw new Error("Unauthorized");
 	}
 	
 	const traitType = await db.query.traitTypes.findFirst({
 		where: eq(traitTypes.id, payload.id || '')
 	})
-	if(!traitType){
+	if (!traitType) {
 		throw new Error("Class type not found");
 	}
 	
 	const response = await db.transaction(async (trx) => {
-		if(payload.image && payload.image.startsWith('data:image/png;base64,')) {
+		if (payload.image && payload.image.startsWith('data:image/png;base64,')) {
 			
-			if(traitType.discordEmote){
+			if (traitType.discordEmote) {
 				await DeleteDiscordEmote(traitType.discordEmote);
 			}
 			
@@ -79,7 +79,7 @@ export const updateTraitType = async (payload: TraitTypeFormSchema) => {
 				name: emoteName,
 				image: payload.image,
 			})
-			if(image){
+			if (image) {
 				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp?size=32&quality=lossless`;
 				payload.discordEmote = image.id;
 			}
@@ -90,7 +90,7 @@ export const updateTraitType = async (payload: TraitTypeFormSchema) => {
 			updatedBy: user.id,
 		}).where(eq(traitTypes.id, payload.id || '')).returning();
 	});
-
+	
 	revalidatePath(ROUTES.ADMIN.SETTINGS.TRAITS);
 	return response;
 }
@@ -100,18 +100,18 @@ export const deleteTraitType = async (id: string) => {
 	const session = await auth();
 	const user = session?.user;
 	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
+	if (!user?.roles.includes(ROLES.ADMIN)) {
 		throw new Error("Unauthorized");
 	}
 	
 	const traitType = await db.query.traitTypes.findFirst({
 		where: eq(traitTypes.id, id)
 	})
-	if(!traitType){
+	if (!traitType) {
 		throw new Error("Class type not found");
 	}
 	
-	if(traitType.discordEmote){
+	if (traitType.discordEmote) {
 		await DeleteDiscordEmote(traitType.discordEmote);
 	}
 	

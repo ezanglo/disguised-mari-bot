@@ -1,7 +1,7 @@
 "use client";
 
 import { insertTraitType, updateTraitType } from "@/actions/trait-type";
-import { TraitTypeForm, TraitTypeFormSchema } from "@/components/admin/settings/trait-form";
+import { TraitForm, TraitFormSchema } from "@/components/admin/settings/trait-form";
 import { TraitType } from "@/components/admin/settings/traits-table";
 import { UpgradeType } from "@/components/admin/settings/upgrade-types-selector";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/
 import React, { useState } from "react";
 import { toast } from "sonner";
 
-type TraitTypeDialogProps = {
+type TraitDialogProps = {
 	data?: TraitType,
 	upgradeTypes: UpgradeType[],
 	children?: React.ReactNode
@@ -19,11 +19,11 @@ export function TraitDialog({
 	data,
 	upgradeTypes,
 	children
-}: TraitTypeDialogProps) {
+}: TraitDialogProps) {
 	
 	const [open, setOpen] = useState(false);
 	
-	const handleSubmit = async (formData: TraitTypeFormSchema) => {
+	const handleSubmit = async (formData: TraitFormSchema) => {
 		try {
 			let result;
 			
@@ -34,7 +34,7 @@ export function TraitDialog({
 			}
 			
 			if (result) {
-				toast.success(data ? "TraitType type updated" : "TraitType type created")
+				toast.success(data ? "Trait type updated" : "Trait type created")
 				setOpen(false)
 			}
 		} catch (error) {
@@ -51,7 +51,7 @@ export function TraitDialog({
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogTitle>{data ? `Edit ${data.name}` : 'Add List Item'}</DialogTitle>
-				<TraitTypeForm
+				<TraitForm
 					defaultValues={data}
 					upgradeTypes={upgradeTypes}
 					onSubmit={handleSubmit}
