@@ -1,6 +1,6 @@
 "use client";
 
-import { ClassEquipType } from "@/components/admin/settings/equips-table";
+import { EquipType } from "@/components/admin/settings/equips-table";
 import { TraitType } from "@/components/admin/settings/traits-table";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -21,12 +21,12 @@ type CopyMarkdownProps = ({
 	prefix: 'trait'
 } & TraitType) | ({
 	prefix: 'equip'
-} & ClassEquipType)
+} & EquipType)
 
 export function CopyMarkdown({
 	prefix,
 	id,
-	name,
+	name = '',
 	discordEmote,
 	image
 }: CopyMarkdownProps) {

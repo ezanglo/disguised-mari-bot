@@ -28,7 +28,7 @@ export function GearSelect({
 				<SelectGroup>
 					{showAll && <SelectItem value={'all'}>Select gear type</SelectItem>}
 					{data.map((item, index) => (
-						<SelectItem value={item.code}>
+						<SelectItem key={index} value={item.code}>
 							{item.name}
 						</SelectItem>
 					))}

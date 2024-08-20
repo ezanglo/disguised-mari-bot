@@ -71,7 +71,7 @@ export function ListItemForm({
 										<SelectGroup>
 											<SelectLabel>List Groups</SelectLabel>
 											{listGroup.map((item, index) => (
-												<SelectItem value={item.id}>{item.name}</SelectItem>
+												<SelectItem key={index} value={item.id}>{item.name}</SelectItem>
 											))}
 										</SelectGroup>
 									</SelectContent>

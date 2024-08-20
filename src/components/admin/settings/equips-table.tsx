@@ -20,7 +20,9 @@ import { InferSelectModel } from "drizzle-orm";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
-export type EquipType = InferSelectModel<typeof equipTypes>;
+export type EquipType = InferSelectModel<typeof equipTypes> & {
+	name?: string
+};
 
 type EquipsTableProps = {
 	data: EquipType[],

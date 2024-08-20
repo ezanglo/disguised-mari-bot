@@ -84,7 +84,7 @@ export function TraitForm({
 										<SelectGroup>
 											<SelectLabel>Upgrade Types</SelectLabel>
 											{upgradeTypes.map((item, index) => (
-												<SelectItem value={item.code}>{item.name}</SelectItem>
+												<SelectItem key={index} value={item.code}>{item.name}</SelectItem>
 											))}
 										</SelectGroup>
 									</SelectContent>

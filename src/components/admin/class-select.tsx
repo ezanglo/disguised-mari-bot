@@ -29,7 +29,7 @@ export function ClassSelect({
 				<SelectGroup>
 					{showAll && <SelectItem value={'all'}>Select class</SelectItem>}
 					{data.map((item, index) => (
-						<SelectItem value={item.code}>
+						<SelectItem key={index} value={item.code}>
 							<div className="flex flex-row gap-2 items-center">
 								<Image src={item.image || ''} alt={item.name} width={100} height={100} className="size-5"/>
 								{item.name}
