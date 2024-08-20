@@ -29,6 +29,24 @@ export const attributeTypes = pgTable("attribute_type", {
 	...timestampColumns
 });
 
+export const upgradeTypes = pgTable("upgrade_type", {
+	id: uuid("id").primaryKey().defaultRandom(),
+	name: text("name").notNull(),
+	image: text("image"),
+	discordEmote: text("discord_emote"),
+	order: integer("order"),
+	...timestampColumns
+});
+
+export const skillTypes = pgTable("skill_type", {
+	id: uuid("id").primaryKey().defaultRandom(),
+	name: text("name").notNull(),
+	image: text("image"),
+	discordEmote: text("discord_emote"),
+	order: integer("order"),
+	...timestampColumns
+});
+
 export const lists = pgTable("list", {
 	id: uuid("id").primaryKey().defaultRandom(),
 	name: text("name").notNull(),
@@ -40,7 +58,19 @@ export const listItems = pgTable("list_item", {
 	listId: uuid("list_id").notNull()
 	.references(() => lists.id, { onDelete: "cascade"}),
 	name: text("name").notNull(),
+	code: text("code").notNull().unique(),
+	image: text("image"),
+	discordEmote: text("discord_emote"),
+	order: integer("order"),
+	...timestampColumns
+});
+
+export const traitTypes = pgTable("trait_type", {
+	id: uuid("id").primaryKey().defaultRandom(),
+	name: text("name").notNull(),
 	code: text("code").notNull(),
+	upgradeType: text("upgrade_type").notNull()
+	.references(() => listItems.code),
 	image: text("image"),
 	discordEmote: text("discord_emote"),
 	order: integer("order"),

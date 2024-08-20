@@ -4,7 +4,7 @@ import { ListsSelector } from "@/components/admin/settings/lists-selector";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/db";
 import { listItems, lists } from "@/db/schema";
-import { asc, count, eq } from "drizzle-orm";
+import { asc, count, eq, getTableColumns } from "drizzle-orm";
 
 type ListsPageProps = {
 	searchParams: {
@@ -18,12 +18,7 @@ export default async function ListsPage({
 	
 	const listGroup = await db
 		.select({
-			id: lists.id,
-			name: lists.name,
-			createdAt: lists.createdAt,
-			createdBy: lists.createdBy,
-			updatedAt: lists.updatedAt,
-			updatedBy: lists.updatedBy,
+			...getTableColumns(lists),
 			itemCount: count(listItems.id),
 		}).from(lists)
 		.leftJoin(listItems, eq(lists.id, listItems.listId))

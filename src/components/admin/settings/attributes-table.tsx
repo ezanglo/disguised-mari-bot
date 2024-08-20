@@ -59,10 +59,7 @@ export function AttributesTable({
 							</div>
 						</TableCell>
 						<TableCell>
-							<div className="flex flex-row gap-2 items-center">
-								<CopyMarkdown prefix="tier" data={item}/>
-								<span className="hidden sm:table-cell">{item.discordEmote}</span>
-							</div>
+							<CopyMarkdown prefix="attr" {...item}/>
 						</TableCell>
 						<TableCell className="text-right">
 							<DropdownMenu>

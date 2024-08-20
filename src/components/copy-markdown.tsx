@@ -2,31 +2,35 @@
 
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { attributeTypes, classTypes, tierTypes } from "@/db/schema";
+import { attributeTypes, classTypes, tierTypes, traitTypes } from "@/db/schema";
 import { GetDiscordEmoteName } from "@/lib/utils";
 import { InferSelectModel } from "drizzle-orm";
 import { CopyIcon } from "lucide-react";
+import Image from "next/image";
 import { toast } from "sonner";
 
-type CopyMarkdownProps = {
+type CopyMarkdownProps = ({
 	prefix: 'tier',
-	data: InferSelectModel<typeof tierTypes>
-} | {
+} & InferSelectModel<typeof tierTypes>) | ({
 	prefix: 'class',
-	data: InferSelectModel<typeof classTypes>
-} | {
+} & InferSelectModel<typeof classTypes>) | ({
 	prefix: 'attr',
-	data: InferSelectModel<typeof attributeTypes>
-}
+} & InferSelectModel<typeof attributeTypes>) | ({
+	prefix: 'trait'
+} & InferSelectModel<typeof traitTypes>);
 
 export function CopyMarkdown({
 	prefix,
-	data
+	id,
+	name,
+	discordEmote,
+	image
 }: CopyMarkdownProps) {
 	
+	const label = GetDiscordEmoteName(prefix, name, id)
+	const markdown = `<:${label}:${discordEmote}>`
+	
 	const handleCopy = async () => {
-		const label = GetDiscordEmoteName(prefix, data.name, data.id)
-		const markdown = `<:${label}:${data.discordEmote}>`
 		
 		navigator.clipboard.writeText(markdown).then(() => {
 			toast.success('Markdown copied to clipboard', {
@@ -43,8 +47,9 @@ export function CopyMarkdown({
 						<CopyIcon className="size-4"/>
 					</Button>
 				</TooltipTrigger>
-				<TooltipContent>
-					<p>Copy markdown</p>
+				<TooltipContent className="flex flex-col items-center justify-center">
+					<Image src={image || ''} alt={''} width={25} height={25}/>
+					<p>{markdown}</p>
 				</TooltipContent>
 			</Tooltip>
 		</TooltipProvider>

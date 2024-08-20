@@ -1,9 +1,10 @@
 "use client";
 
-import { deleteClassType } from "@/actions/class-type";
-import { ClassDialog } from "@/components/admin/settings/class-dialog";
-import { ColorPicker } from "@/components/color-picker";
+import { deleteTraitType } from "@/actions/trait-type";
+import { TraitDialog } from "@/components/admin/settings/trait-dialog";
+import { UpgradeType } from "@/components/admin/settings/upgrade-types-selector";
 import { CopyMarkdown } from "@/components/copy-markdown";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
@@ -14,18 +15,22 @@ import {
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { classTypes } from "@/db/schema";
+import { traitTypes } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
-type ClassesTableProps = {
-	data: InferSelectModel<typeof classTypes>[]
+export type TraitType = InferSelectModel<typeof traitTypes>;
+
+type ListsTableProps = {
+	data: TraitType[],
+	upgradeTypes: UpgradeType[],
 }
 
-export function ClassesTable({
-	data
-}: ClassesTableProps) {
+export function TraitsTable({
+	data,
+	upgradeTypes
+}: ListsTableProps) {
 	
 	if (data.length === 0) {
 		return (
@@ -41,7 +46,7 @@ export function ClassesTable({
 				<TableRow>
 					<TableHead className="w-[100px] hidden sm:table-cell">ID</TableHead>
 					<TableHead>Name</TableHead>
-					<TableHead className="hidden md:table-cell">Color</TableHead>
+					<TableHead>Type</TableHead>
 					<TableHead>Emote</TableHead>
 					<TableHead>
 						<span className="sr-only">Actions</span>
@@ -56,15 +61,21 @@ export function ClassesTable({
 						</TableCell>
 						<TableCell>
 							<div className="flex flex-row gap-2 items-center">
-								<Image src={item.image || ''} alt={item.name} width={100} height={100} className="size-5"/>
+								{item.image &&
+									<Image src={item.image} alt={item.name} width={100} height={100} className="size-5"/>}
 								{item.name}
+								<Badge variant="outline" className="hidden lg:block">
+									{item.code}
+								</Badge>
 							</div>
 						</TableCell>
-						<TableCell className="hidden md:table-cell">
-							<ColorPicker value={item.color || ''} aria-readonly/>
+						<TableCell>
+							<Badge variant="outline">
+								{upgradeTypes.find(i => i.code === item.upgradeType)?.name}
+							</Badge>
 						</TableCell>
 						<TableCell>
-							<CopyMarkdown prefix="class" {...item}/>
+							<CopyMarkdown prefix="trait" {...item} name={item.upgradeType + item.code}/>
 						</TableCell>
 						<TableCell className="text-right">
 							<DropdownMenu>
@@ -80,13 +91,13 @@ export function ClassesTable({
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end">
 									<DropdownMenuLabel>Actions</DropdownMenuLabel>
-									<ClassDialog data={item}>
+									<TraitDialog data={item} upgradeTypes={upgradeTypes}>
 										<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
-									</ClassDialog>
+									</TraitDialog>
 									<ConfirmDialog
 										title={`Delete ${item.name}?`}
 										description="This action is permanent and cannot be undone."
-										onConfirm={() => deleteClassType(item.id)}
+										onConfirm={() => deleteTraitType(item.id)}
 									>
 										<DropdownMenuItem preventSelect className="text-destructive">
 											Delete

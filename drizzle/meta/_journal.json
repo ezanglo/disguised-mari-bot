@@ -36,6 +36,20 @@
       "when": 1724097241136,
       "tag": "0004_unknown_nextwave",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1724113144254,
+      "tag": "0005_parched_thing",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1724113255356,
+      "tag": "0006_freezing_valkyrie",
+      "breakpoints": true
     }
   ]
 }
