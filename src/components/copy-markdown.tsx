@@ -46,7 +46,7 @@ export function CopyMarkdown({
 	return (
 		<TooltipProvider>
 			<Tooltip>
-				<TooltipTrigger>
+				<TooltipTrigger asChild>
 					<Button variant="ghost" size="icon" onClick={handleCopy}>
 						<CopyIcon className="size-4"/>
 					</Button>

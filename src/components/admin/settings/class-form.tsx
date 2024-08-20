@@ -6,6 +6,7 @@ import { SubmitButton } from "@/components/submit-button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { classTypes } from "@/db/schema/types";
+import { toCode } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
 import Image from "next/image";
@@ -32,7 +33,10 @@ export function ClassForm({
 	
 	const form = useForm<ClassFormSchema>({
 		resolver: zodResolver(formSchema),
-		defaultValues,
+		defaultValues: {
+			code: toCode(defaultValues?.name ?? ""),
+			...defaultValues
+		},
 	})
 	
 	return (

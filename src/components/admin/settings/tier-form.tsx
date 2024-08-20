@@ -5,9 +5,11 @@ import { SubmitButton } from "@/components/submit-button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { tierTypes } from "@/db/schema/types";
+import { toCode } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
 import Image from "next/image";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -30,8 +32,15 @@ export function TierForm({
 	
 	const form = useForm<TierFormSchema>({
 		resolver: zodResolver(formSchema),
-		defaultValues,
+		defaultValues: {
+			code: toCode(defaultValues?.name ?? ""),
+			...defaultValues
+		}
 	})
+	
+	useEffect(() => {
+		console.log(form.formState.errors)
+	}, [form.formState.errors]);
 	
 	return (
 		<Form {...form}>

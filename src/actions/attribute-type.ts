@@ -64,7 +64,7 @@ export const updateAttributeType = async (payload: AttributeFormSchema) => {
 		where: eq(attributeTypes.id, payload.id || '')
 	})
 	if(!attributeType){
-		throw new Error("Class type not found");
+		throw new Error("Attribute type not found");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -114,7 +114,7 @@ export const deleteAttributeType = async (id: string) => {
 		where: eq(attributeTypes.id, id)
 	})
 	if(!attributeType){
-		throw new Error("Class type not found");
+		throw new Error("Attribute type not found");
 	}
 	
 	if(attributeType.discordEmote){

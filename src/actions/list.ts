@@ -167,7 +167,7 @@ export const deleteListItem = async (id: string) => {
 		where: eq(listItems.id, id)
 	})
 	if (!listItem) {
-		throw new Error("Class type not found");
+		throw new Error("List item not found");
 	}
 	
 	if (listItem.discordEmote) {

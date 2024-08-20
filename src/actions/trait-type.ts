@@ -64,7 +64,7 @@ export const updateTraitType = async (payload: TraitFormSchema) => {
 		where: eq(traitTypes.id, payload.id || '')
 	})
 	if (!traitType) {
-		throw new Error("Class type not found");
+		throw new Error("Trait type not found");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -116,7 +116,7 @@ export const deleteTraitType = async (id: string) => {
 		where: eq(traitTypes.id, id)
 	})
 	if (!traitType) {
-		throw new Error("Class type not found");
+		throw new Error("Trait type not found");
 	}
 	
 	if (traitType.discordEmote) {

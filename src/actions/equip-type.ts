@@ -63,7 +63,7 @@ export const updateEquip = async (payload: EquipFormSchema) => {
 		where: eq(equipTypes.id, payload.id || '')
 	})
 	if(!equipType){
-		throw new Error("Class type not found");
+		throw new Error("Equip type not found");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -114,7 +114,7 @@ export const deleteEquip = async (id: string) => {
 		where: eq(equipTypes.id, id)
 	})
 	if(!equipType){
-		throw new Error("Class type not found");
+		throw new Error("Equip type not found");
 	}
 	
 	if(equipType.discordEmote){

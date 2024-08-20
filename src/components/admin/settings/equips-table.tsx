@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteTraitType } from "@/actions/trait-type";
+import { deleteEquip } from "@/actions/equip-type";
 import { ClassType } from "@/components/admin/class-select";
 import { GearType } from "@/components/admin/gear-select";
 import { EquipDialog } from "@/components/admin/settings/equip-dialog";
@@ -115,7 +115,7 @@ export function EquipsTable({
 									<ConfirmDialog
 										title={`Delete Equip?`}
 										description="This action is permanent and cannot be undone."
-										onConfirm={() => deleteTraitType(item.id)}
+										onConfirm={() => deleteEquip(item.id)}
 									>
 										<DropdownMenuItem preventSelect className="text-destructive">
 											Delete
