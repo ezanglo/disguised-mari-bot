@@ -49,8 +49,8 @@ export function EquipsTable({
 			<TableHeader>
 				<TableRow>
 					<TableHead className="w-[100px] hidden sm:table-cell">ID</TableHead>
-					<TableHead>Name</TableHead>
 					<TableHead>Class</TableHead>
+					<TableHead>Name</TableHead>
 					<TableHead>Emote</TableHead>
 					<TableHead>
 						<span className="sr-only">Actions</span>
@@ -62,13 +62,6 @@ export function EquipsTable({
 					<TableRow key={index}>
 						<TableCell className="font-medium hidden sm:table-cell">
 							{item.id.split('-')[0]}
-						</TableCell>
-						<TableCell>
-							<div className="flex flex-row gap-2 items-center">
-								{item.image &&
-									<Image src={item.image} alt={item.gearType} width={100} height={100} className="size-5"/>}
-								{gearTypes.find(i => i.code === item.gearType)?.name}
-							</div>
 						</TableCell>
 						<TableCell>
 							{(() => {
@@ -87,6 +80,13 @@ export function EquipsTable({
 								)
 									;
 							})()}
+						</TableCell>
+						<TableCell>
+							<div className="flex flex-row gap-2 items-center">
+								{item.image &&
+									<Image src={item.image} alt={item.gearType} width={100} height={100} className="size-5"/>}
+								{gearTypes.find(i => i.code === item.gearType)?.name}
+							</div>
 						</TableCell>
 						<TableCell>
 							<CopyMarkdown prefix="equip" {...item} name={item.classType + item.gearType}/>

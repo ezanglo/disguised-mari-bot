@@ -13,6 +13,14 @@ const nextConfig = {
 			pathname: "/a/1te70qyjma/*",
 		},]
 	},
+	async rewrites() {
+		return [
+			{
+				source: '/admin',
+				destination: '/admin/dashboard',
+			},
+		]
+	},
 };
 
 export default nextConfig;

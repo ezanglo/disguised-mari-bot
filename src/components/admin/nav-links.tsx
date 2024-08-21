@@ -1,41 +1,37 @@
 "use client";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
+import { Home } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
+import { FaUsers } from "react-icons/fa6";
+import { GiSamusHelmet } from "react-icons/gi";
+import { TbSwords } from "react-icons/tb";
 
 export const links = [
-	{label: 'Dashboard', href: ROUTES.ADMIN.DASHBOARD.BASE},
-	{label: 'Settings', href: ROUTES.ADMIN.SETTINGS.BASE},
+	{label: 'Dashboard', href: ROUTES.ADMIN.DASHBOARD.BASE, icon: <Home/>},
+	{label: 'Heroes', href: ROUTES.ADMIN.HEROES.BASE, icon: <GiSamusHelmet/>},
+	{label: 'Equips', href: ROUTES.ADMIN.EQUIPS.BASE, icon: <TbSwords/>},
+	{label: 'Lineups', href: ROUTES.ADMIN.LINEUPS.BASE, icon: <FaUsers/>},
 ]
 
 export function NavLinks() {
 	const pathname = usePathname();
 	
 	return (
-		<nav
-			className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-			<Link
-				href="#"
-				className="flex items-center gap-2 text-lg font-semibold md:text-base"
-			>
-				<Avatar className="border-2 border-primary size-6">
-					<AvatarImage src="/images/mari-icon.png" alt="mari" width={128} height={128}/>
-				</Avatar>
-				<span className="sr-only">Disguised Mari Bot</span>
-			</Link>
+		<nav className="grid items-start px-2 text-sm font-medium lg:px-4">
 			{links.map((item, index) => (
 				<Link
 					key={index}
 					href={item.href}
 					className={cn(
-						"hover:text-foreground",
-						!pathname.startsWith(item.href) && "text-muted-foreground",
+						"flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+						pathname.startsWith(item.href) && "text-primary bg-muted",
 					)}
 				>
+					{React.cloneElement(item.icon, {className: "size-4"})}
 					{item.label}
 				</Link>
 			))}

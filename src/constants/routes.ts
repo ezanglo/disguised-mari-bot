@@ -5,6 +5,15 @@ const ADMIN = {
 	DASHBOARD: {
 		BASE: '/admin/dashboard',
 	},
+	HEROES: {
+		BASE: '/admin/heroes',
+	},
+	EQUIPS: {
+		BASE: '/admin/equips',
+	},
+	LINEUPS: {
+		BASE: '/admin/lineups',
+	},
 	SETTINGS: {
 		BASE: '/admin/settings',
 		LISTS: '/admin/settings/lists',

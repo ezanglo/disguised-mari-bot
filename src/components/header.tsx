@@ -23,7 +23,9 @@ export async function Header() {
 				<NavLinks/>
 			</div>
 			{user ? (
-				<UserMenu user={user}/>
+				<div className="hidden md:block">
+					<UserMenu user={user}/>
+				</div>
 			): (
 				<div className="hidden md:flex flex-row items-center gap-2 w-full justify-end">
 					<Button variant="secondary" className="rounded-full text-amber-500 border border-amber-500">
