@@ -38,10 +38,6 @@ export function TierForm({
 		}
 	})
 	
-	useEffect(() => {
-		console.log(form.formState.errors)
-	}, [form.formState.errors]);
-	
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(formData => onSubmit?.(formData))} className="space-y-4">

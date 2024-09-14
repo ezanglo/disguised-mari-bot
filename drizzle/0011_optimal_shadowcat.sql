@@ -1,0 +1,1 @@
+ALTER TABLE "hero" DROP COLUMN IF EXISTS "description";

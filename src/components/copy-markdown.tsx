@@ -10,6 +10,7 @@ import { InferSelectModel } from "drizzle-orm";
 import { CopyIcon } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
+import { HeroesType } from "./admin/settings/heroes-table";
 
 type CopyMarkdownProps = ({
 	prefix: 'tier',
@@ -21,7 +22,9 @@ type CopyMarkdownProps = ({
 	prefix: 'trait'
 } & TraitType) | ({
 	prefix: 'equip'
-} & EquipType)
+} & EquipType) | ({
+	prefix: 'hero'
+} & HeroesType)
 
 export function CopyMarkdown({
 	prefix,

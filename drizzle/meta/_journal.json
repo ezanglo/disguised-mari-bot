@@ -71,6 +71,34 @@
       "when": 1724125268969,
       "tag": "0009_bizarre_morph",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1726280696644,
+      "tag": "0010_free_jack_flag",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1726282041551,
+      "tag": "0011_optimal_shadowcat",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1726282536591,
+      "tag": "0012_absurd_overlord",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1726283891071,
+      "tag": "0013_windy_sentinel",
+      "breakpoints": true
     }
   ]
 }

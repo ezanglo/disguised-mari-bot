@@ -1,16 +1,14 @@
 "use client";
 
-import { LoadingSpinner } from "@/components/loading-spinner";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useUploadThing } from "@/lib/uploadthing";
-import Image from "next/image";
+import { Loader2Icon } from "lucide-react";
 import { useState } from "react";
 
 type UploadButtonProps = ButtonProps & {
 	value?: string,
-	onUpload: (url: string[]) => void,
+	onUpload: (url: string) => void,
 }
 
 export function UploadButton({
@@ -25,9 +23,10 @@ export function UploadButton({
 		"imageUploader",
 		{
 			onClientUploadComplete: (res) => {
-				onUpload(res.map((r) => {
+				const formatted = res.map((r) => {
 					return `https://utfs.io/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/${r.key}`
-				}))
+				});
+				onUpload(formatted[0])
 				setLoading(false);
 			},
 			onUploadError: () => {
@@ -44,13 +43,12 @@ export function UploadButton({
 		: [];
 	
 	return (
-		<>
+		<div className="relative">
 			<Input
-				id="upload-button"
-				className="hidden"
-				placeholder="Picture"
 				type="file"
+				placeholder="upload"
 				accept={fileTypes.join(", ")}
+				disabled={loading}
 				onChange={async (event) => {
 					setLoading(true);
 					const files = event.target.files;
@@ -59,15 +57,9 @@ export function UploadButton({
 					}
 				}}
 			/>
-			<Button  {...props} asChild disabled={loading}>
-				<Label htmlFor="upload-button" className="cursor-pointer flex items-center justify-center">
-					{loading ? (
-						<LoadingSpinner className="size-4"/>
-					) : value ? (
-						<Image src={value} alt={''} width={25} height={25}/>
-					) : 'Upload'}
-				</Label>
-			</Button>
-		</>
+			{loading && <div className="absolute top-0 right-0 h-full flex items-center justify-center p-3">
+				<Loader2Icon className="animate-spin size-4" />
+			</div>}
+		</div>
 	)
 }

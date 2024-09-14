@@ -17,6 +17,7 @@ const ADMIN = {
 	SETTINGS: {
 		BASE: '/admin/settings',
 		LISTS: '/admin/settings/lists',
+		HEROES: '/admin/settings/heroes',
 		TRAITS: '/admin/settings/traits',
 		EQUIPS: '/admin/settings/equips',
 		RESOURCES: '/admin/settings/resources',

@@ -29,6 +29,6 @@ export function GetDiscordEmoteMarkdown(discordId: string, prefix: string, name:
 	return `<:${label}:${discordId}>`
 }
 
-export function toCode(text: string){
+export function toCode(text: string = ""){
 	return text.replace(/[^a-z0-9\s]/gi, '').replace(/\s+/g, '_').toLowerCase()
 }
