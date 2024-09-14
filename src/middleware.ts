@@ -10,13 +10,15 @@ export default auth((req) => {
 	
 	const isLandingPage = req.nextUrl.pathname === ROUTES.BASE
 	const isAdminRoute = nextUrl.pathname.startsWith(ROUTES.ADMIN.BASE)
-	const isAdmin = auth?.user.roles.includes(ROLES.ADMIN);
+	const isAdminOrModerator = auth?.user.roles.some(role => 
+		[ROLES.ADMIN, ROLES.MODERATOR].includes(role)
+	);
 	
 	if(!isLoggedIn && !isLandingPage){
 		return Response.redirect(new URL(ROUTES.BASE, req.nextUrl))
 	}
 	
-	if(isAdminRoute && !isAdmin){
+	if(isAdminRoute && !isAdminOrModerator){
 		return Response.redirect(new URL(ROUTES.BASE, nextUrl))
 	}
 })
