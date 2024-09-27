@@ -1,3 +1,4 @@
+import * as cheerio from "cheerio";
 import { type ClassValue, clsx } from "clsx"
 import { RESTError, RESTErrorFieldInformation, RESTErrorGroupWrapper } from "discord-api-types/v10";
 import { twMerge } from "tailwind-merge"
@@ -31,4 +32,32 @@ export function GetDiscordEmoteMarkdown(discordId: string, prefix: string, name:
 
 export function toCode(text: string = ""){
 	return text.replace(/[^a-z0-9\s]/gi, '').replace(/\s+/g, '_').toLowerCase()
+}
+
+export function toCamelCase(text: string = ""){
+	// First, remove symbols and replace with spaces
+	const cleanText = text.replace(/[^\w\s]/g, '');
+	
+	// Then convert to camel case
+	return cleanText.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
+		index === 0 ? word.toLowerCase() : word.toUpperCase()
+	).replace(/\s+/g, '');
+}
+
+export function parseHtmlImage(html: string): { imageName: string, imageSrc: string } {
+  const $ = cheerio.load(html);
+  const img = $('img');
+  return {
+    imageName: img.attr('data-image-name') || '',
+    imageSrc: img.attr('data-src') || img.attr('src') || '',
+  };
+}
+
+export function capitalizeFirstLetter(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+export function stripHtml(html: string): string {
+  const $ = cheerio.load(html);
+  return $.text();
 }
