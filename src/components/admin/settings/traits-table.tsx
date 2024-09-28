@@ -2,7 +2,6 @@
 
 import { deleteTraitType } from "@/actions/trait-type";
 import { TraitDialog } from "@/components/admin/settings/trait-dialog";
-import { UpgradeType } from "@/components/admin/settings/upgrade-types-selector";
 import { CopyMarkdown } from "@/components/copy-markdown";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,18 +22,18 @@ import Image from "next/image";
 export type TraitType = InferSelectModel<typeof traitTypes>;
 
 type TraitsTableProps = {
-	data: TraitType[],
-	upgradeTypes: UpgradeType[],
+	data: (TraitType & {
+		upgradeName: string| null
+	})[],
 }
 
 export function TraitsTable({
 	data,
-	upgradeTypes
 }: TraitsTableProps) {
 	
 	if (data.length === 0) {
 		return (
-			<div className="flex w-full items-center justify-center h-32 text-muted-foreground">
+			<div className="flex w-full items-center justify-center h-32 text-muted-foreground border border-muted rounded-md">
 				No data found.
 			</div>
 		)
@@ -71,7 +70,7 @@ export function TraitsTable({
 						</TableCell>
 						<TableCell>
 							<Badge variant="outline">
-								{upgradeTypes.find(i => i.code === item.upgradeType)?.name}
+								{item.upgradeName}
 							</Badge>
 						</TableCell>
 						<TableCell>
@@ -91,7 +90,7 @@ export function TraitsTable({
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end">
 									<DropdownMenuLabel>Actions</DropdownMenuLabel>
-									<TraitDialog data={item} upgradeTypes={upgradeTypes}>
+									<TraitDialog data={item}>
 										<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
 									</TraitDialog>
 									<ConfirmDialog

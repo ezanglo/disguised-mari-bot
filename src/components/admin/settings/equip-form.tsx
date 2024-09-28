@@ -1,7 +1,7 @@
 "use client";
 
-import { ClassSelect, ClassType } from "@/components/admin/class-select";
-import { GearSelect, GearType } from "@/components/admin/gear-select";
+import { ClassSelect } from "@/components/admin/class-select";
+import { GearSelect } from "@/components/admin/gear-select";
 import { FileInput } from "@/components/file-input";
 import { SubmitButton } from "@/components/submit-button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -22,15 +22,11 @@ const formSchema = createInsertSchema(equipTypes, {
 export type EquipFormSchema = z.infer<typeof formSchema>
 
 type EquipFormProps = {
-	classTypes: ClassType[],
-	gearTypes: GearType[],
 	onSubmit?: (formData: EquipFormSchema) => Promise<void>
 	defaultValues?: EquipFormSchema
 }
 
 export function EquipForm({
-	classTypes,
-	gearTypes,
 	defaultValues,
 	onSubmit
 }: EquipFormProps) {
@@ -45,10 +41,20 @@ export function EquipForm({
 			classType: searchParams.get("classType") || defaultValues?.classType || "",
 		},
 	})
+
+	const handleSubmit = async () => {
+    const valid = await form.trigger();
+		if(valid){
+			onSubmit?.(form.getValues())
+		}
+		else {
+			form.reset();
+		}
+	}
 	
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(formData => onSubmit?.(formData))} className="space-y-4">
+			<form action={handleSubmit} className="space-y-4">
 				<FormField
 					control={form.control}
 					name="classType"
@@ -59,7 +65,6 @@ export function EquipForm({
 								<ClassSelect
 									onValueChange={field.onChange}
 									defaultValue={field.value}
-									data={classTypes}
 								/>
 							</FormControl>
 							<FormMessage/>
@@ -76,7 +81,6 @@ export function EquipForm({
 								<GearSelect
 									onValueChange={field.onChange}
 									defaultValue={field.value}
-									data={gearTypes}
 								/>
 							</FormControl>
 							<FormMessage/>

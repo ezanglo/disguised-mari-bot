@@ -1,12 +1,8 @@
 import { AttributeDialog } from "@/components/admin/settings/attribute-dialog";
 import { AttributesTable } from "@/components/admin/settings/attributes-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { db } from "@/db";
-import { attributeTypes } from "@/db/schema";
 
 export async function AttributesCard() {
-	
-	const result = await db.select().from(attributeTypes);
 	
 	return (
 		<Card>
@@ -20,7 +16,7 @@ export async function AttributesCard() {
 				<AttributeDialog/>
 			</CardHeader>
 			<CardContent>
-				<AttributesTable data={result}/>
+				<AttributesTable/>
 			</CardContent>
 		</Card>
 	)

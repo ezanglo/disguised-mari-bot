@@ -1,57 +1,29 @@
 "use client";
 
-import { ClassSelect, ClassType } from "@/components/admin/class-select";
-import { GearSelect, GearType } from "@/components/admin/gear-select";
-import { useRouter, useSearchParams } from "next/navigation";
-import qs from "query-string";
+import { GearSelect } from "@/components/admin/gear-select";
+import { ClassFilter } from "@/components/class-filter";
+import { parseAsString, useQueryState } from "nuqs";
 
-type EquipFiltersProps = {
-	classTypes: ClassType[]
-	gearTypes: GearType[]
-}
+export function EquipFilters() {
+	
+	const [gearType, setGearType] = useQueryState('gearType',
+		parseAsString
+			.withDefault('all')
+			.withOptions({
+				shallow: false,
+				clearOnDefault: true,
+			})
+	)
 
-export function EquipFilters({
-	classTypes,
-	gearTypes
-}: EquipFiltersProps) {
-	
-	const router = useRouter();
-	const searchParams = useSearchParams();
-	const gearType = searchParams.get("gearType") || undefined;
-	const classType = searchParams.get("classType") || undefined;
-	
-	const handleClick = (query: { gearType?: string, classType?: string }) => {
-		
-		const url = qs.stringifyUrl({
-			url: window.location.href,
-			query
-		}, {skipNull: true})
-		
-		router.push(url);
-	}
-	
 	return (
-		<div className="flex flex-row gap-2 py-2">
+		<div className="flex flex-row gap-2">
 			<GearSelect
 				showAll
-				data={gearTypes}
 				defaultValue={gearType || 'all'}
 				className="w-40"
-				onValueChange={val => handleClick({
-					gearType: val === "all" ? undefined : val,
-					classType
-				})}
+				onValueChange={setGearType}
 			/>
-			<ClassSelect
-				showAll
-				data={classTypes}
-				defaultValue={gearType || 'all'}
-				className="w-40"
-				onValueChange={val => handleClick({
-					classType: val === "all" ? undefined : val,
-					gearType
-				})}
-			/>
+			<ClassFilter />
 		</div>
 	)
 }

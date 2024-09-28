@@ -1,19 +1,9 @@
 "use client";
 
-import { UpgradeType } from "@/components/admin/settings/upgrade-types-selector";
 import { FileInput } from "@/components/file-input";
 import { SubmitButton } from "@/components/submit-button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue
-} from "@/components/ui/select";
 import { traitTypes } from "@/db/schema/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
@@ -21,6 +11,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { UpgradeSelect } from "../upgrade-select";
 
 const formSchema = createInsertSchema(traitTypes, {
 	name: z.string().min(1),
@@ -32,13 +23,11 @@ const formSchema = createInsertSchema(traitTypes, {
 export type TraitFormSchema = z.infer<typeof formSchema>
 
 type TraitFormProps = {
-	upgradeTypes: UpgradeType[],
 	onSubmit?: (formData: TraitFormSchema) => Promise<void>
 	defaultValues?: TraitFormSchema
 }
 
 export function TraitForm({
-	upgradeTypes,
 	defaultValues,
 	onSubmit
 }: TraitFormProps) {
@@ -52,10 +41,20 @@ export function TraitForm({
 			upgradeType: searchParams.get("upgradeType") || defaultValues?.upgradeType ||"",
 		},
 	})
+
+	const handleSubmit = async () => {
+    const valid = await form.trigger();
+		if(valid){
+			onSubmit?.(form.getValues())
+		}
+		else {
+			form.reset();
+		}
+	}
 	
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(formData => onSubmit?.(formData))} className="space-y-4">
+			<form action={handleSubmit} className="space-y-4">
 				<FormField
 					control={form.control}
 					name="name"
@@ -76,19 +75,7 @@ export function TraitForm({
 						<FormItem>
 							<FormLabel>Upgrade Type</FormLabel>
 							<FormControl>
-								<Select onValueChange={field.onChange} defaultValue={field.value}>
-									<SelectTrigger>
-										<SelectValue placeholder="Select upgrade type" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectGroup>
-											<SelectLabel>Upgrade Types</SelectLabel>
-											{upgradeTypes.map((item, index) => (
-												<SelectItem key={index} value={item.code}>{item.name}</SelectItem>
-											))}
-										</SelectGroup>
-									</SelectContent>
-								</Select>
+								<UpgradeSelect value={field.value} onValueChange={field.onChange} />
 							</FormControl>
 							<FormMessage/>
 						</FormItem>

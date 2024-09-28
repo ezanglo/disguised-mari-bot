@@ -60,7 +60,7 @@ export const insertHero = async (payload: HeroFormSchema) => {
 		return result;
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
+	revalidatePath(ROUTES.ADMIN.HEROES.BASE);
 	return response;
 }
 
@@ -108,7 +108,7 @@ export const updateHero = async (payload: HeroFormSchema) => {
 		}).where(eq(heroes.id, payload.id || '')).returning();
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
+	revalidatePath(ROUTES.ADMIN.HEROES.BASE);
 	return response;
 }
 
@@ -133,6 +133,6 @@ export const deleteHero = async (id: string) => {
 	}
 	
 	const response = await db.delete(heroes).where(eq(heroes.id, id)).returning();
-	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
+	revalidatePath(ROUTES.ADMIN.HEROES.BASE);
 	return response;
 }

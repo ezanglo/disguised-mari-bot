@@ -48,7 +48,7 @@ export const insertTraitType = async (payload: TraitFormSchema) => {
 		return result;
 	});
 	
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TRAITS);
+	revalidatePath(ROUTES.ADMIN.TRAITS.BASE);
 	return response;
 }
 
@@ -99,7 +99,7 @@ export const updateTraitType = async (payload: TraitFormSchema) => {
 		}).where(eq(traitTypes.id, payload.id || '')).returning();
 	});
 	
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TRAITS);
+	revalidatePath(ROUTES.ADMIN.TRAITS.BASE);
 	return response;
 }
 
@@ -124,6 +124,6 @@ export const deleteTraitType = async (id: string) => {
 	}
 	
 	const response = await db.delete(traitTypes).where(eq(traitTypes.id, id)).returning();
-	revalidatePath(ROUTES.ADMIN.SETTINGS.TRAITS);
+	revalidatePath(ROUTES.ADMIN.TRAITS.BASE);
 	return response;
 }

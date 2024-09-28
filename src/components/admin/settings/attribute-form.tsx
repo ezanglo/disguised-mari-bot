@@ -36,10 +36,20 @@ export function AttributeForm({
 			...defaultValues
 		},
 	})
+
+	const handleSubmit = async () => {
+    const valid = await form.trigger();
+		if(valid){
+			onSubmit?.(form.getValues())
+		}
+		else {
+			form.reset();
+		}
+	}
 	
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(formData => onSubmit?.(formData))} className="space-y-4">
+			<form action={handleSubmit} className="space-y-4">
 				<FormField
 					control={form.control}
 					name="name"

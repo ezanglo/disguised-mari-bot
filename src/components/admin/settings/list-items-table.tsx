@@ -2,7 +2,6 @@
 
 import { deleteListItem } from "@/actions/list";
 import { ListItemDialog } from "@/components/admin/settings/list-item-dialog";
-import { ListGroupType } from "@/components/admin/settings/lists-selector";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -22,13 +21,13 @@ import Image from "next/image";
 export type ListItemType = InferSelectModel<typeof listItems>;
 
 type ListsTableProps = {
-	data: ListItemType[],
-	listGroup: ListGroupType[]
+	data: (ListItemType & {
+		listName: string | null
+	})[],
 }
 
 export function ListItemsTable({
 	data,
-	listGroup
 }: ListsTableProps) {
 	
 	if (data.length === 0) {
@@ -69,7 +68,7 @@ export function ListItemsTable({
 							</TableCell>
 							<TableCell>
 								<Badge variant="outline">
-									{listGroup.find(i => i.id === item.listId)?.name}
+									{item.listName}
 								</Badge>
 							</TableCell>
 							<TableCell className="text-right">
@@ -86,7 +85,7 @@ export function ListItemsTable({
 									</DropdownMenuTrigger>
 									<DropdownMenuContent align="end">
 										<DropdownMenuLabel>Actions</DropdownMenuLabel>
-										<ListItemDialog data={item} listGroup={listGroup}>
+										<ListItemDialog data={item}>
 											<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
 										</ListItemDialog>
 										<ConfirmDialog

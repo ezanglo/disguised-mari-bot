@@ -15,21 +15,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { classTypes } from "@/db/schema";
+import useLists from "@/hooks/use-lists";
 import { InferSelectModel } from "drizzle-orm";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
-type ClassesTableProps = {
-	data: InferSelectModel<typeof classTypes>[]
-}
+type ClassType = InferSelectModel<typeof classTypes>;
 
-export function ClassesTable({
-	data
-}: ClassesTableProps) {
+export function ClassesTable() {
+
+	const { data, isLoading} = useLists('classes')
+
+	if(isLoading) {
+		return (
+			<div className="flex w-full items-center justify-center h-32 text-muted-foreground border border-muted rounded-md">
+				Loading...
+			</div>
+		)
+	}
 	
 	if (data.length === 0) {
 		return (
-			<div className="flex w-full items-center justify-center h-32 text-muted-foreground">
+			<div className="flex w-full items-center justify-center h-32 text-muted-foreground border border-muted rounded-md">
 				No data found.
 			</div>
 		)
@@ -49,7 +56,7 @@ export function ClassesTable({
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{data.map((item, index) => (
+				{data.map((item: ClassType, index: number) => (
 					<TableRow key={index}>
 						<TableCell className="font-medium hidden sm:table-cell">
 							{item.id.split('-')[0]}

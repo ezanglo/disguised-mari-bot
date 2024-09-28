@@ -3,7 +3,6 @@
 import { insertListItem, updateListItem } from "@/actions/list";
 import { ListItemForm, ListItemFormSchema } from "@/components/admin/settings/list-item-form";
 import { ListItemType } from "@/components/admin/settings/list-items-table";
-import { ListGroupType } from "@/components/admin/settings/lists-selector";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import React, { useState } from "react";
@@ -11,13 +10,11 @@ import { toast } from "sonner";
 
 type ListItemDialogProps = {
 	data?: ListItemType,
-	listGroup: ListGroupType[],
 	children?: React.ReactNode
 }
 
 export function ListItemDialog({
 	data,
-	listGroup,
 	children
 }: ListItemDialogProps) {
 	
@@ -53,7 +50,6 @@ export function ListItemDialog({
 				<DialogTitle>{data ? `Edit ${data.name}` : 'Add List Item'}</DialogTitle>
 				<ListItemForm
 					defaultValues={data}
-					listGroup={listGroup}
 					onSubmit={handleSubmit}
 				/>
 			</DialogContent>

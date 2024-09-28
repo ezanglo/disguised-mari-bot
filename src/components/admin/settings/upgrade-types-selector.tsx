@@ -3,49 +3,43 @@
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { listItems } from "@/db/schema";
+import useLists from "@/hooks/use-lists";
 import { cn } from "@/lib/utils";
 import { InferSelectModel } from "drizzle-orm";
-import { useRouter, useSearchParams } from "next/navigation";
-import qs from "query-string";
+import { parseAsString, useQueryState } from "nuqs";
 
 export type UpgradeType = InferSelectModel<typeof listItems>;
 
-type UpgradeTypesSelectorProps = {
-	data: UpgradeType[]
-}
+export function UpgradeTypesSelector() {
 
-export function UpgradeTypesSelector({
-	data
-}: UpgradeTypesSelectorProps) {
+	const { data, isLoading} = useLists('upgrade-types')
 	
-	const router = useRouter();
-	const searchParams = useSearchParams();
-	const upgradeType = searchParams.get("upgradeType");
-	
-	const handleClick = (code?: string) => {
-		const query = {upgradeType: code === upgradeType ? undefined : code}
-		
-		const url = qs.stringifyUrl({
-			url: window.location.href,
-			query
-		}, {skipNull: true})
-		
-		router.push(url);
-	}
+	const [upgradeType, setUpgradeType] = useQueryState('upgradeType',
+		parseAsString
+			.withDefault('all')
+			.withOptions({
+				shallow: false,
+				clearOnDefault: true,
+			})
+	)
+
+	const upgradeTypes = !isLoading ? data.filter((i: UpgradeType) => {
+		return ['lvl', 'csr', 'si', 'trans'].includes(i.code);
+	}): []
 	
 	return (
-		<div className="flex flex-row gap-2 p-2 flex-wrap">
+		<div className="flex flex-row gap-2 flex-wrap">
 			<Button
 				variant="secondary" size="sm"
 				className={cn(
 					'bg-secondary/20',
-					!upgradeType && 'bg-secondary/50 outline outline-2 outline-secondary'
+					upgradeType === 'all' && 'bg-secondary/50 outline outline-2 outline-secondary'
 				)}
-				onClick={() => handleClick(undefined)}
+				onClick={() => setUpgradeType('all')}
 			>
 				All
 			</Button>
-			{data.map((item, index) => (
+			{upgradeTypes.map((item: UpgradeType, index: number) => (
 				<TooltipProvider key={index}>
 					<Tooltip>
 						<TooltipTrigger>
@@ -55,7 +49,7 @@ export function UpgradeTypesSelector({
 									'bg-secondary/20',
 									item.code === upgradeType && 'bg-secondary/50 outline outline-2 outline-secondary'
 								)}
-								onClick={() => handleClick(item.code)}
+								onClick={() => setUpgradeType(item.code)}
 							>
 								{item.name}
 							</Button>

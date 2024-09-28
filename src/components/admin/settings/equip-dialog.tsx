@@ -1,8 +1,6 @@
 "use client";
 
 import { insertEquip, updateEquip } from "@/actions/equip-type";
-import { ClassType } from "@/components/admin/class-select";
-import { GearType } from "@/components/admin/gear-select";
 import { EquipForm, EquipFormSchema } from "@/components/admin/settings/equip-form";
 import { EquipType } from "@/components/admin/settings/equips-table";
 import { Button } from "@/components/ui/button";
@@ -12,15 +10,11 @@ import { toast } from "sonner";
 
 type EquipDialogProps = {
 	data?: EquipType,
-	classTypes: ClassType[],
-	gearTypes: GearType[],
 	children?: React.ReactNode
 }
 
 export function EquipDialog({
 	data,
-	classTypes,
-	gearTypes,
 	children
 }: EquipDialogProps) {
 	
@@ -57,8 +51,6 @@ export function EquipDialog({
 				<DialogTitle>{data ? `Edit Equip` : 'Add Equip'}</DialogTitle>
 				<EquipForm
 					defaultValues={data}
-					gearTypes={gearTypes}
-					classTypes={classTypes}
 					onSubmit={handleSubmit}
 				/>
 			</DialogContent>

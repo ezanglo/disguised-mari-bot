@@ -14,21 +14,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { tierTypes } from "@/db/schema";
+import useLists from "@/hooks/use-lists";
 import { InferSelectModel } from "drizzle-orm";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
-type TiersTableProps = {
-	data: InferSelectModel<typeof tierTypes>[]
-}
+export type TierType = InferSelectModel<typeof tierTypes>
 
-export function TiersTable({
-	data
-}: TiersTableProps) {
+export function TiersTable() {
+
+	const { data, isLoading} = useLists('tiers')
+
+	if(isLoading) {
+		return (
+			<div className="flex w-full items-center justify-center h-32 text-muted-foreground border border-muted rounded-md">
+				Loading...
+			</div>
+		)
+	}
 	
 	if (data.length === 0) {
 		return (
-			<div className="flex w-full items-center justify-center h-32 text-muted-foreground">
+			<div className="flex w-full items-center justify-center h-32 text-muted-foreground border border-muted rounded-md">
 				No data found.
 			</div>
 		)
@@ -47,7 +54,7 @@ export function TiersTable({
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{data.map((item, index) => (
+				{data.map((item: TierType, index: number) => (
 					<TableRow key={index}>
 						<TableCell className="font-medium hidden sm:table-cell">
 							{item.id.split('-')[0]}

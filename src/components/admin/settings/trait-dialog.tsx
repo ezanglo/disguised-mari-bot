@@ -3,7 +3,6 @@
 import { insertTraitType, updateTraitType } from "@/actions/trait-type";
 import { TraitForm, TraitFormSchema } from "@/components/admin/settings/trait-form";
 import { TraitType } from "@/components/admin/settings/traits-table";
-import { UpgradeType } from "@/components/admin/settings/upgrade-types-selector";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import React, { useState } from "react";
@@ -11,13 +10,11 @@ import { toast } from "sonner";
 
 type TraitDialogProps = {
 	data?: TraitType,
-	upgradeTypes: UpgradeType[],
 	children?: React.ReactNode
 }
 
 export function TraitDialog({
 	data,
-	upgradeTypes,
 	children
 }: TraitDialogProps) {
 	
@@ -53,7 +50,6 @@ export function TraitDialog({
 				<DialogTitle>{data ? `Edit ${data.name}` : 'Add Trait'}</DialogTitle>
 				<TraitForm
 					defaultValues={data}
-					upgradeTypes={upgradeTypes}
 					onSubmit={handleSubmit}
 				/>
 			</DialogContent>

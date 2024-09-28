@@ -1,8 +1,6 @@
 "use client";
 
 import { deleteEquip } from "@/actions/equip-type";
-import { ClassType } from "@/components/admin/class-select";
-import { GearType } from "@/components/admin/gear-select";
 import { EquipDialog } from "@/components/admin/settings/equip-dialog";
 import { CopyMarkdown } from "@/components/copy-markdown";
 import { Button } from "@/components/ui/button";
@@ -15,6 +13,7 @@ import {
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { DEFAULT_IMAGE } from "@/constants/constants";
 import { equipTypes } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import { MoreHorizontal } from "lucide-react";
@@ -25,17 +24,17 @@ export type EquipType = InferSelectModel<typeof equipTypes> & {
 };
 
 type EquipsTableProps = {
-	data: EquipType[],
-	classTypes: ClassType[],
-	gearTypes: GearType[],
+	data: (EquipType & {
+		classImage?: string | null;
+		className?: string | null;
+		gearName?: string | null;
+	})[],
 }
 
 export function EquipsTable({
-	data,
-	classTypes,
-	gearTypes
+	data
 }: EquipsTableProps) {
-	
+
 	if (data.length === 0) {
 		return (
 			<div className="flex w-full items-center justify-center h-32 text-muted-foreground">
@@ -43,7 +42,7 @@ export function EquipsTable({
 			</div>
 		)
 	}
-	
+
 	return (
 		<Table>
 			<TableHeader>
@@ -64,32 +63,31 @@ export function EquipsTable({
 							{item.id.split('-')[0]}
 						</TableCell>
 						<TableCell>
-							{(() => {
-								const classType = classTypes.find(i => i.code === item.classType);
-								return (
-									<div className="flex flex-row gap-1 items-center">
-										<Image
-											src={classType?.image || ''}
-											alt={item.classType}
-											width={100}
-											height={100}
-											className="size-4"
-										/>
-										<span>{classType?.name}</span>
-									</div>
-								)
-									;
-							})()}
-						</TableCell>
-						<TableCell>
-							<div className="flex flex-row gap-2 items-center">
-								{item.image &&
-									<Image src={item.image} alt={item.gearType} width={100} height={100} className="size-5"/>}
-								{gearTypes.find(i => i.code === item.gearType)?.name}
+							<div className="flex flex-row gap-1 items-center">
+								<Image
+									src={item.classImage || DEFAULT_IMAGE}
+									alt={item.classType}
+									width={100}
+									height={100}
+									className="size-4"
+								/>
+								<span>{item.className}</span>
 							</div>
 						</TableCell>
 						<TableCell>
-							<CopyMarkdown prefix="equip" {...item} name={item.classType + item.gearType}/>
+							<div className="flex flex-row gap-2 items-center">
+								<Image
+									src={item.image || DEFAULT_IMAGE}
+									alt={item.gearType}
+									width={100}
+									height={100}
+									className="size-4"
+								/>
+								<span>{item.gearName}</span>
+							</div>
+						</TableCell>
+						<TableCell>
+							<CopyMarkdown prefix="equip" {...item} name={item.classType + item.gearType} />
 						</TableCell>
 						<TableCell className="text-right">
 							<DropdownMenu>
@@ -99,17 +97,13 @@ export function EquipsTable({
 										size="icon"
 										variant="ghost"
 									>
-										<MoreHorizontal className="h-4 w-4"/>
+										<MoreHorizontal className="h-4 w-4" />
 										<span className="sr-only">Toggle menu</span>
 									</Button>
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end">
 									<DropdownMenuLabel>Actions</DropdownMenuLabel>
-									<EquipDialog
-										data={item}
-										gearTypes={gearTypes}
-										classTypes={classTypes}
-									>
+									<EquipDialog data={item}>
 										<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
 									</EquipDialog>
 									<ConfirmDialog

@@ -9,7 +9,6 @@ import { toCode } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
 import Image from "next/image";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -37,10 +36,20 @@ export function TierForm({
 			...defaultValues
 		}
 	})
+
+	const handleSubmit = async () => {
+    const valid = await form.trigger();
+		if(valid){
+			onSubmit?.(form.getValues())
+		}
+		else {
+			form.reset();
+		}
+	}
 	
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(formData => onSubmit?.(formData))} className="space-y-4">
+			<form action={handleSubmit} className="space-y-4">
 				<FormField
 					control={form.control}
 					name="name"

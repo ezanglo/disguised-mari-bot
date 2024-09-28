@@ -1,4 +1,4 @@
-import { getDetails, getGallery, getHeroIcon, getSkills } from '@/lib/wiki-helper';
+import { getDetails, getGallery, getSkills } from '@/lib/wiki-helper';
 
 export const dynamic = 'force-static'
 

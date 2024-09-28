@@ -24,7 +24,7 @@ export const insertListGroup = async (name: string) => {
 		createdBy: user.id,
 	}).returning().then((res) => res[0] ?? null);
 	
-	revalidatePath(ROUTES.ADMIN.SETTINGS.LISTS);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }
 
@@ -41,7 +41,7 @@ export const updateListGroup = async (id: string, name: string) => {
 		updatedBy: user.id,
 	}).where(eq(lists.id, id)).returning();
 	
-	revalidatePath(ROUTES.ADMIN.SETTINGS.LISTS);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }
 
@@ -54,7 +54,7 @@ export const deleteListGroup = async (id: string) => {
 	}
 	
 	const response = await db.delete(lists).where(eq(lists.id, id)).returning();
-	revalidatePath(ROUTES.ADMIN.SETTINGS.LISTS);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }
 
@@ -101,7 +101,7 @@ export const insertListItem = async (payload: ListItemFormSchema) => {
 		return result;
 	});
 	
-	revalidatePath(ROUTES.ADMIN.SETTINGS.LISTS);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }
 
@@ -151,7 +151,7 @@ export const updateListItem = async (payload: ListItemFormSchema) => {
 		}).where(eq(listItems.id, payload.id || '')).returning();
 	});
 	
-	revalidatePath(ROUTES.ADMIN.SETTINGS.LISTS);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }
 
@@ -175,6 +175,6 @@ export const deleteListItem = async (id: string) => {
 	}
 	
 	const response = await db.delete(listItems).where(eq(listItems.id, id)).returning();
-	revalidatePath(ROUTES.ADMIN.SETTINGS.LISTS);
+	revalidatePath(ROUTES.ADMIN.SETTINGS.BASE);
 	return response;
 }

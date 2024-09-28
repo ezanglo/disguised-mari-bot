@@ -47,7 +47,7 @@ export const insertEquip = async (payload: EquipFormSchema) => {
 		return result;
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.EQUIPS);
+	revalidatePath(ROUTES.ADMIN.EQUIPS.BASE);
 	return response;
 }
 
@@ -97,7 +97,7 @@ export const updateEquip = async (payload: EquipFormSchema) => {
 		}).where(eq(equipTypes.id, payload.id || '')).returning();
 	});
 
-	revalidatePath(ROUTES.ADMIN.SETTINGS.EQUIPS);
+	revalidatePath(ROUTES.ADMIN.EQUIPS.BASE);
 	return response;
 }
 
@@ -122,6 +122,6 @@ export const deleteEquip = async (id: string) => {
 	}
 	
 	const response = await db.delete(equipTypes).where(eq(equipTypes.id, id)).returning();
-	revalidatePath(ROUTES.ADMIN.SETTINGS.EQUIPS);
+	revalidatePath(ROUTES.ADMIN.EQUIPS.BASE);
 	return response;
 }

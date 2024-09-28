@@ -20,7 +20,7 @@ export async function ClassesCard() {
 				<ClassDialog/>
 			</CardHeader>
 			<CardContent>
-				<ClassesTable data={result}/>
+				<ClassesTable/>
 			</CardContent>
 		</Card>
 	)

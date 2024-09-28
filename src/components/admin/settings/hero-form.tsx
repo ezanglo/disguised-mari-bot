@@ -1,24 +1,22 @@
 "use client";
 
-import { ClassSelect, ClassType } from "@/components/admin/class-select";
-import { GearSelect, GearType } from "@/components/admin/gear-select";
-import { FileInput } from "@/components/file-input";
+import { ClassSelect } from "@/components/admin/class-select";
+import { ColorPicker } from "@/components/color-picker";
 import { SubmitButton } from "@/components/submit-button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { UploadButton } from "@/components/upload-button";
 import { heroes } from "@/db/schema";
+import { toCode } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { TierSelect, TierType } from "../tier-select";
-import { AttributeSelect, AttributeType } from "../attribute-select";
-import { Input } from "@/components/ui/input";
-import { ColorPicker } from "@/components/color-picker";
-import { useEffect } from "react";
-import { toCode } from "@/lib/utils";
-import { UploadButton } from "@/components/upload-button";
+import { AttributeSelect } from "../attribute-select";
+import { TierSelect } from "../tier-select";
 
 const formSchema = createInsertSchema(heroes, {
 	name: z.string().min(1),
@@ -34,17 +32,11 @@ const formSchema = createInsertSchema(heroes, {
 export type HeroFormSchema = z.infer<typeof formSchema>
 
 type HeroFormProps = {
-	tierTypes: TierType[],
-	classTypes: ClassType[],
-	attributeTypes: AttributeType[],
 	onSubmit?: (formData: HeroFormSchema) => Promise<void>
 	defaultValues?: HeroFormSchema
 }
 
 export function HeroForm({
-	tierTypes,
-	classTypes,
-	attributeTypes,
 	defaultValues,
 	onSubmit
 }: HeroFormProps) {
@@ -64,10 +56,20 @@ export function HeroForm({
 	useEffect(() => {
 		form.setValue("code", toCode(form.getValues("name")))
 	}, [form.formState]);
+
+	const handleSubmit = async () => {
+    const valid = await form.trigger();
+		if(valid){
+			onSubmit?.(form.getValues())
+		}
+		else {
+			form.reset();
+		}
+	}
 	
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(formData => onSubmit?.(formData))} className="space-y-4">
+			<form action={handleSubmit} className="space-y-4">
 				<FormField
 					control={form.control}
 					name="name"
@@ -117,7 +119,6 @@ export function HeroForm({
 								<TierSelect
 									onValueChange={field.onChange}
 									defaultValue={field.value}
-									data={tierTypes}
 								/>
 							</FormControl>
 							<FormMessage/>
@@ -134,7 +135,6 @@ export function HeroForm({
 								<ClassSelect
 									onValueChange={field.onChange}
 									defaultValue={field.value}
-									data={classTypes}
 								/>
 							</FormControl>
 							<FormMessage/>
@@ -151,7 +151,6 @@ export function HeroForm({
 								<AttributeSelect
 									onValueChange={field.onChange}
 									defaultValue={field.value}
-									data={attributeTypes}
 								/>
 							</FormControl>
 							<FormMessage/>

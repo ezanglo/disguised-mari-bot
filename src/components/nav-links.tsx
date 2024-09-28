@@ -5,16 +5,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export const links = [
-	{ label: 'Home', href: '/'},
-	{ label: 'Heroes', href: '/heroes'},
-	{label: 'Pets', href: '/pets'},
-	{label: 'Lineups', href: '/lineups'}
+	{ label: 'Home', href: '/' },
+	{ label: 'Heroes', href: '/heroes' },
+	{ label: 'Pets', href: '/pets' },
+	{ label: 'Lineups', href: '/lineups' }
 ]
 
 export function NavLinks() {
-	
+
 	const pathname = usePathname()
-	
+
 	return (
 		<nav className="hidden md:flex flex-row gap-5">
 			{links.map((link, index) => (
