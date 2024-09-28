@@ -50,11 +50,11 @@ export const authConfig = {
 			}
 			
 			if (token?.roles) {
-				session.user.roles = token.roles;
+				session.user.roles = token.roles as string[];
 			}
 			
 			if (token?.nick) {
-				session.user.nick = token.nick;
+				session.user.nick = token.nick as string;
 			}
 			
 			return session;

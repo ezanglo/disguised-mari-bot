@@ -17,7 +17,6 @@ import { AttributeSelect, AttributeType } from "../attribute-select";
 import { Input } from "@/components/ui/input";
 import { ColorPicker } from "@/components/color-picker";
 import { useEffect } from "react";
-import { log } from "console";
 import { toCode } from "@/lib/utils";
 import { UploadButton } from "@/components/upload-button";
 

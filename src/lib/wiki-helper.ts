@@ -3,7 +3,7 @@ import * as cheerio from 'cheerio';
 import { capitalizeFirstLetter, parseHtmlImage, stripHtml, toCamelCase } from './utils';
 import { DataData, InfoboxData, InfoboxProps, SkillData } from 'wiki-helper';
 
-async function fetchWikiData(params: object, newHero: boolean = false) {
+export async function fetchWikiData(params: object, newHero: boolean = false) {
   const url = qs.stringifyUrl({
     url: "https://grandchase.fandom.com/api.php",
     query: {
@@ -43,7 +43,7 @@ function getImageString(image?: string) {
   return image?.replace(/\/revision\/.*$/, '') || '';
 }
 
-async function getGallery(hero: string[], newHero: boolean = false) {
+export async function getGallery(hero: string[], newHero: boolean = false) {
   const gallerySection = await getSection(hero, "Gallery", newHero);
   const data = await fetchWikiData({
     action: "parse",
@@ -99,7 +99,7 @@ function extractFlatGallery($: cheerio.CheerioAPI) {
   return galleryImages;
 }
 
-async function getHeroIcon(hero: string[], newHero: boolean = false) {
+export async function getHeroIcon(hero: string[], newHero: boolean = false) {
 
   const gallerySection = await getSection(hero, "Gallery", newHero);
 
@@ -139,7 +139,7 @@ async function getHeroIcon(hero: string[], newHero: boolean = false) {
   return iconSrc;
 }
 
-async function getDetails(hero: string[], newHero: boolean = false) {
+export async function getDetails(hero: string[], newHero: boolean = false) {
 
   const data = await fetchWikiData({
     action: "parse",
@@ -251,7 +251,7 @@ function processDetailItem(item: {
   return value;
 }
 
-async function getSection(hero: string[], section: string, newHero: boolean = false) {
+export async function getSection(hero: string[], section: string, newHero: boolean = false) {
   const sectionsData = await fetchWikiData({
     action: "parse",
     page: getPageName(hero, newHero),
@@ -261,7 +261,7 @@ async function getSection(hero: string[], section: string, newHero: boolean = fa
   return sectionsData.parse.sections.find((i: any) => i.line === section);
 }
 
-async function getSkills(hero: string[], newHero: boolean = false) {
+export async function getSkills(hero: string[], newHero: boolean = false) {
   const [_, type] = hero;
   const skillSection = await getSection(hero, "Skills", newHero);
   const skillData = await fetchWikiData({
@@ -499,7 +499,7 @@ function extractChaserSkill($: cheerio.CheerioAPI, type: string | undefined) {
 
 type Tier = 'SS' | 'S' | 'A' | 'T';
 
-async function getHeroes(tier: Tier) {
+export async function getHeroes(tier: Tier) {
   const response = await fetchWikiData({
     action: 'parse',
     text: `{{Template:GCkakao ${tier}}}`,
@@ -526,13 +526,3 @@ async function getHeroes(tier: Tier) {
 
   return heroes;
 }
-
-
-export {
-  getDetails,
-  getSkills,
-  getHeroIcon,
-  getGallery,
-  fetchWikiData,
-  getHeroes
-};
