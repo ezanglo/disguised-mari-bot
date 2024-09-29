@@ -113,6 +113,20 @@
       "when": 1727574616947,
       "tag": "0015_odd_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1727575555714,
+      "tag": "0016_closed_meltdown",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1727575576984,
+      "tag": "0017_happy_rictor",
+      "breakpoints": true
     }
   ]
 }
