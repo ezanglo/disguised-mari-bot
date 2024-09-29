@@ -1,7 +1,8 @@
 "use client";
 
-import { EquipType } from "@/components/admin/settings/equips-table";
-import { TraitType } from "@/components/admin/settings/traits-table";
+import { EquipType } from "@/components/admin/equips/equips-table";
+import { HeroesType } from "@/components/admin/heroes/heroes-table";
+import { TraitType } from "@/components/admin/traits/traits-table";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { attributeTypes, classTypes, tierTypes } from "@/db/schema";
@@ -10,7 +11,6 @@ import { InferSelectModel } from "drizzle-orm";
 import { CopyIcon } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
-import { HeroesType } from "./admin/settings/heroes-table";
 
 type CopyMarkdownProps = ({
 	prefix: 'tier',

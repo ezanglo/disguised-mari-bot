@@ -11,6 +11,9 @@ const ADMIN = {
 	EQUIPS: {
 		BASE: '/admin/equips',
 	},
+	CONTENTS: {
+		BASE: '/admin/contents',
+	},
 	LINEUPS: {
 		BASE: '/admin/lineups',
 	},

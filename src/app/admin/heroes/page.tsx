@@ -1,6 +1,6 @@
+import { HeroDialog } from "@/components/admin/heroes/hero-dialog";
 import { HeroList } from "@/components/admin/heroes/hero-list";
 import { HeroListFilters } from "@/components/admin/heroes/hero-list-filters";
-import { HeroDialog } from "@/components/admin/settings/hero-dialog";
 import LoadingPlaceholder from "@/components/loading-placeholder";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";

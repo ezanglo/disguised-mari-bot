@@ -1,8 +1,8 @@
 "use client";
 
 import { insertTraitType, updateTraitType } from "@/actions/trait-type";
-import { TraitForm, TraitFormSchema } from "@/components/admin/settings/trait-form";
-import { TraitType } from "@/components/admin/settings/traits-table";
+import { TraitForm, TraitFormSchema } from "@/components/admin/traits/trait-form";
+import { TraitType } from "@/components/admin/traits/traits-table";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import React, { useState } from "react";

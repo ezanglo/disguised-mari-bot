@@ -1,5 +1,7 @@
 "use client";
 
+import { TierDialog } from "@/components/admin/tiers/tier-dialog";
+import { TiersTable } from "@/components/admin/tiers/tiers-table";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlusIcon } from "lucide-react";
@@ -8,8 +10,6 @@ import { AttributeDialog } from "./attribute-dialog";
 import { AttributesTable } from "./attributes-table";
 import { ClassDialog } from "./class-dialog";
 import { ClassesTable } from "./classes-table";
-import { TierDialog } from "./tier-dialog";
-import { TiersTable } from "./tiers-table";
 
 export default function GeneralSettingTabs() {
   const [tab, setTab] = useState<string>('tier');

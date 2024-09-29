@@ -1,12 +1,12 @@
 "use client"
 
+import { ClassType } from '@/components/class-select'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import useLists from '@/hooks/use-lists'
 import { Loader2Icon } from 'lucide-react'
 import Image from 'next/image'
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
 import React from 'react'
-import { ClassType } from './admin/class-select'
 
 
 export function ClassFilter() {

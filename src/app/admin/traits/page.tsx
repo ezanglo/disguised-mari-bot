@@ -1,7 +1,7 @@
-import { TraitDialog } from "@/components/admin/settings/trait-dialog";
-import { TraitsTable } from "@/components/admin/settings/traits-table";
-import { UpgradeTypesSelector } from "@/components/admin/settings/upgrade-types-selector";
+import { TraitDialog } from "@/components/admin/traits/trait-dialog";
+import { TraitsTable } from "@/components/admin/traits/traits-table";
 import { Button } from "@/components/ui/button";
+import { UpgradeTypesSelector } from "@/components/upgrade-types-selector";
 import { db } from "@/db";
 import { listItems, traitTypes } from "@/db/schema";
 import { and, asc, eq, getTableColumns } from "drizzle-orm";

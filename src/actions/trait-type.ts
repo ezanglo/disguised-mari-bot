@@ -2,7 +2,7 @@
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
 import { auth } from "@/auth";
-import { TraitFormSchema } from "@/components/admin/settings/trait-form";
+import { TraitFormSchema } from "@/components/admin/traits/trait-form";
 import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";

@@ -1,5 +1,6 @@
 "use client"
 
+import { TierType } from '@/components/tier-select'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import useLists from '@/hooks/use-lists'
 
@@ -7,7 +8,6 @@ import { Loader2Icon } from 'lucide-react'
 import Image from 'next/image'
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
 import React from 'react'
-import { TierType } from './admin/tier-select'
 
 export function TierFilter() {
 

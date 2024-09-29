@@ -4,6 +4,7 @@ import { FileInput } from "@/components/file-input";
 import { SubmitButton } from "@/components/submit-button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { UpgradeSelect } from "@/components/upgrade-select";
 import { traitTypes } from "@/db/schema/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
@@ -11,7 +12,6 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { UpgradeSelect } from "../upgrade-select";
 
 const formSchema = createInsertSchema(traitTypes, {
 	name: z.string().min(1),

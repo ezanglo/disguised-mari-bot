@@ -1,8 +1,8 @@
 "use client";
 
-import { ClassSelect } from "@/components/admin/class-select";
-import { GearSelect } from "@/components/admin/gear-select";
+import { ClassSelect } from "@/components/class-select";
 import { FileInput } from "@/components/file-input";
+import { GearSelect } from "@/components/gear-select";
 import { SubmitButton } from "@/components/submit-button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";

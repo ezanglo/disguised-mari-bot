@@ -1,9 +1,11 @@
 "use client";
 
-import { ClassSelect } from "@/components/admin/class-select";
+import { AttributeSelect } from "@/components/attribute-select";
+import { ClassSelect } from "@/components/class-select";
 import { ColorPicker } from "@/components/color-picker";
 import { FileInput } from "@/components/file-input";
 import { SubmitButton } from "@/components/submit-button";
+import { TierSelect } from "@/components/tier-select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { heroes } from "@/db/schema";
@@ -15,8 +17,6 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { AttributeSelect } from "../attribute-select";
-import { TierSelect } from "../tier-select";
 
 const formSchema = createInsertSchema(heroes, {
 	name: z.string().min(1),

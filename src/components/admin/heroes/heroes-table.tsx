@@ -1,8 +1,11 @@
 "use client";
 
-import { deleteTierType } from "@/actions/tier-type";
-import { TierDialog } from "@/components/admin/settings/tier-dialog";
+import { deleteHero } from "@/actions/hero";
+import { HeroDialog } from "@/components/admin/heroes/hero-dialog";
+import { AttributeType } from "@/components/attribute-select";
+import { ClassType } from "@/components/class-select";
 import { CopyMarkdown } from "@/components/copy-markdown";
+import { TierType } from "@/components/tier-select";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
@@ -13,60 +16,88 @@ import {
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { tierTypes } from "@/db/schema";
-import useLists from "@/hooks/use-lists";
+import { heroes } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
-export type TierType = InferSelectModel<typeof tierTypes>
+export type HeroesType = InferSelectModel<typeof heroes>;
 
-export function TiersTable() {
+type HeroesTableProps = {
+	data: (HeroesType & {
+		tierImage?: string | null;
+		classImage?: string | null;
+		attributeImage?: string | null;
+	})[],
+	tierTypes: TierType[];
+	classTypes: ClassType[];
+	attributeTypes: AttributeType[];
+}
 
-	const { data, isLoading} = useLists('tiers')
+export function HeroesTable({
+	data,
+}: HeroesTableProps) {
 
-	if(isLoading) {
-		return (
-			<div className="flex w-full items-center justify-center h-32 text-muted-foreground border border-muted rounded-md">
-				Loading...
-			</div>
-		)
-	}
-	
 	if (data.length === 0) {
 		return (
-			<div className="flex w-full items-center justify-center h-32 text-muted-foreground border border-muted rounded-md">
+			<div className="flex w-full items-center justify-center h-32 text-muted-foreground">
 				No data found.
 			</div>
 		)
 	}
-	
+
 	return (
 		<Table>
 			<TableHeader>
 				<TableRow>
 					<TableHead className="w-[100px] hidden sm:table-cell">ID</TableHead>
+					<TableHead>Tier</TableHead>
 					<TableHead>Name</TableHead>
-					<TableHead>Emote</TableHead>
+					<TableHead className="hidden md:table-cell">Emote</TableHead>
 					<TableHead>
 						<span className="sr-only">Actions</span>
 					</TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{data.map((item: TierType, index: number) => (
+				{data.map((item, index) => (
 					<TableRow key={index}>
 						<TableCell className="font-medium hidden sm:table-cell">
 							{item.id.split('-')[0]}
 						</TableCell>
 						<TableCell>
-							<div className="flex flex-row gap-2 items-center">
-								<Image src={item.image || ''} alt={item.name} width={100} height={100} className="size-5"/>
-								{item.name}
-							</div>
+							<Image
+								src={item.tierImage || ''}
+								alt={item.tierType}
+								width={100}
+								height={100}
+								className="size-5"
+							/>
 						</TableCell>
 						<TableCell>
-							<CopyMarkdown prefix="tier" {...item}/>
+							<div className="flex flex-row gap-2 items-center">
+								{item.image && (
+									<Image src={item.image} alt={item.name} width={100} height={100} className="size-5" />
+								)}
+								{item.name}
+								<Image
+									src={item.classImage || ''}
+									alt={item.classType}
+									width={100}
+									height={100}
+									className="size-5"
+								/>
+								<Image
+									src={item.attributeImage || ''}
+									alt={item.attributeType}
+									width={100}
+									height={100}
+									className="size-5"
+								/>
+							</div>
+						</TableCell>
+						<TableCell className="hidden md:table-cell">
+							<CopyMarkdown prefix="hero" {...item} />
 						</TableCell>
 						<TableCell className="text-right">
 							<DropdownMenu>
@@ -82,13 +113,13 @@ export function TiersTable() {
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end">
 									<DropdownMenuLabel>Actions</DropdownMenuLabel>
-									<TierDialog data={item}>
+									<HeroDialog data={item}>
 										<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
-									</TierDialog>
+									</HeroDialog>
 									<ConfirmDialog
 										title={`Delete ${item.name}?`}
 										description="This action is permanent and cannot be undone."
-										onConfirm={() => deleteTierType(item.id)}
+										onConfirm={() => deleteHero(item.id)}
 									>
 										<DropdownMenuItem preventSelect className="text-destructive">
 											Delete

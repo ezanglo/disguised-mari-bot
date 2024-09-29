@@ -1,12 +1,12 @@
 "use client"
 
+import { AttributeType } from '@/components/attribute-select'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import useLists from '@/hooks/use-lists'
 import { Loader2Icon } from 'lucide-react'
 import Image from 'next/image'
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
 import React from 'react'
-import { AttributeType } from './admin/attribute-select'
 
 export function AttributeFilter() {
 

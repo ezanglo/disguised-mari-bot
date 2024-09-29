@@ -1,6 +1,6 @@
-import { EquipDialog } from "@/components/admin/settings/equip-dialog";
-import { EquipFilters } from "@/components/admin/settings/equip-filters";
-import { EquipsTable } from "@/components/admin/settings/equips-table";
+import { EquipDialog } from "@/components/admin/equips/equip-dialog";
+import { EquipFilters } from "@/components/admin/equips/equip-filters";
+import { EquipsTable } from "@/components/admin/equips/equips-table";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db";
 import { classTypes, equipTypes, listItems } from "@/db/schema";

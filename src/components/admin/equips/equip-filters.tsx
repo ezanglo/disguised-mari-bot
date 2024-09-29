@@ -1,7 +1,7 @@
 "use client";
 
-import { GearSelect } from "@/components/admin/gear-select";
 import { ClassFilter } from "@/components/class-filter";
+import { GearSelect } from "@/components/gear-select";
 import { parseAsString, useQueryState } from "nuqs";
 
 export function EquipFilters() {

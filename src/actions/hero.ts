@@ -2,7 +2,7 @@
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
 import { auth } from "@/auth";
-import { HeroFormSchema } from "@/components/admin/settings/hero-form";
+import { HeroFormSchema } from "@/components/admin/heroes/hero-form";
 import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";

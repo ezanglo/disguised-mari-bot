@@ -1,8 +1,8 @@
 "use client";
 
 import { insertEquip, updateEquip } from "@/actions/equip-type";
-import { EquipForm, EquipFormSchema } from "@/components/admin/settings/equip-form";
-import { EquipType } from "@/components/admin/settings/equips-table";
+import { EquipForm, EquipFormSchema } from "@/components/admin/equips/equip-form";
+import { EquipType } from "@/components/admin/equips/equips-table";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import React, { useState } from "react";

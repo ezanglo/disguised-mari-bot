@@ -1,38 +1,38 @@
 "use client";
 
-import { insertHero, updateHero } from "@/actions/hero";
-import { HeroForm, HeroFormSchema } from "@/components/admin/settings/hero-form";
+import { insertTierType, updateTierType } from "@/actions/tier-type";
+import { TierForm, TierFormSchema } from "@/components/admin/tiers/tier-form";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { heroes } from "@/db/schema";
+import { tierTypes } from "@/db/schema/types";
 import { InferSelectModel } from "drizzle-orm";
 import { useState } from "react";
 import { toast } from "sonner";
 
-type HeroDialogProps = {
-	data?: InferSelectModel<typeof heroes>,
+type TierDialogProps = {
+	data?: InferSelectModel<typeof tierTypes>,
 	children?: React.ReactNode
 }
 
-export function HeroDialog({
+export function TierDialog({
 	data,
 	children
-}: HeroDialogProps) {
+}: TierDialogProps) {
 	const [open, setOpen] = useState(false);
 	
-	const handleSubmit = async (formData: HeroFormSchema) => {
+	const handleSubmit = async (formData: TierFormSchema) => {
 		try {
 			let result;
 			
 			if(data){
-				result = await updateHero(formData);
+				result = await updateTierType(formData);
 			}
 			else {
-				result = await insertHero(formData);
+				result = await insertTierType(formData);
 			}
 
 			if (result) {
-				toast.success(data ? "Hero updated": "Hero created")
+				toast.success(data ? "Tier type updated": "Tier type created")
 				setOpen(false)
 			}
 		} catch (error) {
@@ -44,12 +44,12 @@ export function HeroDialog({
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				{children ? children : (
-					<Button variant={'outline'}>{data ? 'Update': 'Add'}</Button>
+					<Button variant="outline">{data ? 'Update': 'Add'}</Button>
 				)}
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
-				<DialogTitle>{data ? `Edit ${data.name}` : 'Add Hero'}</DialogTitle>
-				<HeroForm
+				<DialogTitle>{data ? `Edit ${data.name}` : 'Add Tier'}</DialogTitle>
+				<TierForm
 					defaultValues={data}
 					onSubmit={handleSubmit}
 				/>

@@ -1,3 +1,4 @@
+import { HeroDialog } from '@/components/admin/heroes/hero-dialog'
 import { Card, CardHeader } from '@/components/ui/card'
 import { DEFAULT_IMAGE } from '@/constants/constants'
 import { db } from "@/db";
@@ -5,7 +6,6 @@ import { attributeTypes, classTypes, heroes, tierTypes } from "@/db/schema";
 import { and, asc, eq, getTableColumns, inArray } from "drizzle-orm";
 import Image from 'next/image'
 import React from 'react'
-import { HeroDialog } from '../settings/hero-dialog'
 
 type HeroListProps = {
 	tiers?: string[] | null,
