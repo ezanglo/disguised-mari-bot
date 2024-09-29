@@ -1,5 +1,6 @@
 "use client";
 
+import { ListItemDialog } from "@/components/admin/settings/list-item-dialog";
 import { ManageListGroup } from "@/components/admin/settings/manage-list-group";
 import { Button } from "@/components/ui/button";
 import { lists } from "@/db/schema";
@@ -8,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { InferSelectModel } from "drizzle-orm";
 import { PlusIcon } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
-import { ListItemDialog } from "./list-item-dialog";
 
 export type ListGroupType = InferSelectModel<typeof lists> & {
 	itemCount: number

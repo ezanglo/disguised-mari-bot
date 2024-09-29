@@ -1,6 +1,6 @@
 import { attributeTypes, classTypes, tierTypes } from "@/db/schema/types";
 import { timestampColumns } from "@/db/schema/users";
-import { json, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 
 export const heroes = pgTable("hero", {
 	id: uuid("id").primaryKey().defaultRandom(),

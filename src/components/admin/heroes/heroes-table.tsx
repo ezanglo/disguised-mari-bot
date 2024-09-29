@@ -2,10 +2,7 @@
 
 import { deleteHero } from "@/actions/hero";
 import { HeroDialog } from "@/components/admin/heroes/hero-dialog";
-import { AttributeType } from "@/components/attribute-select";
-import { ClassType } from "@/components/class-select";
 import { CopyMarkdown } from "@/components/copy-markdown";
-import { TierType } from "@/components/tier-select";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
@@ -29,9 +26,6 @@ type HeroesTableProps = {
 		classImage?: string | null;
 		attributeImage?: string | null;
 	})[],
-	tierTypes: TierType[];
-	classTypes: ClassType[];
-	attributeTypes: AttributeType[];
 }
 
 export function HeroesTable({

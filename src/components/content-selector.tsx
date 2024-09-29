@@ -8,13 +8,13 @@ import { cn } from "@/lib/utils";
 import { InferSelectModel } from "drizzle-orm";
 import { parseAsString, useQueryState } from "nuqs";
 
-export type UpgradeType = InferSelectModel<typeof listItems>;
+export type ContentType = InferSelectModel<typeof listItems>;
 
-export function UpgradeTypesSelector() {
+export function ContentTypesSelector() {
 
-	const { data, isLoading} = useLists('upgrade-types')
+	const { data, isLoading} = useLists('content-types')
 	
-	const [upgradeType, setUpgradeType] = useQueryState('upgradeType',
+	const [contentType, setContentType] = useQueryState('contentType',
 		parseAsString
 			.withDefault('all')
 			.withOptions({
@@ -22,10 +22,6 @@ export function UpgradeTypesSelector() {
 				clearOnDefault: true,
 			})
 	)
-
-	const upgradeTypes = !isLoading ? data.filter((i: UpgradeType) => {
-		return ['lvl', 'csr', 'si', 'trans'].includes(i.code);
-	}): []
 	
 	return (
 		<div className="flex flex-row gap-2 flex-wrap">
@@ -33,13 +29,13 @@ export function UpgradeTypesSelector() {
 				variant="secondary" size="sm"
 				className={cn(
 					'bg-secondary/20',
-					upgradeType === 'all' && 'bg-secondary/50 outline outline-2 outline-secondary'
+					contentType === 'all' && 'bg-secondary/50 outline outline-2 outline-secondary'
 				)}
-				onClick={() => setUpgradeType('all')}
+				onClick={() => setContentType('all')}
 			>
 				All
 			</Button>
-			{upgradeTypes.map((item: UpgradeType, index: number) => (
+			{!isLoading && data.map((item: ContentType, index: number) => (
 				<TooltipProvider key={index}>
 					<Tooltip>
 						<TooltipTrigger asChild>
@@ -47,9 +43,9 @@ export function UpgradeTypesSelector() {
 								variant="secondary" size="sm"
 								className={cn(
 									'bg-secondary/20',
-									item.code === upgradeType && 'bg-secondary/50 outline outline-2 outline-secondary'
+									item.code === contentType && 'bg-secondary/50 outline outline-2 outline-secondary'
 								)}
-								onClick={() => setUpgradeType(item.code)}
+								onClick={() => setContentType(item.code)}
 							>
 								{item.name}
 							</Button>

@@ -1,7 +1,7 @@
 "use client";
 
 import { deleteListGroup, insertListGroup, updateListGroup } from "@/actions/list";
-import { ListGroupType } from "@/components/admin/settings/lists-selector";
+import { ListGroupType } from "@/components/lists-selector";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import {

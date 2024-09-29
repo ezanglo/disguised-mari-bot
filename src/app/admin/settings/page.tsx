@@ -1,6 +1,6 @@
 import GeneralSettingTabs from "@/components/admin/settings/general-setting-tabs";
 import { ListItemsTable } from "@/components/admin/settings/list-items-table";
-import { ListsSelector } from "@/components/admin/settings/lists-selector";
+import { ListsSelector } from "@/components/lists-selector";
 import { db } from "@/db";
 import { listItems, lists } from "@/db/schema";
 import { and, asc, eq, getTableColumns } from "drizzle-orm";
