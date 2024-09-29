@@ -28,13 +28,14 @@ export const insertHero = async (payload: HeroFormSchema) => {
 		}).returning().then((res) => res[0] ?? null);
 
 		if(payload.image){
+			let imageBase64 = payload.image;
 			const isUrl = payload.image.startsWith('http');
 			if (isUrl) {
 				try {
 					const response = await fetch(payload.image);
 					const arrayBuffer = await response.arrayBuffer();
 					const base64 = Buffer.from(arrayBuffer).toString('base64');
-					payload.image = `data:image/png;base64,${base64}`;
+					imageBase64 = `data:image/png;base64,${base64}`;
 				} catch (error) {
 					console.error('Error converting image to base64:', error);
 					throw new Error('Failed to convert image to base64');
@@ -45,10 +46,10 @@ export const insertHero = async (payload: HeroFormSchema) => {
 			
 			const discordEmote = await UploadDiscordEmote({
 				name: emoteName,
-				image: payload.image,
+				image: imageBase64,
 			})
 			if(discordEmote){
-				const emoteUrl = isUrl ? payload.image : `https://cdn.discordapp.com/emojis/${discordEmote.id}.webp?size=32&quality=lossless`
+				const emoteUrl = isUrl ? payload.image : `https://cdn.discordapp.com/emojis/${discordEmote.id}.webp`
 				return trx.update(heroes).set({
 					discordEmote: discordEmote.id,
 					image: emoteUrl,
@@ -97,7 +98,7 @@ export const updateHero = async (payload: HeroFormSchema) => {
 				image: payload.image,
 			})
 			if(image){
-				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp?size=32&quality=lossless`;
+				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp`;
 				payload.discordEmote = image.id;
 			}
 		}

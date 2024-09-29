@@ -32,7 +32,7 @@ export function DiscordEmoteUpload({
 			
 			if(response){
 				toast.success('Emoji has been uploaded')
-				const emoteUrl = `https://cdn.discordapp.com/emojis/${response.id}.webp?size=32&quality=lossless`
+				const emoteUrl = `https://cdn.discordapp.com/emojis/${response.id}.webp`
 				onUpload?.(emoteUrl)
 			}
 		}

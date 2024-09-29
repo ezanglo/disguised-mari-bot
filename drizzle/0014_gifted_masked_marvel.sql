@@ -1,0 +1,1 @@
+ALTER TABLE "equip_type" ADD COLUMN "name" text;

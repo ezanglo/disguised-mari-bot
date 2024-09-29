@@ -1,12 +1,11 @@
 import { HeroList } from "@/components/admin/heroes/hero-list";
 import { HeroListFilters } from "@/components/admin/heroes/hero-list-filters";
 import { HeroDialog } from "@/components/admin/settings/hero-dialog";
+import LoadingPlaceholder from "@/components/loading-placeholder";
 import { Button } from "@/components/ui/button";
-import { db } from "@/db";
-import { attributeTypes, classTypes, heroes, tierTypes } from "@/db/schema";
-import { and, asc, eq, getTableColumns, inArray } from "drizzle-orm";
 import { PlusIcon } from "lucide-react";
 import { createSearchParamsCache, parseAsArrayOf, parseAsString } from 'nuqs/server'
+import { Suspense } from "react";
 
 const searchParamsCache = createSearchParamsCache({
 	tiers: parseAsArrayOf(parseAsString),
@@ -23,34 +22,6 @@ export default async function HeroesPage({
 	searchParams
 }: HeroesPageProps) {
 
-
-	const { tiers, classes, attributes } = searchParamsCache.parse(searchParams)
-
-	const whereConditions = []
-
-	if (tiers && tiers.length > 0) {
-		whereConditions.push(inArray(heroes.tierType, tiers))
-	}
-	if (classes && classes.length > 0) {
-		whereConditions.push(inArray(heroes.classType, classes))
-	}
-	if (attributes && attributes.length > 0) {
-		whereConditions.push(inArray(heroes.attributeType, attributes))
-	}
-
-	const data = await db
-		.select({
-			...getTableColumns(heroes),
-			tierImage: tierTypes.image,
-			classImage: classTypes.image,
-			attributeImage: attributeTypes.image,
-		}).from(heroes)
-		.leftJoin(tierTypes, eq(heroes.tierType, tierTypes.code))
-		.leftJoin(classTypes, eq(heroes.classType, classTypes.code))
-		.leftJoin(attributeTypes, eq(heroes.attributeType, attributeTypes.code))
-		.where(and(...whereConditions))
-		.orderBy(asc(heroes.createdAt));
-
 	return (
 		<div className="flex flex-1 flex-col gap-4 p-4 lg:p-6 h-full mb-4 overflow-hidden">
 			<div className="flex items-center gap-2">
@@ -63,7 +34,9 @@ export default async function HeroesPage({
 			</div>
 			<HeroListFilters />
 			<div className="flex-1 rounded-lg border border-dashed shadow-sm p-2 md:p-3 overflow-y-auto">
-				<HeroList data={data} />
+				<Suspense fallback={<LoadingPlaceholder/>}>
+					<HeroList {...searchParamsCache.parse(searchParams)} />
+				</Suspense>
 			</div>
 		</div>
 	)

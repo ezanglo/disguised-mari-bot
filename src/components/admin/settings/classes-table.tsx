@@ -14,6 +14,7 @@ import {
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { DEFAULT_IMAGE } from "@/constants/constants";
 import { classTypes } from "@/db/schema";
 import useLists from "@/hooks/use-lists";
 import { InferSelectModel } from "drizzle-orm";
@@ -63,7 +64,7 @@ export function ClassesTable() {
 						</TableCell>
 						<TableCell>
 							<div className="flex flex-row gap-2 items-center">
-								<Image src={item.image || ''} alt={item.name} width={100} height={100} className="size-5"/>
+								<Image src={item.image || DEFAULT_IMAGE} alt={item.name} width={100} height={100} className="size-5"/>
 								{item.name}
 							</div>
 						</TableCell>

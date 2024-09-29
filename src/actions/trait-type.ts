@@ -36,7 +36,7 @@ export const insertTraitType = async (payload: TraitFormSchema) => {
 				image: payload.image,
 			})
 			if (image) {
-				const emoteUrl = `https://cdn.discordapp.com/emojis/${image.id}.webp?size=32&quality=lossless`
+				const emoteUrl = `https://cdn.discordapp.com/emojis/${image.id}.webp`
 				return trx.update(traitTypes).set({
 					discordEmote: image.id,
 					image: emoteUrl,
@@ -88,7 +88,7 @@ export const updateTraitType = async (payload: TraitFormSchema) => {
 				image: payload.image,
 			})
 			if (image) {
-				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp?size=32&quality=lossless`;
+				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp`;
 				payload.discordEmote = image.id;
 			}
 		}

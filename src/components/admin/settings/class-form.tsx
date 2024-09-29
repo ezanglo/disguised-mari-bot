@@ -34,8 +34,11 @@ export function ClassForm({
 	const form = useForm<ClassFormSchema>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
+			id: defaultValues?.id,
+			name: defaultValues?.name || '',
+			image: defaultValues?.image || '',
 			code: toCode(defaultValues?.name ?? ""),
-			...defaultValues
+			color: defaultValues?.color || "",
 		},
 	})
 

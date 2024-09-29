@@ -41,7 +41,7 @@ export default async function EquipsPage({
 		.leftJoin(classTypes, eq(equipTypes.classType, classTypes.code))
 		.leftJoin(listItems, eq(equipTypes.gearType, listItems.code))
 		.where(and(...whereConditions))
-		.orderBy(asc(equipTypes.createdAt));
+		.orderBy(asc(equipTypes.classType), asc(listItems.order));
 
 	return (
 		<div className="flex flex-1 flex-col gap-4 p-4 lg:p-6 h-full mb-4 overflow-hidden">

@@ -37,7 +37,10 @@ export function TraitForm({
 	const form = useForm<TraitFormSchema>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			...defaultValues,
+			id: defaultValues?.id,
+			name: defaultValues?.name || '',
+			image: defaultValues?.image || '',
+			code: defaultValues?.code || '',
 			upgradeType: searchParams.get("upgradeType") || defaultValues?.upgradeType ||"",
 		},
 	})

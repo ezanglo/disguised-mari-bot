@@ -5,6 +5,7 @@ import { GearSelect } from "@/components/admin/gear-select";
 import { FileInput } from "@/components/file-input";
 import { SubmitButton } from "@/components/submit-button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { equipTypes } from "@/db/schema/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
@@ -16,6 +17,7 @@ import { z } from "zod";
 const formSchema = createInsertSchema(equipTypes, {
 	classType: z.string().min(1),
 	gearType: z.string().min(1),
+	name: z.string().optional(),
 	image: z.string().optional(),
 })
 
@@ -36,7 +38,9 @@ export function EquipForm({
 	const form = useForm<EquipFormSchema>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			...defaultValues,
+			id: defaultValues?.id,
+			name: defaultValues?.name || '',
+			image: defaultValues?.image || '',
 			gearType: searchParams.get("gearType") || defaultValues?.gearType || "",
 			classType: searchParams.get("classType") || defaultValues?.classType || "",
 		},
@@ -82,6 +86,19 @@ export function EquipForm({
 									onValueChange={field.onChange}
 									defaultValue={field.value}
 								/>
+							</FormControl>
+							<FormMessage/>
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="name"
+					render={({field}) => (
+						<FormItem>
+							<FormLabel>Name</FormLabel>
+							<FormControl>
+								<Input placeholder="Name.." {...field} value={field.value || ''}/>
 							</FormControl>
 							<FormMessage/>
 						</FormItem>

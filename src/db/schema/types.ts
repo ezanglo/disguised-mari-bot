@@ -68,6 +68,7 @@ export const equipTypes = pgTable("equip_type", {
 	.references(() => classTypes.code),
 	gearType: text("gear_type").notNull()
 	.references(() => listItems.code),
+	name: text("name"),
 	image: text("image"),
 	discordEmote: text("discord_emote"),
 	order: integer("order"),

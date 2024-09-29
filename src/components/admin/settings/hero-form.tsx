@@ -2,10 +2,10 @@
 
 import { ClassSelect } from "@/components/admin/class-select";
 import { ColorPicker } from "@/components/color-picker";
+import { FileInput } from "@/components/file-input";
 import { SubmitButton } from "@/components/submit-button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UploadButton } from "@/components/upload-button";
 import { heroes } from "@/db/schema";
 import { toCode } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -167,8 +167,7 @@ export function HeroForm({
 								{field.value && <Image src={field.value} alt={''} width={100} height={100} className="size-4"/>}
 							</div>
 							<FormControl>
-								<UploadButton onUpload={field.onChange}/>
-								{/* <FileInput onValueChange={field.onChange}/> */}
+								<FileInput onValueChange={field.onChange}/>
 							</FormControl>
 							<FormMessage/>
 						</FormItem>

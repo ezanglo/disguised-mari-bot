@@ -1,24 +1,50 @@
 import { Card, CardHeader } from '@/components/ui/card'
 import { DEFAULT_IMAGE } from '@/constants/constants'
+import { db } from "@/db";
+import { attributeTypes, classTypes, heroes, tierTypes } from "@/db/schema";
+import { and, asc, eq, getTableColumns, inArray } from "drizzle-orm";
 import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
-import { HeroesType } from '../settings/heroes-table'
+import { HeroDialog } from '../settings/hero-dialog'
 
 type HeroListProps = {
-	data: (HeroesType & {
-		tierImage?: string | null;
-		classImage?: string | null;
-		attributeImage?: string | null;
-	})[],
+	tiers?: string[] | null,
+	classes?: string[] | null,
+	attributes?: string[] | null,
 }
 
-export function HeroList({ data }: HeroListProps) {
+export async function HeroList({ tiers, classes, attributes }: HeroListProps) {
+	const whereConditions = []
+
+	if (tiers && tiers.length > 0) {
+		whereConditions.push(inArray(heroes.tierType, tiers))
+	}
+	if (classes && classes.length > 0) {
+		whereConditions.push(inArray(heroes.classType, classes))
+	}
+	if (attributes && attributes.length > 0) {
+		whereConditions.push(inArray(heroes.attributeType, attributes))
+	}
+
+	const data = await db
+		.select({
+			...getTableColumns(heroes),
+			tierImage: tierTypes.image,
+			classImage: classTypes.image,
+			attributeImage: attributeTypes.image,
+		}).from(heroes)
+		.leftJoin(tierTypes, eq(heroes.tierType, tierTypes.code))
+		.leftJoin(classTypes, eq(heroes.classType, classTypes.code))
+		.leftJoin(attributeTypes, eq(heroes.attributeType, attributeTypes.code))
+		.where(and(...whereConditions))
+		.orderBy(asc(heroes.createdAt));
+
+
 	return (
 		<div className="flex flex-wrap gap-2 md:gap-3">
 			{data.map((item, index) => (
-				<Link href={`/admin/heroes/${item.id}`} key={index}>
-					<Card key={index} className="overflow-hidden hover:scale-105 transition-all duration-300">
+				<HeroDialog key={index} data={item}>
+					<Card className="overflow-hidden hover:scale-105 transition-all duration-300">
 						<CardHeader className="p-0 space-y-0 relative">
 							<Image
 								src={item.image || DEFAULT_IMAGE}
@@ -47,7 +73,7 @@ export function HeroList({ data }: HeroListProps) {
 							</div>
 						</CardHeader>
 					</Card>
-				</Link>
+				</HeroDialog>
 			))}
 		</div>
 	)

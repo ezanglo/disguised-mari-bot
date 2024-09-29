@@ -34,7 +34,7 @@ export default async function TraitsPage({
 		}).from(traitTypes)
 		.leftJoin(listItems, eq(traitTypes.upgradeType, listItems.code))
 		.where(and(...whereConditions))
-		.orderBy(asc(traitTypes.createdAt));
+		.orderBy(asc(traitTypes.upgradeType), asc(traitTypes.code));
 
 	return (
 		<div className="flex flex-1 flex-col gap-4 p-4 lg:p-6 h-full mb-4">

@@ -35,7 +35,7 @@ export const insertEquip = async (payload: EquipFormSchema) => {
 				image: payload.image,
 			})
 			if(image){
-				const emoteUrl = `https://cdn.discordapp.com/emojis/${image.id}.webp?size=32&quality=lossless`
+				const emoteUrl = `https://cdn.discordapp.com/emojis/${image.id}.webp`
 				return trx.update(equipTypes).set({
 					discordEmote: image.id,
 					image: emoteUrl,
@@ -86,7 +86,7 @@ export const updateEquip = async (payload: EquipFormSchema) => {
 				image: payload.image,
 			})
 			if(image){
-				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp?size=32&quality=lossless`;
+				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp`;
 				payload.discordEmote = image.id;
 			}
 		}

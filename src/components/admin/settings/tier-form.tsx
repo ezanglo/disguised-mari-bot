@@ -32,8 +32,10 @@ export function TierForm({
 	const form = useForm<TierFormSchema>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
+			id: defaultValues?.id,
+			name: defaultValues?.name || '',
+			image: defaultValues?.image || '',
 			code: toCode(defaultValues?.name ?? ""),
-			...defaultValues
 		}
 	})
 

@@ -34,8 +34,10 @@ export function ListItemForm({
 	const form = useForm<ListItemFormSchema>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			...defaultValues,
-			listId: searchParams.get("listId") || "",
+			id: defaultValues?.id,
+			name: defaultValues?.name || '',
+			code: defaultValues?.code || '',
+			listId: defaultValues?.listId || "",
 		},
 	})
 

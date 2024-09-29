@@ -34,7 +34,7 @@ export function CopyMarkdown({
 	image
 }: CopyMarkdownProps) {
 	
-	const label = GetDiscordEmoteName(prefix, name, id)
+	const label = GetDiscordEmoteName(prefix, name || '', id)
 	const markdown = `<:${label}:${discordEmote}>`
 	
 	const handleCopy = async () => {

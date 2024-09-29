@@ -19,9 +19,7 @@ import { InferSelectModel } from "drizzle-orm";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
-export type EquipType = InferSelectModel<typeof equipTypes> & {
-	name?: string
-};
+export type EquipType = InferSelectModel<typeof equipTypes>;
 
 type EquipsTableProps = {
 	data: (EquipType & {
@@ -83,7 +81,7 @@ export function EquipsTable({
 									height={100}
 									className="size-4"
 								/>
-								<span>{item.gearName}</span>
+								<span>{item.name}</span>
 							</div>
 						</TableCell>
 						<TableCell>
