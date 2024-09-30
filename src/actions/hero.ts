@@ -1,23 +1,20 @@
 "use server"
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
-import { auth } from "@/auth";
 import { HeroFormSchema } from "@/components/admin/heroes/hero-form";
-import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { heroes } from "@/db/schema";
 import { GetDiscordEmoteName, toCode } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { getAuthorizedUser } from "./base";
 
 
 export const insertHero = async (payload: HeroFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -66,11 +63,9 @@ export const insertHero = async (payload: HeroFormSchema) => {
 }
 
 export const updateHero = async (payload: HeroFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const hero = await db.query.heroes.findFirst({
@@ -115,11 +110,9 @@ export const updateHero = async (payload: HeroFormSchema) => {
 
 
 export const deleteHero = async (id: string) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const hero = await db.query.heroes.findFirst({

@@ -1,22 +1,19 @@
 "use server";
 
 import { DeleteDiscordEmote, UploadDiscordEmote } from "@/actions/discord";
-import { auth } from "@/auth";
 import { ListItemFormSchema } from "@/components/admin/settings/list-item-form";
-import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { listItems, lists } from "@/db/schema";
 import { GetDiscordEmoteName } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { getAuthorizedUser } from "./base";
 
 export const insertListGroup = async (name: string) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if (!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const response = await db.insert(lists).values({
@@ -29,11 +26,9 @@ export const insertListGroup = async (name: string) => {
 }
 
 export const updateListGroup = async (id: string, name: string) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if (!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const response = await db.update(lists).set({
@@ -46,11 +41,9 @@ export const updateListGroup = async (id: string, name: string) => {
 }
 
 export const deleteListGroup = async (id: string) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if (!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const response = await db.delete(lists).where(eq(lists.id, id)).returning();
@@ -59,11 +52,9 @@ export const deleteListGroup = async (id: string) => {
 }
 
 export const insertListItem = async (payload: ListItemFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if (!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const listGroup = await db.query.lists.findFirst({
@@ -106,11 +97,9 @@ export const insertListItem = async (payload: ListItemFormSchema) => {
 }
 
 export const updateListItem = async (payload: ListItemFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if (!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const listItem = await db.query.listItems.findFirst({
@@ -156,11 +145,9 @@ export const updateListItem = async (payload: ListItemFormSchema) => {
 }
 
 export const deleteListItem = async (id: string) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if (!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const listItem = await db.query.listItems.findFirst({

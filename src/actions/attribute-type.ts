@@ -1,23 +1,20 @@
 "use server"
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
-import { auth } from "@/auth";
 import { AttributeFormSchema } from "@/components/admin/settings/attribute-form";
-import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { attributeTypes } from "@/db/schema/types";
 import { GetDiscordEmoteName, toCode } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { getAuthorizedUser } from "./base";
 
 
 export const insertAttributeType = async (payload: AttributeFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -53,11 +50,9 @@ export const insertAttributeType = async (payload: AttributeFormSchema) => {
 }
 
 export const updateAttributeType = async (payload: AttributeFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const attributeType = await db.query.attributeTypes.findFirst({
@@ -103,11 +98,9 @@ export const updateAttributeType = async (payload: AttributeFormSchema) => {
 
 
 export const deleteAttributeType = async (id: string) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const attributeType = await db.query.attributeTypes.findFirst({

@@ -1,22 +1,19 @@
 "use server"
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
-import { auth } from "@/auth";
 import { TraitFormSchema } from "@/components/admin/traits/trait-form";
-import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { traitTypes } from "@/db/schema/types";
 import { GetDiscordEmoteName } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { getAuthorizedUser } from "./base";
 
 export const insertTraitType = async (payload: TraitFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if (!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -53,11 +50,9 @@ export const insertTraitType = async (payload: TraitFormSchema) => {
 }
 
 export const updateTraitType = async (payload: TraitFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if (!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const traitType = await db.query.traitTypes.findFirst({
@@ -105,11 +100,9 @@ export const updateTraitType = async (payload: TraitFormSchema) => {
 
 
 export const deleteTraitType = async (id: string) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if (!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const traitType = await db.query.traitTypes.findFirst({

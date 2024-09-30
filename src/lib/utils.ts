@@ -1,10 +1,18 @@
+import { ROLES } from "@/constants/discord";
 import * as cheerio from "cheerio";
 import { type ClassValue, clsx } from "clsx"
 import { RESTError, RESTErrorFieldInformation, RESTErrorGroupWrapper } from "discord-api-types/v10";
+import { Session } from "next-auth";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
+}
+
+export function isAuthorized(user?: Session['user']){
+  return user?.roles.some(role => 
+		[ROLES.ADMIN, ROLES.MODERATOR].includes(role)
+	);
 }
 
 export function enumToPgEnum<T extends Record<string, any>>(

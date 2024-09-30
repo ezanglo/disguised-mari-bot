@@ -7,9 +7,8 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
-import { cn } from "@/lib/utils";
+import { cn, isAuthorized } from "@/lib/utils";
 import { CrownIcon, LogOutIcon, MenuIcon, SettingsIcon } from "lucide-react";
 import { Session } from "next-auth";
 import Link from "next/link";
@@ -68,7 +67,7 @@ export function Sidebar({
 								</p>
 							</div>
 							<div className="flex flex-row gap-2 ml-auto">
-								{user.roles.includes(ROLES.ADMIN) && (
+								{isAuthorized(user) && (
 									<Button variant="outline" size="icon" asChild>
 										<Link href={ROUTES.ADMIN.BASE}>
 											<SettingsIcon className="size-4"/>

@@ -12,8 +12,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
+import { isAuthorized } from "@/lib/utils";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { LogOutIcon, SettingsIcon } from "lucide-react";
 import { Session } from "next-auth";
@@ -63,7 +63,7 @@ export function UserMenu({
 					</div>
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator/>
-				{user.roles.includes(ROLES.ADMIN) && (
+				{isAuthorized(user) && (
 					<DropdownMenuItem asChild>
 						<Link href={ROUTES.ADMIN.BASE}>
 							<SettingsIcon className="size-4 mr-2"/>

@@ -1,22 +1,19 @@
 "use server"
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
-import { auth } from "@/auth";
 import { EquipFormSchema } from "@/components/admin/equips/equip-form";
-import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { equipTypes } from "@/db/schema/types";
 import { GetDiscordEmoteName } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { getAuthorizedUser } from "./base";
 
 export const insertEquip = async (payload: EquipFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -52,11 +49,9 @@ export const insertEquip = async (payload: EquipFormSchema) => {
 }
 
 export const updateEquip = async (payload: EquipFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const equipType = await db.query.equipTypes.findFirst({
@@ -103,11 +98,9 @@ export const updateEquip = async (payload: EquipFormSchema) => {
 
 
 export const deleteEquip = async (id: string) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const equipType = await db.query.equipTypes.findFirst({

@@ -1,23 +1,20 @@
 "use server"
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
-import { auth } from "@/auth";
 import { TierFormSchema } from "@/components/admin/tiers/tier-form";
-import { ROLES } from "@/constants/discord";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { tierTypes } from "@/db/schema/types";
 import { GetDiscordEmoteName, toCode } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { getAuthorizedUser } from "./base";
 
 
 export const insertTierType = async (payload: TierFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -53,11 +50,9 @@ export const insertTierType = async (payload: TierFormSchema) => {
 }
 
 export const updateTierType = async (payload: TierFormSchema) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const tierType = await db.query.tierTypes.findFirst({
@@ -102,11 +97,9 @@ export const updateTierType = async (payload: TierFormSchema) => {
 
 
 export const deleteTierType = async (id: string) => {
-	const session = await auth();
-	const user = session?.user;
-	
-	if(!user?.roles.includes(ROLES.ADMIN)) {
-		throw new Error("Unauthorized");
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
 	}
 	
 	const tierType = await db.query.tierTypes.findFirst({
