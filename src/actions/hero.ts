@@ -16,8 +16,6 @@ export const insertHero = async (payload: HeroFormSchema) => {
 	if(!user){
     throw new Error("Unauthorized");
 	}
-
-	console.log({payload})
 	
 	const response = await db.transaction(async (trx) => {
 		const result = await trx.insert(heroes).values({
@@ -30,7 +28,6 @@ export const insertHero = async (payload: HeroFormSchema) => {
 			let imageBase64 = payload.image;
 			const isUrl = payload.image.startsWith('http');
 			if (isUrl) {
-				console.log(isUrl);
 				try {
 					const response = await fetch(payload.image);
 					const arrayBuffer = await response.arrayBuffer();

@@ -29,10 +29,7 @@ export function HeroCard({
     return <div>Loading...</div>
   }
 
-  const heroCode = toCode(wikiHero.name, false);
   const hero = data as HeroType;
-
-  console.log(wikiHero.name, heroCode)
 
   const handleInsert = async () => {
 

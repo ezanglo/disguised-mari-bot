@@ -267,7 +267,6 @@ function processDetailItem(item: {
     currentValue = processClass(value.value as string) || value.value;
   }
   if(label === 'attribute') {
-    console.log(value);
     currentValue = processAttribute(value.value as string) || value.value;
   }
 
