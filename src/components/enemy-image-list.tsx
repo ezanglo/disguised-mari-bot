@@ -23,7 +23,7 @@ export function EnemyImageList({
 	return (
 		<div className={"flex flex-row gap-2 flex-wrap"}>
 			{enemies.map((item: HeroType | MonsterType, index) => (
-				<TooltipProvider>
+				<TooltipProvider key={index}>
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Image
