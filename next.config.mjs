@@ -11,7 +11,11 @@ const nextConfig = {
 			protocol: "https",
 			hostname: "utfs.io",
 			pathname: "/a/1te70qyjma/*",
-		},]
+		},
+		{
+			protocol: "https",
+			hostname: "static.wikia.nocookie.net",
+		}]
 	},
 	async rewrites() {
 		return [

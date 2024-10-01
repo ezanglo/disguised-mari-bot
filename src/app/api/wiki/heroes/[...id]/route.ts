@@ -13,9 +13,14 @@ async function getHeroDetails(hero: string[], newHero: boolean = false) {
       icon = gallery['icons']?.reverse().find((icon: any) => icon.type.includes('icon'))?.image || '';
     }
 
+    const displayName = title?.[0];
+    const name = displayName?.split(" ")[0];
+    const koreanName = title?.[1]
+
     return {
-      name: title?.[0],
-      koreanName: title?.[1],
+      name,
+      displayName,
+      koreanName,
       image: icon,
       details,
       skills,
