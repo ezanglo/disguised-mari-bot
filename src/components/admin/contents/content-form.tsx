@@ -5,13 +5,22 @@ import { ClassSelect } from "@/components/class-select";
 import { ContentSelect } from "@/components/content-select";
 import { EnemySelector } from "@/components/enemy-selector";
 import { SubmitButton } from "@/components/submit-button";
+import { Badge } from "@/components/ui/badge";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { contentPhases, enemyTypeEnum } from "@/db/schema";
+import { capitalizeFirstLetter } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CaretDownIcon } from "@radix-ui/react-icons";
 import { createInsertSchema } from "drizzle-zod";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
@@ -38,9 +47,11 @@ export function ContentForm({
 	defaultValues,
 	onSubmit
 }: ContentFormProps) {
-	
+
 	const searchParams = useSearchParams();
-	
+
+	const [enemyType, setEnemyType] = useState<EnemyType>('monsters')
+
 	const form = useForm<ContentFormSchema>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -54,7 +65,7 @@ export function ContentForm({
 			enemies: defaultValues?.enemies || [],
 		},
 	})
-	
+
 	const handleSubmit = async () => {
 		const valid = await form.trigger();
 		if (valid) {
@@ -63,49 +74,48 @@ export function ContentForm({
 			form.reset();
 		}
 	}
-	
-	
-	const enemyType = useWatch({control: form.control, name: "enemyType"});
-	
+
+	const contentType = useWatch({ control: form.control, name: "content" });
+
 	return (
 		<Form {...form}>
 			<form action={handleSubmit} className="space-y-4">
 				<FormField
 					control={form.control}
 					name="content"
-					render={({field}) => (
+					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Content</FormLabel>
 							<FormControl>
-								<ContentSelect value={field.value} onValueChange={field.onChange}/>
+								<ContentSelect value={field.value} onValueChange={field.onChange} />
 							</FormControl>
-							<FormMessage/>
+							<FormMessage />
 						</FormItem>
 					)}
 				/>
 				<FormField
 					control={form.control}
 					name="name"
-					render={({field}) => (
+					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Name</FormLabel>
 							<FormControl>
 								<Input {...field} />
 							</FormControl>
-							<FormMessage/>
+							<FormMessage />
 						</FormItem>
 					)}
 				/>
 				<FormField
 					control={form.control}
 					name="code"
-					render={({field}) => (
+					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Code</FormLabel>
 							<FormControl>
-								<Input {...field} />
+								<Input  {...field} value={field.value || `${contentType}.`} />
 							</FormControl>
-							<FormMessage/>
+							<FormMessage />
 						</FormItem>
 					)}
 				/>
@@ -113,59 +123,51 @@ export function ContentForm({
 					<FormField
 						control={form.control}
 						name="classType"
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Class</FormLabel>
 								<FormControl>
-									<ClassSelect value={field.value} onValueChange={field.onChange}/>
+									<ClassSelect value={field.value} onValueChange={field.onChange} />
 								</FormControl>
-								<FormMessage/>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
 					<FormField
 						control={form.control}
 						name="attributeType"
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Attribute</FormLabel>
 								<FormControl>
-									<AttributeSelect value={field.value} onValueChange={field.onChange}/>
+									<AttributeSelect value={field.value} onValueChange={field.onChange} />
 								</FormControl>
-								<FormMessage/>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
 				</div>
 				<FormField
 					control={form.control}
-					name="enemyType"
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>Enemy Type</FormLabel>
-							<FormControl>
-								<Select value={field.value || ''} onValueChange={field.onChange}>
-									<SelectTrigger>
-										<SelectValue placeholder="Select enemy type"/>
-									</SelectTrigger>
-									<SelectContent>
-										<SelectGroup>
-											<SelectItem value="monsters">Monster</SelectItem>
-											<SelectItem value="heroes">Heroes</SelectItem>
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-							</FormControl>
-							<FormMessage/>
-						</FormItem>
-					)}
-				/>
-				{enemyType && (<FormField
-					control={form.control}
 					name="enemies"
-					render={({field}) => (
+					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Enemies</FormLabel>
+							<div className="flex flex-row gap-2 items-center">
+								<FormLabel>
+									Enemies
+								</FormLabel>
+								<DropdownMenu>
+									<DropdownMenuTrigger>
+										<Badge variant="outline">
+											{capitalizeFirstLetter(enemyType)} <CaretDownIcon className="size-3"/>
+										</Badge>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent>
+										<DropdownMenuItem onSelect={val => setEnemyType('heroes')}>Heroes</DropdownMenuItem>
+										<DropdownMenuItem onSelect={val => setEnemyType('monsters')}>Monsters</DropdownMenuItem>
+									</DropdownMenuContent>
+								</DropdownMenu>
+							</div>
 							<FormControl>
 								<EnemySelector
 									enemyType={enemyType}
@@ -173,10 +175,10 @@ export function ContentForm({
 									onValueChange={field.onChange}
 								/>
 							</FormControl>
-							<FormMessage/>
+							<FormMessage />
 						</FormItem>
 					)}
-				/>)}
+				/>
 				<SubmitButton type="submit" className="w-full">Submit</SubmitButton>
 			</form>
 		</Form>

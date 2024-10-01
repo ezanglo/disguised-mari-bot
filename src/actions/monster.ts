@@ -1,28 +1,25 @@
 "use server"
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
-import { HeroFormSchema } from "@/components/admin/heroes/hero-form";
+import { MonsterFormSchema } from "@/components/admin/monsters/monster-form";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
-import { heroes } from "@/db/schema";
-import { GetDiscordEmoteName, toCode } from "@/lib/utils";
+import { monsters } from "@/db/schema";
+import { GetDiscordEmoteName } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { getAuthorizedUser } from "./base";
 
 
-export const insertHero = async (payload: HeroFormSchema) => {
+export const insertMonster = async (payload: MonsterFormSchema) => {
 	const user = await getAuthorizedUser();
 	if(!user){
     throw new Error("Unauthorized");
 	}
-
-	console.log({payload})
 	
 	const response = await db.transaction(async (trx) => {
-		const result = await trx.insert(heroes).values({
+		const result = await trx.insert(monsters).values({
 			...payload,
-			code: toCode(payload.name),
 			createdBy: user.id,
 		}).returning().then((res) => res[0] ?? null);
 
@@ -30,7 +27,6 @@ export const insertHero = async (payload: HeroFormSchema) => {
 			let imageBase64 = payload.image;
 			const isUrl = payload.image.startsWith('http');
 			if (isUrl) {
-				console.log(isUrl);
 				try {
 					const response = await fetch(payload.image);
 					const arrayBuffer = await response.arrayBuffer();
@@ -42,7 +38,7 @@ export const insertHero = async (payload: HeroFormSchema) => {
 				}
 			}
 			
-			const emoteName = GetDiscordEmoteName('hero', payload.name, result.id);
+			const emoteName = GetDiscordEmoteName('mob', payload.name, result.id);
 			
 			const discordEmote = await UploadDiscordEmote({
 				name: emoteName,
@@ -50,11 +46,11 @@ export const insertHero = async (payload: HeroFormSchema) => {
 			})
 			if(discordEmote){
 				const emoteUrl = isUrl ? payload.image : `https://cdn.discordapp.com/emojis/${discordEmote.id}.webp`
-				return trx.update(heroes).set({
+				return trx.update(monsters).set({
 					discordEmote: discordEmote.id,
 					image: emoteUrl,
 					updatedBy: user.id,
-				}).where(eq(heroes.id, result.id)).returning();
+				}).where(eq(monsters.id, result.id)).returning();
 			}
 		}
 
@@ -62,34 +58,33 @@ export const insertHero = async (payload: HeroFormSchema) => {
 	});
 
 	revalidatePath(ROUTES.ADMIN.HEROES.BASE);
-	revalidatePath(ROUTES.ADMIN.HEROES.ADD);
 	return response;
 }
 
-export const updateHero = async (payload: HeroFormSchema) => {
+export const updateMonster = async (payload: MonsterFormSchema) => {
 	const user = await getAuthorizedUser();
 	if(!user){
     throw new Error("Unauthorized");
 	}
 	
-	const hero = await db.query.heroes.findFirst({
-		where: eq(heroes.id, payload.id || '')
+	const monster = await db.query.monsters.findFirst({
+		where: eq(monsters.id, payload.id || '')
 	})
-	if(!hero){
+	if(!monster){
 		throw new Error("List item not found");
 	}
 	
 	const response = await db.transaction(async (trx) => {
-		const emoteName = GetDiscordEmoteName('hero', payload.name, hero.id);
+		const emoteName = GetDiscordEmoteName('mob', payload.name, monster.id);
 		
-		if(hero.discordEmote && payload.name !== hero.name){
-			await UpdateDiscordEmoteName(hero.discordEmote, emoteName);
+		if(monster.discordEmote && payload.name !== monster.name){
+			await UpdateDiscordEmoteName(monster.discordEmote, emoteName);
 		}
 		
 		if(payload.image && payload.image.startsWith('data:image/png;base64,')) {
 			
-			if(hero.discordEmote){
-				await DeleteDiscordEmote(hero.discordEmote);
+			if(monster.discordEmote){
+				await DeleteDiscordEmote(monster.discordEmote);
 			}
 			
 			const image = await UploadDiscordEmote({
@@ -102,10 +97,10 @@ export const updateHero = async (payload: HeroFormSchema) => {
 			}
 		}
 		
-		return trx.update(heroes).set({
+		return trx.update(monsters).set({
 			...payload,
 			updatedBy: user.id,
-		}).where(eq(heroes.id, payload.id || '')).returning();
+		}).where(eq(monsters.id, payload.id || '')).returning();
 	});
 
 	revalidatePath(ROUTES.ADMIN.HEROES.BASE);
@@ -113,24 +108,24 @@ export const updateHero = async (payload: HeroFormSchema) => {
 }
 
 
-export const deleteHero = async (id: string) => {
+export const deleteMonster = async (id: string) => {
 	const user = await getAuthorizedUser();
 	if(!user){
     throw new Error("Unauthorized");
 	}
 	
-	const hero = await db.query.heroes.findFirst({
-		where: eq(heroes.id, id)
+	const monster = await db.query.monsters.findFirst({
+		where: eq(monsters.id, id)
 	})
-	if(!hero){
+	if(!monster){
 		throw new Error("List item not found");
 	}
 	
-	if(hero.discordEmote){
-		await DeleteDiscordEmote(hero.discordEmote);
+	if(monster.discordEmote){
+		await DeleteDiscordEmote(monster.discordEmote);
 	}
 	
-	const response = await db.delete(heroes).where(eq(heroes.id, id)).returning();
+	const response = await db.delete(monsters).where(eq(monsters.id, id)).returning();
 	revalidatePath(ROUTES.ADMIN.HEROES.BASE);
 	return response;
 }

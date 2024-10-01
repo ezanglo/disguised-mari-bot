@@ -1,7 +1,7 @@
 "use client";
 
 import { EquipType } from "@/components/admin/equips/equips-table";
-import { HeroesType } from "@/components/admin/heroes/heroes-table";
+import { HeroType } from "@/components/admin/heroes/heroes-table";
 import { TraitType } from "@/components/admin/traits/traits-table";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -11,6 +11,7 @@ import { InferSelectModel } from "drizzle-orm";
 import { CopyIcon } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
+import { MonsterType } from "./admin/monsters/monster-table";
 
 type CopyMarkdownProps = ({
 	prefix: 'tier',
@@ -24,7 +25,9 @@ type CopyMarkdownProps = ({
 	prefix: 'equip'
 } & EquipType) | ({
 	prefix: 'hero'
-} & HeroesType)
+} & HeroType) | ({
+	prefix: 'mob'
+} & MonsterType)
 
 export function CopyMarkdown({
 	prefix,

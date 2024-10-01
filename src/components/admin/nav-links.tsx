@@ -12,6 +12,7 @@ import { TbSwords } from "react-icons/tb";
 export const links = [
 	{ label: 'General', href: ROUTES.ADMIN.SETTINGS.BASE, icon: <SettingsIcon /> },
 	{ label: 'Heroes', href: ROUTES.ADMIN.HEROES.BASE, icon: <GiSamusHelmet /> },
+	{ label: 'Monsters', href: ROUTES.ADMIN.MONSTERS.BASE, icon: <GiSamusHelmet /> },
 	{ label: 'Contents', href: ROUTES.ADMIN.CONTENTS.BASE, icon: <TbSwords /> },
 	{ label: 'Equips', href: ROUTES.ADMIN.EQUIPS.BASE, icon: <TbSwords /> },
 	{ label: 'Traits', href: ROUTES.ADMIN.TRAITS.BASE, icon: <TbSwords /> },

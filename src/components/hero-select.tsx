@@ -1,6 +1,6 @@
 "use client";
 
-import { HeroesType } from "@/components/admin/heroes/heroes-table";
+import { HeroType } from "@/components/admin/heroes/heroes-table";
 import { Combobox } from "@/components/combobox";
 import { listItems } from "@/db/schema";
 import useLists from "@/hooks/use-lists";
@@ -23,7 +23,7 @@ export function HeroSelect({
 	return !isLoading && (
 		<Combobox
 			placeholder="Select hero"
-			options={data.map((item: HeroesType) => ({ label: item.name, value: item.code}))}
+			options={data.map((item: HeroType) => ({ label: item.name, value: item.code}))}
 			onSelect={onValueChange}
 		/>
 	)

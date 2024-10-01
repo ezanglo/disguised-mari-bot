@@ -13,16 +13,20 @@ type Option = {
 
 type ComboboxProps = {
 	options: Option[]
+	value?: string,
 	onSelect?: (val: string) => void
 	placeholder?: string
 }
 
 export function Combobox({
 	options,
+	value,
 	onSelect,
 	placeholder = "Select option",
 }: ComboboxProps) {
 	const [open, setOpen] = React.useState(false)
+
+	const selected = options.find(i => i.value == value);
 	
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -33,7 +37,7 @@ export function Combobox({
 					aria-expanded={open}
 					className="justify-between"
 				>
-					{placeholder}
+					{selected?.label || placeholder}
 					<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
@@ -41,15 +45,15 @@ export function Combobox({
 				<Command>
 					<CommandInput placeholder="Search..." />
 					<CommandList className="max-h-48">
-						<CommandEmpty>No framework found.</CommandEmpty>
+						<CommandEmpty>No data found.</CommandEmpty>
 						<CommandGroup>
 							{options.map((option) => (
 								<CommandItem
 									key={option.value}
-									value={option.value}
+									value={option.label}
 									onSelect={(value) => {
 										setOpen(false)
-										onSelect?.(value)
+										onSelect?.(option.value)
 									}}
 								>
 									{option.label}

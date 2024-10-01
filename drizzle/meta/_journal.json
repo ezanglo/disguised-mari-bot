@@ -127,6 +127,13 @@
       "when": 1727575576984,
       "tag": "0017_happy_rictor",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1727721461182,
+      "tag": "0018_curvy_wallow",
+      "breakpoints": true
     }
   ]
 }

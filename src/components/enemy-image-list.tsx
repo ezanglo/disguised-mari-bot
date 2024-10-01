@@ -1,27 +1,28 @@
-import { HeroType } from "@/components/admin/heroes/heroes-table";
-import { UpgradeType } from "@/components/upgrade-types-selector";
 import { DEFAULT_IMAGE } from "@/constants/constants";
 import useLists from "@/hooks/use-lists";
 import Image from "next/image";
+import { HeroType } from "./admin/heroes/heroes-table";
+import { MonsterType } from "./admin/monsters/monster-table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
-type HeroImageListProps = {
-	heroCodes: string[]
+type EnemyImageListProps = {
+	codes: string[]
 }
 
-export function HeroImageList({
-	heroCodes,
-}: HeroImageListProps) {
+export function EnemyImageList({
+	codes,
+}: EnemyImageListProps) {
 
-	const { data, isLoading } = useLists('heroes')
+	const {data: heroList } = useLists('heroes');
+	const {data: monsterList } = useLists('monsters');
 
-	const heroes = !isLoading ? data.filter((i: UpgradeType) => {
-		return heroCodes.includes(i.code);
-	}) : []
+	const data = [...heroList || [], ...monsterList || []]
+
+	const enemies = data.filter(i => codes.includes(i.code)) 
 
 	return (
 		<div className={"flex flex-row gap-2 flex-wrap"}>
-			{heroes.map((item: HeroType, index: number) => (
+			{enemies.map((item: HeroType | MonsterType, index) => (
 				<TooltipProvider>
 					<Tooltip>
 						<TooltipTrigger asChild>

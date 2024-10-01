@@ -1,7 +1,7 @@
-import qs from 'query-string';
 import * as cheerio from 'cheerio';
-import { capitalizeFirstLetter, parseHtmlImage, stripHtml, toCamelCase } from './utils';
+import qs from 'query-string';
 import { DataData, InfoboxData, InfoboxProps, SkillData } from 'wiki-helper';
+import { capitalizeFirstLetter, parseHtmlImage, stripHtml, toCamelCase } from './utils';
 
 export async function fetchWikiData(params: object, newHero: boolean = false) {
   const url = qs.stringifyUrl({
@@ -27,14 +27,18 @@ export async function fetchWikiData(params: object, newHero: boolean = false) {
 }
 
 function getPageName(hero: string[], newHero: boolean = false) {
-  const [heroName, upgrade] = hero;
+  let [heroName, upgrade, type] = hero;
+  
+  if(upgrade === 'Dimensional_Chaser'){
+    upgrade = type;
+  }
 
   const data = [capitalizeFirstLetter(heroName)];
   if (!newHero) {
     data.push('Dimensional_Chaser');
   }
   if (upgrade) {
-    data.push(upgrade.toUpperCase());
+    data.push(upgrade);
   }
   return data.join('/');
 }
@@ -159,7 +163,7 @@ export async function getDetails(hero: string[], newHero: boolean = false) {
 
 // New helper functions for getDetails
 function extractTitle(infoboxData: InfoboxData[]) {
-  return infoboxData.find(i => i.type === 'title')?.data.value.split('<br/>');
+  return infoboxData.find(i => i.type === 'title')?.data.value.replace('<br>', '').split('<br/>');
 }
 
 function extractMedia(infoboxData: InfoboxData[]) {
@@ -170,8 +174,10 @@ function extractMedia(infoboxData: InfoboxData[]) {
   }));
 }
 
+export type DetailData = { label: string, value: string | string[] }
+
 function extractDetails(infoboxData: InfoboxData[]) {
-  const details = [] as { label: string, value: string | string[] }[];
+  const details = [] as DetailData[];
   infoboxData.filter(i => i.type === 'group').forEach(group => {
     group.data.value
       .filter(i => i.type === 'data')
@@ -199,11 +205,16 @@ function processDetailItem(item: {
     case "type":
     case "attribute":
     case "pet":
-
       const { imageName, imageSrc } = parseHtmlImage(itemValue);
+
+      let labelValue = imageName;
+      if(label === 'pet'){
+        labelValue = stripHtml(itemValue).trim() || imageName
+      }
+
       value = {
         ...value,
-        value: stripHtml(itemValue).trim() || imageName,
+        value: labelValue,
         image: getImageString(imageSrc),
       }
       break;
@@ -248,7 +259,51 @@ function processDetailItem(item: {
       break;
   }
 
-  return value;
+  let currentValue = value.value;
+  if(label === 'tier') {
+    currentValue = processTier(value.value as string) || value.value;
+  }
+  if(label === 'type') {
+    currentValue = processClass(value.value as string) || value.value;
+  }
+  if(label === 'attribute') {
+    console.log(value);
+    currentValue = processAttribute(value.value as string) || value.value;
+  }
+
+  return {
+    ...value,
+    value: currentValue
+  };
+}
+
+function processTier(data: string){
+  switch(data){
+    case 'Rank-SS.png': return 'sr'
+    case 'Rank-S.png': return 's'
+    case 'Rank-T.png': return 't'
+    case 'Rank-A.png': return 'a'
+  }
+}
+
+function processAttribute(data: string){
+  switch(data){
+    case 'ATTR-Judgment.png': return 'balance_blue'
+    case 'ATTR-Life.png': return 'life_green'
+    case 'ATTR-Hellfire.png': return 'retribution_red'
+    case 'ATTR-Cycles.png': return 'cycle_light'
+    case 'ATTR-Destruction.png': return 'ruin_dark'
+  }
+}
+
+function processClass(data: string){
+  switch(data){
+    case 'Type-Ranged.png': return 'ranger'
+    case 'Type-Assault.png': return 'assault'
+    case 'Type-Tank.png': return 'tank'
+    case 'Type-Mage.png': return 'mage'
+    case 'Type-Support.png': return 'healer'
+  }
 }
 
 export async function getSection(hero: string[], section: string, newHero: boolean = false) {
@@ -497,7 +552,7 @@ function extractChaserSkill($: cheerio.CheerioAPI, type: string | undefined) {
   return chaserSkill;
 }
 
-type Tier = 'SS' | 'S' | 'A' | 'T';
+export type Tier = 'SS' | 'S' | 'A' | 'T';
 
 export async function getHeroes(tier: Tier) {
   const response = await fetchWikiData({
@@ -509,18 +564,19 @@ export async function getHeroes(tier: Tier) {
   const html = response.parse.text['*'];
   const $ = cheerio.load(html);
 
-  const heroes = [] as { name: string, imageUrl?: string, attribute?: string, tier: Tier }[];
+  const heroes = [] as { name: string, wikiPage?: string, imageUrl?: string, attribute?: string, tier: Tier }[];
 
   $('td[style*="font-size:11px"]').each((index, element) => {
     const $element = $(element);
     const name = $element.find('span[style="color: #ffffff;"]').text().trim();
     let imageUrl = $element.find('img').first().attr('data-src') || $element.find('img').first().attr('src');
     imageUrl = getImageString(imageUrl);
+    const wikiPage = $element.find('a').first().attr('href')?.replace("/wiki/", "");
     const attributeImg = $element.find('img').last();
     const attribute = attributeImg.attr('alt')?.replace('ATTR-', '') || 'Unknown';
 
     if (name && imageUrl) {
-      heroes.push({ name, imageUrl, attribute, tier });
+      heroes.push({ name, wikiPage, imageUrl, attribute, tier });
     }
   });
 

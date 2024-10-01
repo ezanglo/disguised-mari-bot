@@ -1,7 +1,7 @@
 "use client";
 
-import { deleteHero } from "@/actions/hero";
-import { HeroDialog } from "@/components/admin/heroes/hero-dialog";
+import { deleteMonster } from "@/actions/monster";
+import { MonsterDialog } from "@/components/admin/monsters/monster-dialog";
 import { CopyMarkdown } from "@/components/copy-markdown";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -13,24 +13,24 @@ import {
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { heroes } from "@/db/schema";
+import { monsters } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
-export type HeroType = InferSelectModel<typeof heroes>;
+export type MonsterType = InferSelectModel<typeof monsters>;
 
-type HeroesTableProps = {
-	data: (HeroType & {
+type MonstersTableProps = {
+	data: (MonsterType & {
 		tierImage?: string | null;
 		classImage?: string | null;
 		attributeImage?: string | null;
 	})[],
 }
 
-export function HeroesTable({
+export function MonstersTable({
 	data,
-}: HeroesTableProps) {
+}: MonstersTableProps) {
 
 	if (data.length === 0) {
 		return (
@@ -45,7 +45,6 @@ export function HeroesTable({
 			<TableHeader>
 				<TableRow>
 					<TableHead className="w-[100px] hidden sm:table-cell">ID</TableHead>
-					<TableHead>Tier</TableHead>
 					<TableHead>Name</TableHead>
 					<TableHead className="hidden md:table-cell">Emote</TableHead>
 					<TableHead>
@@ -60,15 +59,6 @@ export function HeroesTable({
 							{item.id.split('-')[0]}
 						</TableCell>
 						<TableCell>
-							<Image
-								src={item.tierImage || ''}
-								alt={item.tierType}
-								width={100}
-								height={100}
-								className="size-5"
-							/>
-						</TableCell>
-						<TableCell>
 							<div className="flex flex-row gap-2 items-center">
 								{item.image && (
 									<Image src={item.image} alt={item.name} width={100} height={100} className="size-5" />
@@ -76,14 +66,14 @@ export function HeroesTable({
 								{item.name}
 								<Image
 									src={item.classImage || ''}
-									alt={item.classType}
+									alt={item.classType || ''}
 									width={100}
 									height={100}
 									className="size-5"
 								/>
 								<Image
 									src={item.attributeImage || ''}
-									alt={item.attributeType}
+									alt={item.attributeType || ''}
 									width={100}
 									height={100}
 									className="size-5"
@@ -91,7 +81,7 @@ export function HeroesTable({
 							</div>
 						</TableCell>
 						<TableCell className="hidden md:table-cell">
-							<CopyMarkdown prefix="hero" {...item} />
+							<CopyMarkdown prefix="mob" {...item} />
 						</TableCell>
 						<TableCell className="text-right">
 							<DropdownMenu>
@@ -107,13 +97,13 @@ export function HeroesTable({
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end">
 									<DropdownMenuLabel>Actions</DropdownMenuLabel>
-									<HeroDialog data={item}>
+									<MonsterDialog data={item}>
 										<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
-									</HeroDialog>
+									</MonsterDialog>
 									<ConfirmDialog
 										title={`Delete ${item.name}?`}
 										description="This action is permanent and cannot be undone."
-										onConfirm={() => deleteHero(item.id)}
+										onConfirm={() => deleteMonster(item.id)}
 									>
 										<DropdownMenuItem preventSelect className="text-destructive">
 											Delete

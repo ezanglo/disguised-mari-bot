@@ -38,8 +38,12 @@ export function GetDiscordEmoteMarkdown(discordId: string, prefix: string, name:
 	return `<:${label}:${discordId}>`
 }
 
-export function toCode(text: string = ""){
-	return text.replace(/[^a-z0-9\s]/gi, '').replace(/\s+/g, '_').toLowerCase()
+export function toCode(text: string = "", lower: boolean = true){
+	const code = text.replace(/[^a-z0-9\s]/gi, '').replace(/\s+/g, '_');
+	if(lower){
+		return code.toLowerCase()
+	}
+	return code;
 }
 
 export function toCamelCase(text: string = ""){

@@ -20,3 +20,16 @@ export const contentPhases = pgTable("content_phase", {
 	order: integer("order"),
 	...timestampColumns
 });
+
+export const monsters = pgTable("monster", {
+	id: uuid("id").primaryKey().defaultRandom(),
+	name: text("name").notNull(),
+	code: text("code").notNull().unique(),
+	image: text("image"),
+	discordEmote: text("discord_emote"),
+	classType: text("class_type")
+	.references(() => classTypes.code),
+	attributeType: text("attribute_type")
+	.references(() => attributeTypes.code),
+	...timestampColumns,
+});

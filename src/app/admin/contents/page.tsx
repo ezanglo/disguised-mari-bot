@@ -38,7 +38,7 @@ export default async function ContentsPage({
 	.leftJoin(classTypes, eq(contentPhases.classType, classTypes.code))
 	.leftJoin(attributeTypes, eq(contentPhases.attributeType, attributeTypes.code))
 	.where(and(...whereConditions))
-	.orderBy(asc(contentPhases.content), asc(contentPhases.code));
+	.orderBy(asc(contentPhases.content), asc(contentPhases.order));
 	
 	return (
 		<div className="flex flex-1 flex-col gap-4 p-4 lg:p-6 h-full mb-4">

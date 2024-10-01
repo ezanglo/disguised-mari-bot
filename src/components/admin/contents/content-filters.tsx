@@ -17,7 +17,7 @@ export function ContentFilters() {
 		<div className="flex flex-row gap-2">
 			<ContentSelect
 				showAll
-				defaultValue={contentType || 'all'}
+				value={contentType || 'all'}
 				className="w-52"
 				onValueChange={setContentType}
 			/>
