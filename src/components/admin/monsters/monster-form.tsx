@@ -93,7 +93,7 @@ export function MonsterForm({
 							<FormControl>
 								<ClassSelect
 									onValueChange={field.onChange}
-									defaultValue={field.value || ''}
+									value={field.value || ''}
 								/>
 							</FormControl>
 							<FormMessage/>
@@ -109,7 +109,7 @@ export function MonsterForm({
 							<FormControl>
 								<AttributeSelect
 									onValueChange={field.onChange}
-									defaultValue={field.value || ''}
+									value={field.value || ''}
 								/>
 							</FormControl>
 							<FormMessage/>

@@ -47,7 +47,7 @@ export default function AddHeroPage({ }: AddHeroPageProps) {
   return (
     <div className="grid grid-cols-2 flex-1 gap-4 p-4 lg:p-6 h-full mb-4 overflow-hidden">
       <div className="flex flex-col gap-2">
-        <TierSelect defaultValue={tier} onValueChange={val => setTier(val.toUpperCase())} />
+        <TierSelect value={tier} onValueChange={val => setTier(val?.toUpperCase() || '')} />
         <span>Count: {heroes.length}</span>
         <div className="flex-1 grid grid-cols-2 rounded-lg border border-dashed shadow-sm p-2 gap-2 max-h-96 overflow-y-auto">
           {heroes.map((item, index) => (

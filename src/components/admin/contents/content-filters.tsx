@@ -6,7 +6,7 @@ import { parseAsString, useQueryState } from "nuqs";
 export function ContentFilters() {
 	const [contentType, setContentType] = useQueryState('contentType',
 		parseAsString
-		.withDefault('all')
+		.withDefault('')
 		.withOptions({
 			shallow: false,
 			clearOnDefault: true,
@@ -16,10 +16,9 @@ export function ContentFilters() {
 	return (
 		<div className="flex flex-row gap-2">
 			<ContentSelect
-				showAll
 				value={contentType || 'all'}
 				className="w-52"
-				onValueChange={setContentType}
+				onValueChange={val => setContentType(val || '')}
 			/>
 		</div>
 	)

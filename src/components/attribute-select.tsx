@@ -1,44 +1,38 @@
 "use client";
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Combobox } from "@/components/combobox";
 import { attributeTypes } from "@/db/schema";
 import useLists from "@/hooks/use-lists";
-import { SelectProps } from "@radix-ui/react-select";
 import { InferSelectModel } from "drizzle-orm";
-import Image from "next/image";
 
 export type AttributeType = InferSelectModel<typeof attributeTypes>;
 
-type AttributeSelectProps = SelectProps & {
+type AttributeSelectProps = {
+	value?: string,
+	onValueChange?: (value?: string) => void,
 	className?: string,
-	showAll?: boolean,
 }
 
 export function AttributeSelect({
-	className,
-	showAll = false,
-	...props
+	value,
+	onValueChange,
+	className
 }: AttributeSelectProps) {
-  const { data, isLoading } = useLists('attributes')
-
+	const {data, isLoading} = useLists('attributes')
+	
+	const options = !isLoading ? data.map((item: AttributeType) => ({
+		label: item.name,
+		value: item.code,
+		image: item.image,
+	})) : []
+	
 	return (
-		<Select {...props}>
-			<SelectTrigger className={className}>
-				<SelectValue placeholder="Select attribute"/>
-			</SelectTrigger>
-			<SelectContent>
-				<SelectGroup>
-					{showAll && <SelectItem value={'all'}>Select class</SelectItem>}
-					{isLoading ? <SelectItem value={'all'}>Loading...</SelectItem> : data.map((item: AttributeType, index: number) => (
-						<SelectItem key={index} value={item.code}>
-							<div className="flex flex-row gap-2 items-center">
-								<Image src={item.image || ''} alt={item.name} width={100} height={100} className="size-5"/>
-								{item.name}
-							</div>
-						</SelectItem>
-					))}
-				</SelectGroup>
-			</SelectContent>
-		</Select>
+		<Combobox
+			placeholder="Select attribute"
+			className={className}
+			options={options}
+			value={value}
+			onValueChange={onValueChange}
+		/>
 	)
 }

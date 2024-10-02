@@ -1,45 +1,39 @@
 "use client";
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Combobox } from "@/components/combobox";
 import { listItems } from "@/db/schema";
 import useLists from "@/hooks/use-lists";
-import { SelectProps } from "@radix-ui/react-select";
 import { InferSelectModel } from "drizzle-orm";
 
 export type ListGroupType = InferSelectModel<typeof listItems>;
 
-type ListGroupSelectProps = SelectProps & {
+type ListGroupSelectProps = {
+	value?: string,
+	onValueChange?: (value?: string) => void,
 	className?: string,
-	showAll?: boolean,
 }
 
 export function ListGroupSelect({
+	value,
+	onValueChange,
 	className,
-	showAll = false,
-	...props
 }: ListGroupSelectProps) {
 	
 	const { data, isLoading } = useLists('list-group')
-
+	
+	const options = !isLoading ? data.map((item: ListGroupType) => ({
+		label: item.name,
+		value: item.id,
+		image: item.image,
+	})) : []
+	
 	return (
-		<Select {...props}>
-			<SelectTrigger className={className}>
-				<SelectValue placeholder="Select a list group" />
-			</SelectTrigger>
-			<SelectContent>
-				{isLoading ? (
-					<SelectItem value={'all'}>Loading...</SelectItem>
-				) : (
-					<SelectGroup>
-						{showAll && <SelectItem value={'all'}>Select list group</SelectItem>}
-						{data.map((item: ListGroupType, index: number) => (
-							<SelectItem key={index} value={item.id}>
-								{item.name}
-							</SelectItem>
-						))}
-					</SelectGroup>
-				)}
-			</SelectContent>
-		</Select>
+		<Combobox
+			placeholder="Select list group"
+			className={className}
+			options={options}
+			value={value}
+			onValueChange={onValueChange}
+		/>
 	)
 }

@@ -68,7 +68,7 @@ export function EquipForm({
 							<FormControl>
 								<ClassSelect
 									onValueChange={field.onChange}
-									defaultValue={field.value}
+									value={field.value}
 								/>
 							</FormControl>
 							<FormMessage/>
@@ -84,7 +84,7 @@ export function EquipForm({
 							<FormControl>
 								<GearSelect
 									onValueChange={field.onChange}
-									defaultValue={field.value}
+									value={field.value}
 								/>
 							</FormControl>
 							<FormMessage/>

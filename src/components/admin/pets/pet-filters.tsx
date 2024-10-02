@@ -9,7 +9,7 @@ import { parseAsString, useQueryState } from "nuqs";
 export function PetFilters() {
 	const [hero, setHero] = useQueryState('hero',
 		parseAsString
-		.withDefault('all')
+		.withDefault('')
 		.withOptions({
 			shallow: false,
 			clearOnDefault: true,
@@ -20,7 +20,7 @@ export function PetFilters() {
 		<div className="flex flex-row gap-2 flex-wrap">
 			<HeroSelect 
 				value={hero} 
-				onValueChange={val => setHero(val)}
+				onValueChange={val => setHero(val || '')}
 				className="w-40"
 			/>
       <TierFilter />

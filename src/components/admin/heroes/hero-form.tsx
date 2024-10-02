@@ -118,7 +118,7 @@ export function HeroForm({
 							<FormControl>
 								<TierSelect
 									onValueChange={field.onChange}
-									defaultValue={field.value}
+									value={field.value}
 								/>
 							</FormControl>
 							<FormMessage/>
@@ -134,7 +134,7 @@ export function HeroForm({
 							<FormControl>
 								<ClassSelect
 									onValueChange={field.onChange}
-									defaultValue={field.value}
+									value={field.value}
 								/>
 							</FormControl>
 							<FormMessage/>
@@ -149,8 +149,8 @@ export function HeroForm({
 							<FormLabel>Attribute</FormLabel>
 							<FormControl>
 								<AttributeSelect
+									value={field.value}
 									onValueChange={field.onChange}
-									defaultValue={field.value}
 								/>
 							</FormControl>
 							<FormMessage/>

@@ -2,31 +2,39 @@
 
 import { pets } from "@/db/schema";
 import useLists from "@/hooks/use-lists";
-import { SelectProps } from "@radix-ui/react-select";
 import { InferSelectModel } from "drizzle-orm";
 import { Combobox } from "./combobox";
 
 export type PetType = InferSelectModel<typeof pets>;
 
-type ClassSelectProps = SelectProps & {
+type ClassSelectProps = {
+	value?: string,
+	onValueChange?: (value?: string) => void,
 	className?: string,
-	showAll?: boolean,
 }
 
 export function PetSelect({
 	value,
 	onValueChange,
+	className
 }: ClassSelectProps) {
 	
 	const {data, isLoading} = useLists('pets')
 	
+	const options = !isLoading ? data.map((item: PetType) => ({
+		label: item.name,
+		value: item.code,
+		image: item.image,
+	})) : []
 	
-	return !isLoading && (
+	
+	return (
 		<Combobox
 			placeholder="Select pet"
-			options={data.map((item: PetType) => ({label: item.name, value: item.code}))}
+			className={className}
+			options={options}
 			value={value}
-			onSelect={onValueChange}
+			onValueChange={onValueChange}
 		/>
 	)
 }

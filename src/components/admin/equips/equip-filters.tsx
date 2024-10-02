@@ -8,7 +8,7 @@ export function EquipFilters() {
 	
 	const [gearType, setGearType] = useQueryState('gearType',
 		parseAsString
-			.withDefault('all')
+			.withDefault('')
 			.withOptions({
 				shallow: false,
 				clearOnDefault: true,
@@ -18,10 +18,9 @@ export function EquipFilters() {
 	return (
 		<div className="flex flex-row gap-2">
 			<GearSelect
-				showAll
-				defaultValue={gearType || 'all'}
+				value={gearType}
 				className="w-40"
-				onValueChange={setGearType}
+				onValueChange={val => setGearType(val || '')}
 			/>
 			<ClassFilter />
 		</div>
