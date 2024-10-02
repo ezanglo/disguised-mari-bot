@@ -2,6 +2,7 @@
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
 import { MonsterFormSchema } from "@/components/admin/monsters/monster-form";
+import { DISCORD_EMOTE_URL } from "@/constants/constants";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { monsters } from "@/db/schema";
@@ -44,8 +45,8 @@ export const insertMonster = async (payload: MonsterFormSchema) => {
 				name: emoteName,
 				image: imageBase64,
 			})
-			if(discordEmote){
-				const emoteUrl = isUrl ? payload.image : `https://cdn.discordapp.com/emojis/${discordEmote.id}.webp`
+			if(discordEmote?.id){
+				const emoteUrl = isUrl ? payload.image : DISCORD_EMOTE_URL(discordEmote.id)
 				return trx.update(monsters).set({
 					discordEmote: discordEmote.id,
 					image: emoteUrl,
@@ -91,8 +92,8 @@ export const updateMonster = async (payload: MonsterFormSchema) => {
 				name: emoteName,
 				image: payload.image,
 			})
-			if(image){
-				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp`;
+			if(image?.id){
+				payload.image = DISCORD_EMOTE_URL(image.id)
 				payload.discordEmote = image.id;
 			}
 		}

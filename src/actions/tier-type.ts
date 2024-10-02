@@ -2,6 +2,7 @@
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
 import { TierFormSchema } from "@/components/admin/tiers/tier-form";
+import { DISCORD_EMOTE_URL } from "@/constants/constants";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { tierTypes } from "@/db/schema/types";
@@ -32,8 +33,8 @@ export const insertTierType = async (payload: TierFormSchema) => {
 				name: emoteName,
 				image: payload.image,
 			})
-			if(image){
-				const emoteUrl = `https://cdn.discordapp.com/emojis/${image.id}.webp`
+			if(image?.id){
+				const emoteUrl = DISCORD_EMOTE_URL(image.id)
 				return trx.update(tierTypes).set({
 					discordEmote: image.id,
 					image: emoteUrl,
@@ -79,8 +80,8 @@ export const updateTierType = async (payload: TierFormSchema) => {
 				name: emoteName,
 				image: payload.image,
 			})
-			if(image){
-				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp`;
+			if(image?.id){
+				payload.image = DISCORD_EMOTE_URL(image.id)
 				payload.discordEmote = image.id;
 			}
 		}

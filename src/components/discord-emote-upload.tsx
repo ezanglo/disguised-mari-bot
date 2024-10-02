@@ -5,6 +5,7 @@ import { LoadingSpinner } from "@/components/loading-spinner";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DISCORD_EMOTE_URL } from "@/constants/constants";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -30,9 +31,9 @@ export function DiscordEmoteUpload({
 				image,
 			});
 			
-			if(response){
+			if(response?.id){
 				toast.success('Emoji has been uploaded')
-				const emoteUrl = `https://cdn.discordapp.com/emojis/${response.id}.webp`
+				const emoteUrl = DISCORD_EMOTE_URL(response.id)
 				onUpload?.(emoteUrl)
 			}
 		}

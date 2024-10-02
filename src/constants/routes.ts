@@ -9,6 +9,9 @@ const ADMIN = {
 		BASE: '/admin/heroes',
 		ADD: '/admin/heroes/add',
 	},
+	PETS: {
+		BASE: '/admin/pets',
+	},
 	MONSTERS: {
 		BASE: '/admin/monsters',
 	},

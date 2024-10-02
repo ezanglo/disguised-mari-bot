@@ -2,6 +2,7 @@
 
 import { DeleteDiscordEmote, UploadDiscordEmote } from "@/actions/discord";
 import { ListItemFormSchema } from "@/components/admin/settings/list-item-form";
+import { DISCORD_EMOTE_URL } from "@/constants/constants";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { listItems, lists } from "@/db/schema";
@@ -79,8 +80,8 @@ export const insertListItem = async (payload: ListItemFormSchema) => {
 				name: emoteName,
 				image: payload.image,
 			})
-			if (image) {
-				const emoteUrl = `https://cdn.discordapp.com/emojis/${image.id}.webp`
+			if(image?.id){
+				const emoteUrl = DISCORD_EMOTE_URL(image.id)
 				return trx.update(listItems).set({
 					discordEmote: image.id,
 					image: emoteUrl,
@@ -128,8 +129,8 @@ export const updateListItem = async (payload: ListItemFormSchema) => {
 				name: emoteName,
 				image: payload.image,
 			})
-			if (image) {
-				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp`;
+			if(image?.id){
+				payload.image = DISCORD_EMOTE_URL(image.id)
 				payload.discordEmote = image.id;
 			}
 		}

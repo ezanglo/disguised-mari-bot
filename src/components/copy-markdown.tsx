@@ -12,6 +12,7 @@ import { CopyIcon } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { MonsterType } from "./admin/monsters/monster-table";
+import { PetType } from "./admin/pets/pets-table";
 
 type CopyMarkdownProps = ({
 	prefix: 'tier',
@@ -27,7 +28,9 @@ type CopyMarkdownProps = ({
 	prefix: 'hero'
 } & HeroType) | ({
 	prefix: 'mob'
-} & MonsterType)
+} & MonsterType) | ({
+	prefix: 'pet'
+} & PetType)
 
 export function CopyMarkdown({
 	prefix,

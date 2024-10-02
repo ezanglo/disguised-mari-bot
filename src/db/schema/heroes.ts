@@ -41,13 +41,20 @@ export const heroes = pgTable("hero", {
 
 export const pets = pgTable("pet", {
 	id: uuid("id").primaryKey().defaultRandom(),
-	heroId: uuid("hero_id").notNull()
-	.references(() => heroes.id, {onDelete: "cascade"}),
+	hero: text("hero").notNull()
+	.references(() => heroes.code, {onDelete: "cascade"}),
+	tierType: text("tier_type").notNull()
+	.references(() => tierTypes.code),
 	name: text("name").notNull(),
 	code: text("code").notNull().unique(),
 	image: text("image"),
-	basic: text("basic").notNull(),
-	skill: text("skill").notNull(),
-	skillDescription: text("skill_description").notNull(),
+	discordEmote: text("discord_emote"),
+	basicDescription: text("basic_description"),
+	basicCooldown: text("basic_cooldown"),
+	skillName: text("skill"),
+	skillImage: text("skill_image"),
+	skillEmote: text("skill_emote"),
+	skillDescription: text("skill_description"),
+	skillCooldown: text("skill_cooldown"),
 	...timestampColumns,
 });

@@ -69,46 +69,46 @@ export function EnemySelector({
 	return (
 		<div className="flex flex-col gap-2">
 			<Popover open={open} onOpenChange={setOpen}>
-			<PopoverTrigger asChild>
-				<Button
-					variant="outline"
-					role="combobox"
-					className="justify-between"
-				>
-					{'Select enemy'}
-					<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-				</Button>
-			</PopoverTrigger>
-			<PopoverContent className="p-0">
-				<Command>
-					<CommandInput placeholder="Search..." />
-					<CommandList className="max-h-48">
-						<CommandEmpty>No data found.</CommandEmpty>
-						<CommandGroup>
-							{data.map((item: HeroType | MonsterType) => (
-								<CommandItem
-									key={item.code}
-									value={item.name}
-									onSelect={() => {
-										setOpen(false)
-										handleSelect(item)
-									}}
-								>
-									<div className="flex flex-row gap-2">
-										<Image
-											src={item.image || DEFAULT_IMAGE}
-											alt={item.name} width={100} height={100}
-											className="size-5"
-										/>
-										{item.name}
-									</div>
-								</CommandItem>
-							))}
-						</CommandGroup>
-					</CommandList>
-				</Command>
-			</PopoverContent>
-		</Popover>
+				<PopoverTrigger asChild>
+					<Button
+						variant="outline"
+						role="combobox"
+						className="justify-between"
+					>
+						{'Select enemy'}
+						<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+					</Button>
+				</PopoverTrigger>
+				<PopoverContent className="p-0">
+					<Command>
+						<CommandInput placeholder="Search..." />
+						<CommandList className="max-h-48">
+							<CommandEmpty>No data found.</CommandEmpty>
+							<CommandGroup>
+								{data.map((item: HeroType | MonsterType) => (
+									<CommandItem
+										key={item.code}
+										value={item.name}
+										onSelect={() => {
+											setOpen(false)
+											handleSelect(item)
+										}}
+									>
+										<div className="flex flex-row gap-2">
+											<Image
+												src={item.image || DEFAULT_IMAGE}
+												alt={item.name} width={100} height={100}
+												className="size-5"
+											/>
+											{item.name}
+										</div>
+									</CommandItem>
+								))}
+							</CommandGroup>
+						</CommandList>
+					</Command>
+				</PopoverContent>
+			</Popover>
 			<div className="flex flex-row gap-2 flex-wrap">
 				{enemies?.map((item, index) => (
 					<Badge key={index} variant="secondary" className="flex flex-row gap-1 items-center justify-center p-0">

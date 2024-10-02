@@ -2,6 +2,7 @@
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
 import { HeroFormSchema } from "@/components/admin/heroes/hero-form";
+import { DISCORD_EMOTE_URL } from "@/constants/constants";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { heroes } from "@/db/schema";
@@ -24,36 +25,7 @@ export const insertHero = async (payload: HeroFormSchema) => {
 			createdBy: user.id,
 		}).returning().then((res) => res[0] ?? null);
 
-		if(payload.image){
-			let imageBase64 = payload.image;
-			const isUrl = payload.image.startsWith('http');
-			if (isUrl) {
-				try {
-					const response = await fetch(payload.image);
-					const arrayBuffer = await response.arrayBuffer();
-					const base64 = Buffer.from(arrayBuffer).toString('base64');
-					imageBase64 = `data:image/png;base64,${base64}`;
-				} catch (error) {
-					console.error('Error converting image to base64:', error);
-					throw new Error('Failed to convert image to base64');
-				}
-			}
-			
-			const emoteName = GetDiscordEmoteName('hero', payload.name, result.id);
-			
-			const discordEmote = await UploadDiscordEmote({
-				name: emoteName,
-				image: imageBase64,
-			})
-			if(discordEmote){
-				const emoteUrl = isUrl ? payload.image : `https://cdn.discordapp.com/emojis/${discordEmote.id}.webp`
-				return trx.update(heroes).set({
-					discordEmote: discordEmote.id,
-					image: emoteUrl,
-					updatedBy: user.id,
-				}).where(eq(heroes.id, result.id)).returning();
-			}
-		}
+		
 
 		return result;
 	});
@@ -93,8 +65,8 @@ export const updateHero = async (payload: HeroFormSchema) => {
 				name: emoteName,
 				image: payload.image,
 			})
-			if(image){
-				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp`;
+			if(image?.id){
+				payload.image = DISCORD_EMOTE_URL(image.id)
 				payload.discordEmote = image.id;
 			}
 		}

@@ -2,6 +2,7 @@
 
 import { DeleteDiscordEmote, UpdateDiscordEmoteName, UploadDiscordEmote } from "@/actions/discord";
 import { TraitFormSchema } from "@/components/admin/traits/trait-form";
+import { DISCORD_EMOTE_URL } from "@/constants/constants";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { traitTypes } from "@/db/schema/types";
@@ -12,8 +13,8 @@ import { getAuthorizedUser } from "./base";
 
 export const insertTraitType = async (payload: TraitFormSchema) => {
 	const user = await getAuthorizedUser();
-	if(!user){
-    throw new Error("Unauthorized");
+	if (!user) {
+		throw new Error("Unauthorized");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -32,8 +33,8 @@ export const insertTraitType = async (payload: TraitFormSchema) => {
 				name: emoteName,
 				image: payload.image,
 			})
-			if (image) {
-				const emoteUrl = `https://cdn.discordapp.com/emojis/${image.id}.webp`
+			if (image?.id) {
+				const emoteUrl = DISCORD_EMOTE_URL(image.id)
 				return trx.update(traitTypes).set({
 					discordEmote: image.id,
 					image: emoteUrl,
@@ -51,8 +52,8 @@ export const insertTraitType = async (payload: TraitFormSchema) => {
 
 export const updateTraitType = async (payload: TraitFormSchema) => {
 	const user = await getAuthorizedUser();
-	if(!user){
-    throw new Error("Unauthorized");
+	if (!user) {
+		throw new Error("Unauthorized");
 	}
 	
 	const traitType = await db.query.traitTypes.findFirst({
@@ -66,9 +67,9 @@ export const updateTraitType = async (payload: TraitFormSchema) => {
 		
 		const emoteName = GetDiscordEmoteName('trait', payload.upgradeType + payload.code, traitType.id);
 		
-		if(traitType.discordEmote &&
+		if (traitType.discordEmote &&
 			(payload.upgradeType !== traitType.upgradeType || payload.code !== traitType.code)
-		){
+		) {
 			await UpdateDiscordEmoteName(traitType.discordEmote, emoteName);
 		}
 		
@@ -82,8 +83,8 @@ export const updateTraitType = async (payload: TraitFormSchema) => {
 				name: emoteName,
 				image: payload.image,
 			})
-			if (image) {
-				payload.image = `https://cdn.discordapp.com/emojis/${image.id}.webp`;
+			if (image?.id) {
+				payload.image = DISCORD_EMOTE_URL(image.id)
 				payload.discordEmote = image.id;
 			}
 		}
@@ -101,8 +102,8 @@ export const updateTraitType = async (payload: TraitFormSchema) => {
 
 export const deleteTraitType = async (id: string) => {
 	const user = await getAuthorizedUser();
-	if(!user){
-    throw new Error("Unauthorized");
+	if (!user) {
+		throw new Error("Unauthorized");
 	}
 	
 	const traitType = await db.query.traitTypes.findFirst({

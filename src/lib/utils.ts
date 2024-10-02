@@ -73,3 +73,20 @@ export function stripHtml(html: string): string {
   const $ = cheerio.load(html);
   return $.text();
 }
+
+export async function fetchImageBase64(imageUrl?: string){
+
+	if(!imageUrl || !imageUrl.startsWith('http')){
+		return imageUrl;
+	}
+	try {
+			const response = await fetch(imageUrl);
+			const arrayBuffer = await response.arrayBuffer();
+			const base64 = Buffer.from(arrayBuffer).toString('base64');
+			const contentType = response.headers.get('content-type') || 'image/png';
+			return `data:${contentType};base64,${base64}`;
+	} catch (error) {
+			console.error('Error converting image to base64:', error);
+			throw new Error('Failed to convert image to base64');
+	}
+}
