@@ -27,7 +27,7 @@ export default async function ContentsPage({
 	const whereConditions = []
 
 	if (hero) {
-		whereConditions.push(eq(pets.hero, heroes.code))
+		whereConditions.push(eq(pets.hero, hero))
 	}
 
 	if (tiers && tiers.length > 0) {
@@ -53,7 +53,7 @@ export default async function ContentsPage({
 	.leftJoin(classTypes, eq(heroes.classType, classTypes.code))
 	.leftJoin(attributeTypes, eq(heroes.attributeType, attributeTypes.code))
 	.where(and(...whereConditions))
-	.orderBy(asc(pets.createdAt));
+	.orderBy(asc(pets.name), asc(pets.hero));
 	
 	return (
 		<div className="flex flex-1 flex-col gap-4 p-4 lg:p-6 h-full mb-4">

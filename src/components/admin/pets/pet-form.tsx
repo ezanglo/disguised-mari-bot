@@ -41,10 +41,8 @@ export function PetForm({
 	const form = useForm<PetFormSchema>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			id: defaultValues?.id,
-			hero: defaultValues?.hero || '',
-			name: defaultValues?.name || '',
-			code: defaultValues?.code || '',
+			...defaultValues,
+			hero: searchParams.get("hero") || defaultValues?.hero || "",
 			tierType: searchParams.get("tierType") || defaultValues?.tierType || "",
 		},
 	})

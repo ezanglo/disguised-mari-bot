@@ -15,7 +15,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { pets } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react";
 import Image from "next/image";
 
 export type PetType = InferSelectModel<typeof pets>;
@@ -104,9 +104,25 @@ export function PetsTable({
 						<TableCell className="hidden md:table-cell">
 							<CopyMarkdown prefix="pet" {...item} />
 						</TableCell>
-						<TableCell className="text-right">
+						<TableCell className="text-right items-center">
+							<div className="flex flex-row gap-2 justify-end">
+								<PetDialog data={item}>
+									<Button variant="ghost" size="icon">
+										<PencilIcon className="size-3"/>
+									</Button>
+								</PetDialog>
+								<ConfirmDialog
+									title={`Delete ${item.name}?`}
+									description="This action is permanent and cannot be undone."
+									onConfirm={() => deletePet(item.id)}
+								>
+									<Button variant="ghost" size="icon" className="text-destructive">
+										<TrashIcon className="size-3"/>
+									</Button>
+								</ConfirmDialog>
+							</div>
 							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
+								<DropdownMenuTrigger asChild className="block sm:hidden">
 									<Button
 										aria-haspopup="true"
 										size="icon"

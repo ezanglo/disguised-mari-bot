@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popove
 import { DEFAULT_IMAGE } from "@/constants/constants";
 import { cn } from "@/lib/utils";
 import { CheckIcon } from "@radix-ui/react-icons";
-import { ChevronsUpDown } from "lucide-react"
+import { ChevronsUpDown, XIcon } from "lucide-react"
 import Image from "next/image";
 import * as React from "react";
 import { useState } from "react";
@@ -66,7 +66,16 @@ export function Combobox({
 			</PopoverTrigger>
 			<PopoverContent className="p-0">
 				<Command>
-					<CommandInput placeholder="Search..."/>
+					<div className="relative">
+						<CommandInput placeholder="Search..." className="pr-10"/>
+						<Button 
+								size="icon" variant="ghost" 
+							className="absolute right-0 top-1/2 -translate-y-1/2"
+							onClick={() => handleSelect(value || '')}
+						>
+							<XIcon className="size-4"/>
+						</Button>
+					</div>
 					<CommandList className="max-h-48">
 						<CommandEmpty>No data found.</CommandEmpty>
 						<CommandGroup>
