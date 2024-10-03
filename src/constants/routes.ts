@@ -35,7 +35,12 @@ const ADMIN = {
 	},
 }
 
+const CHASER = {
+	BASE: '/chaser',
+}
+
 export const ROUTES = {
 	BASE,
-	ADMIN
+	ADMIN,
+	CHASER
 }
