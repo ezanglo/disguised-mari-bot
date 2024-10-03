@@ -1,9 +1,12 @@
 "use server"
 
-import { getDiscordApiErrors } from "@/lib/utils";
+import { fetchImageBase64, getDiscordApiErrors } from "@/lib/utils";
 import { RESTError, RESTPostAPIApplicationEmojiResult } from "discord-api-types/v10";
 
 export const UploadDiscordEmote = async (payload: {prefix?: string, name: string, image: string}) => {
+	
+	let imageBase64 = await fetchImageBase64(payload.image);
+	
 	const url = [process.env.DISCORD_API_URL, 'applications', process.env.DISCORD_BOT_APPLICATION_ID,'emojis'].join('/')
 	const response = await fetch(url, {
 		method: 'POST',
@@ -11,7 +14,10 @@ export const UploadDiscordEmote = async (payload: {prefix?: string, name: string
 			"Authorization": `Bot ${process.env.DISCORD_BOT_TOKEN}`,
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify(payload)
+		body: JSON.stringify({
+			...payload,
+			image: imageBase64,
+		})
 	})
 	
 	if(!response.ok){

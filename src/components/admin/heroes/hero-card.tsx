@@ -1,13 +1,14 @@
 "use client";
 
-import { insertHero } from '@/actions/hero';
+import { insertHero, updateHero } from '@/actions/hero';
 import { WikiHero } from '@/app/admin/heroes/add/page';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DEFAULT_IMAGE } from '@/constants/constants';
 import useLists from '@/hooks/use-lists';
 import { toCode } from '@/lib/utils';
-import { DetailData } from '@/lib/wiki-helper';
+import { DetailData, GalleryData } from '@/lib/wiki-helper';
+import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import React from 'react'
 import { toast } from 'sonner';
@@ -22,10 +23,21 @@ export function HeroCard({
   wikiHero
 }: HeroCardProps) {
 
-  const { data, isLoading } = useLists(`heroes/${toCode(wikiHero.name)}`)
+  let name = toCode(wikiHero.name);
+  const pageParts = wikiHero.wikiPage?.split('/')
+  if (pageParts && pageParts.length > 1 && pageParts.at(-1)?.toLowerCase() !== 'dimensional_chaser') {
+    name += toCode(pageParts.at(-1))
+  }
+  
+  const { data, isLoading } = useLists(`heroes/${name}`)
+
+  const { data: heroData, isLoading: isHeroDataLoading } = useQuery({
+    queryKey: [wikiHero.wikiPage],
+    queryFn: () => fetch(`/api/wiki/heroes/${wikiHero.wikiPage}`).then(res => res.json()),
+  });
 
 
-  if (isLoading) {
+  if (isLoading || isHeroDataLoading) {
     return <div>Loading...</div>
   }
 
@@ -35,30 +47,47 @@ export function HeroCard({
 
     try {
 
-      const heroData = await fetch(`/api/wiki/heroes/${wikiHero.wikiPage}`).then(res => res.json())
-
       const details = heroData.details as DetailData[]
-
 
       const tierType = details.find(i => i.label === 'Tier');
       const classType = details.find(i => i.label === 'Type');
       const attributeType = details.find(i => i.label === 'Attribute');
 
-
       const response = await insertHero({
         name: heroData.name,
         displayName: heroData.displayName,
-        code: toCode(heroData.name),
+        code: name,
         image: heroData.image,
         classType: classType?.value as string,
         tierType: tierType?.value as string,
         attributeType: (attributeType?.value || 'life_green') as string,
       })
       if (response) {
-        console.log(response);
         toast.success(data ? "Hero updated" : "Hero created")
       }
 
+    } catch (error) {
+      toast.error((error as Error).message)
+    }
+  }
+
+  const handleUpdateImage = async (image: string) => {
+    if (!hero) return;
+
+    try {
+      const response = await updateHero({
+        id: hero.id,
+        code: hero.code,
+        name: hero.name,
+        displayName: hero.displayName,
+        tierType: hero.tierType,
+        classType: hero.classType,
+        attributeType: hero.attributeType,
+        image,
+      })
+      if (response) {
+        toast.success("Hero image updated")
+      }
     } catch (error) {
       toast.error((error as Error).message)
     }
@@ -91,6 +120,20 @@ export function HeroCard({
             </CardHeader>
           </Card>
         </HeroDialog>
+        {hero && (
+          <div className="flex flex-row flex-wrap gap-2 p-2 border rounded-sm mt-2">
+            {(heroData.icons as GalleryData[]).map((item, index) => (
+              <Button key={index} className="size-14 p-0" variant="outline" onClick={() => handleUpdateImage(item.image)}>
+                <Image
+                  src={item.image || DEFAULT_IMAGE}
+                  className="object-cover size-10 object-cover"
+                  title={item.label}
+                  alt={''} width={500} height={500}
+                />
+              </Button>
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   )

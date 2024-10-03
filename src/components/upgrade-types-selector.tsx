@@ -10,7 +10,13 @@ import { parseAsString, useQueryState } from "nuqs";
 
 export type UpgradeType = InferSelectModel<typeof listItems>;
 
-export function UpgradeTypesSelector() {
+type UpgradeTypesSelectorProps = {
+	allowed?: UpgradeType['code'][];
+}
+
+export function UpgradeTypesSelector({ 
+	allowed = ['lvl', 'csr', 'si', 'trans']
+ }: UpgradeTypesSelectorProps) {
 
 	const { data, isLoading} = useLists('upgrade-types')
 	
@@ -24,7 +30,7 @@ export function UpgradeTypesSelector() {
 	)
 
 	const upgradeTypes = !isLoading ? data.filter((i: UpgradeType) => {
-		return ['lvl', 'csr', 'si', 'trans'].includes(i.code);
+		return allowed.includes(i.code);
 	}): []
 	
 	return (

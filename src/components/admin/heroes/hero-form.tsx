@@ -14,8 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = createInsertSchema(heroes, {
@@ -53,9 +52,7 @@ export function HeroForm({
 		},
 	})
 
-	useEffect(() => {
-		form.setValue("code", toCode(form.getValues("name")))
-	}, [form.formState]);
+	const name = useWatch({ control: form.control, name: "name" });
 
 	const handleSubmit = async () => {
     const valid = await form.trigger();
@@ -94,6 +91,19 @@ export function HeroForm({
 							</FormControl>
 							<FormMessage/>
 						</FormItem> 
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="code"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Code</FormLabel>
+							<FormControl>
+								<Input  {...field} value={field.value || toCode(name)}/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
 					)}
 				/>
 				<FormField

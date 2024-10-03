@@ -22,15 +22,23 @@ export function enumToPgEnum<T extends Record<string, any>>(
 }
 
 export function getDiscordApiErrors(error: RESTError) {
-	const data = error.errors as { name: RESTErrorGroupWrapper }
-	
-	return {
-		errors: data.name._errors as RESTErrorFieldInformation[]
+	const data = error.errors as {
+		name?: RESTErrorGroupWrapper,
+		image?: RESTErrorGroupWrapper
 	}
+	
+	const errors = [];
+	if(data.name) {
+		errors.push(...data.name._errors as RESTErrorFieldInformation[])
+	}
+	if (data.image) {
+		errors.push(...data.image._errors as RESTErrorFieldInformation[])
+	}
+	return {errors};
 }
 
 export function GetDiscordEmoteName(prefix: string, name: string, id: string){
-	return [prefix.toLowerCase(), toCode(name), id.split('-')[0]].join('_')
+	return [prefix.toLowerCase(), toCode(name), id.split('-')[0]].join('_').slice(0, 32)
 }
 
 export function GetDiscordEmoteMarkdown(discordId: string, prefix: string, name: string, id: string){
@@ -76,9 +84,15 @@ export function stripHtml(html: string): string {
 
 export async function fetchImageBase64(imageUrl?: string){
 
+	
 	if(!imageUrl || !imageUrl.startsWith('http')){
 		return imageUrl;
 	}
+
+	if(imageUrl?.startsWith('https://cdn.discordapp.com/emojis')){
+		return;
+	}
+
 	try {
 			const response = await fetch(imageUrl);
 			const arrayBuffer = await response.arrayBuffer();

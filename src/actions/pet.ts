@@ -35,8 +35,7 @@ export const insertPet = async (payload: PetFormSchema) => {
 				if (discordEmote?.id) {
 					emoteUrl = DISCORD_EMOTE_URL(discordEmote.id);
 				}
-
-				console.log({emoteUrl})
+				
 				return trx.update(pets).set({
 					discordEmote: discordEmote?.id,
 					image: emoteUrl,

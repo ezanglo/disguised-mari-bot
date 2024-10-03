@@ -1,6 +1,7 @@
 "use client";
 
 import { HeroCard } from '@/components/admin/heroes/hero-card';
+import { SkillCard } from "@/components/admin/heroes/skills-card";
 import { AttributeType } from '@/components/attribute-select';
 import { ClassType } from '@/components/class-select';
 import { TierSelect, TierType } from '@/components/tier-select';
@@ -70,7 +71,10 @@ export default function AddHeroPage({ }: AddHeroPageProps) {
           ))}
         </div>
       </div>
-      {hero && <HeroCard wikiHero={hero}/>}
+      <div className="flex flex-col gap-2">
+        {hero && <HeroCard wikiHero={hero}/>}
+        {hero && <SkillCard wikiHero={hero}/>}
+      </div>
     </div>
   )
 }

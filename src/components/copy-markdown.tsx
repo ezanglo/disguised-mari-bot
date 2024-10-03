@@ -2,6 +2,7 @@
 
 import { EquipType } from "@/components/admin/equips/equips-table";
 import { HeroType } from "@/components/admin/heroes/heroes-table";
+import { SkillType } from "@/components/admin/skills/skills-table";
 import { TraitType } from "@/components/admin/traits/traits-table";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -30,7 +31,9 @@ type CopyMarkdownProps = ({
 	prefix: 'mob'
 } & MonsterType) | ({
 	prefix: 'pet'
-} & PetType)
+} & PetType) | ({
+	prefix: 'skill'
+} & SkillType)
 
 export function CopyMarkdown({
 	prefix,

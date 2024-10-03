@@ -32,7 +32,6 @@ export function TableActions<T>({
 	const handleDelete = () => {
 		onDelete(data);
 		toast.success(`${itemName} deleted successfully`);
-		console.log(revalidateQuery)
 		if(revalidateQuery) {
 			queryClient.invalidateQueries({ queryKey: [revalidateQuery] })
 			queryClient.refetchQueries({ queryKey: [revalidateQuery] });

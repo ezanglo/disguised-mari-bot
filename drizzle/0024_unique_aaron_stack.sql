@@ -1,0 +1,1 @@
+ALTER TABLE "skill" ADD COLUMN "discord_emote" text;

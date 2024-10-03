@@ -39,7 +39,6 @@ export function Combobox({
 	
 	const handleSelect = (val: string) => {
 		setOpen(false)
-		console.log({val})
 		onValueChange?.(value !== val ? val : undefined)
 	}
 	

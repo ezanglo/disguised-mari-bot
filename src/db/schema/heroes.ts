@@ -1,6 +1,6 @@
-import { attributeTypes, classTypes, tierTypes } from "@/db/schema/types";
+import { attributeTypes, classTypes, listItems, tierTypes } from "@/db/schema/types";
 import { timestampColumns } from "@/db/schema/users";
-import { pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
 
 export const heroes = pgTable("hero", {
 	id: uuid("id").primaryKey().defaultRandom(),
@@ -19,26 +19,6 @@ export const heroes = pgTable("hero", {
 	...timestampColumns,
 });
 
-// export const skills = pgTable("skill", {
-// 	id: uuid("id").primaryKey().defaultRandom(),
-// 	heroId: uuid("hero_id").notNull()
-// 	.references(() => heroes.id, {onDelete: "cascade"}),
-// 	name: text("name").notNull(),
-// 	basic: text("basic").notNull(),
-// 	skill: text("skill").notNull(),
-// 	skillDescription: text("skill_description").notNull(),
-// 	skillType: uuid("skill_type").notNull()
-// 	.references(() => listItems.code),
-// 	upgradeType: uuid("upgrade_type").notNull()
-// 	.references(() => listItems.code),
-// 	sp: integer("sp").notNull(),
-// 	cooldown: integer("cooldown").notNull(),
-// 	description: text("description").notNull(),
-// 	isHeal: text("is_heal"),
-// 	isRecast: text("is_recast"),
-// 	...timestampColumns,
-// });
-
 export const pets = pgTable("pet", {
 	id: uuid("id").primaryKey().defaultRandom(),
 	hero: text("hero").notNull()
@@ -56,5 +36,25 @@ export const pets = pgTable("pet", {
 	skillEmote: text("skill_emote"),
 	skillDescription: text("skill_description"),
 	skillCooldown: text("skill_cooldown"),
+	...timestampColumns,
+});
+
+export const skills = pgTable("skill", {
+	id: uuid("id").primaryKey().defaultRandom(),
+	hero: text("hero").notNull()
+	.references(() => heroes.code, {onDelete: "cascade"}),
+	skillType: text("skill_type").notNull()
+	.references(() => listItems.code),
+	upgradeType: text("upgrade_type").notNull()
+	.references(() => listItems.code),
+	name: text("name").notNull(),
+	code: text("code").notNull().unique(),
+	description: text("description"),
+	discordEmote: text("discord_emote"),
+	image: text("image"),
+	sp: integer("sp"),
+	cooldown: integer("cooldown"),
+	isHeal: boolean("is_heal"),
+	isRecast: boolean("is_recast"),
 	...timestampColumns,
 });

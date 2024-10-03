@@ -53,6 +53,13 @@ declare module 'wiki-helper' {
     data: InfoboxData[]
   }
 
+  export type SkillUpgrade = {
+    upgradeType: string;
+    description: string;
+    pvpDescription?: string;
+    image?: string;
+  }
+
   export type SkillData = {
     name: string;
     description: string;
@@ -61,11 +68,6 @@ declare module 'wiki-helper' {
     skillType?: string;
     sp?: string;
     cooldown?: string;
-    upgrades?: {
-      level: string;
-      description: string;
-      pvpDescription?: string;
-      image?: string;
-    }[];
+    upgrades?: SkillUpgrade[];
   };
 }
