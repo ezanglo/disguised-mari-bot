@@ -5,6 +5,7 @@ import { ClassForm, ClassFormSchema } from "@/components/admin/settings/class-fo
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { classTypes } from "@/db/schema/types";
+import { useQueryClient } from "@tanstack/react-query";
 import { InferSelectModel } from "drizzle-orm";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -19,6 +20,8 @@ export function ClassDialog({
 	children
 }: ClassDialogProps) {
 	const [open, setOpen] = useState(false);
+
+	const queryClient = useQueryClient();
 	
 	const handleSubmit = async (formData: ClassFormSchema) => {
 		try {
@@ -33,6 +36,7 @@ export function ClassDialog({
 
 			if (result) {
 				toast.success(data ? "Class type updated": "Class type created")
+				queryClient.invalidateQueries({ queryKey: ['classes'] })
 				setOpen(false)
 			}
 		} catch (error) {

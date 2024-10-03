@@ -3,34 +3,25 @@
 import { deleteTraitType } from "@/actions/trait-type";
 import { TraitDialog } from "@/components/admin/traits/trait-dialog";
 import { CopyMarkdown } from "@/components/copy-markdown";
+import { TableActions } from "@/components/table-actions";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { traitTypes } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
-import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
 export type TraitType = InferSelectModel<typeof traitTypes>;
 
 type TraitsTableProps = {
 	data: (TraitType & {
-		upgradeName: string| null
+		upgradeName: string | null
 	})[],
 }
 
 export function TraitsTable({
 	data,
 }: TraitsTableProps) {
-	
+
 	if (data.length === 0) {
 		return (
 			<div className="flex w-full items-center justify-center h-32 text-muted-foreground border border-muted rounded-md">
@@ -38,7 +29,7 @@ export function TraitsTable({
 			</div>
 		)
 	}
-	
+
 	return (
 		<Table>
 			<TableHeader>
@@ -60,8 +51,7 @@ export function TraitsTable({
 						</TableCell>
 						<TableCell>
 							<div className="flex flex-row gap-2 items-center">
-								{item.image &&
-									<Image src={item.image} alt={item.name} width={100} height={100} className="size-5"/>}
+								{item.image && <Image src={item.image} alt={item.name} width={100} height={100} className="size-5" />}
 								{item.name}
 								<Badge variant="outline" className="hidden lg:block">
 									{item.code}
@@ -74,36 +64,15 @@ export function TraitsTable({
 							</Badge>
 						</TableCell>
 						<TableCell>
-							<CopyMarkdown prefix="trait" {...item} name={item.upgradeType + item.code}/>
+							<CopyMarkdown prefix="trait" {...item} name={item.upgradeType + item.code} />
 						</TableCell>
 						<TableCell className="text-right">
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button
-										aria-haspopup="true"
-										size="icon"
-										variant="ghost"
-									>
-										<MoreHorizontal className="h-4 w-4"/>
-										<span className="sr-only">Toggle menu</span>
-									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent align="end">
-									<DropdownMenuLabel>Actions</DropdownMenuLabel>
-									<TraitDialog data={item}>
-										<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
-									</TraitDialog>
-									<ConfirmDialog
-										title={`Delete ${item.name}?`}
-										description="This action is permanent and cannot be undone."
-										onConfirm={() => deleteTraitType(item.id)}
-									>
-										<DropdownMenuItem preventSelect className="text-destructive">
-											Delete
-										</DropdownMenuItem>
-									</ConfirmDialog>
-								</DropdownMenuContent>
-							</DropdownMenu>
+							<TableActions
+								data={item}
+								EditComponent={TraitDialog}
+								onDelete={(data) => deleteTraitType(data.id)}
+								itemName={item.name}
+							/>
 						</TableCell>
 					</TableRow>
 				))}

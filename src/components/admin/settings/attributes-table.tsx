@@ -3,20 +3,11 @@
 import { deleteAttributeType } from "@/actions/attribute-type";
 import { AttributeDialog } from "@/components/admin/settings/attribute-dialog";
 import { CopyMarkdown } from "@/components/copy-markdown";
-import { Button } from "@/components/ui/button";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+import { TableActions } from "@/components/table-actions";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { attributeTypes } from "@/db/schema";
 import useLists from "@/hooks/use-lists";
 import { InferSelectModel } from "drizzle-orm";
-import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
 type AttributeType = InferSelectModel<typeof attributeTypes>;
@@ -60,7 +51,7 @@ export function AttributesTable() {
 						</TableCell>
 						<TableCell>
 							<div className="flex flex-row gap-2 items-center">
-								<Image src={item.image || ''} alt={item.name} width={100} height={100} className="size-5"/>
+								{item.image && <Image src={item.image || ''} alt={item.name} width={100} height={100} className="size-5"/>}
 								{item.name}
 							</div>
 						</TableCell>
@@ -68,33 +59,13 @@ export function AttributesTable() {
 							<CopyMarkdown prefix="attr" {...item}/>
 						</TableCell>
 						<TableCell className="text-right">
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button
-										aria-haspopup="true"
-										size="icon"
-										variant="ghost"
-									>
-										<MoreHorizontal className="size-4"/>
-										<span className="sr-only">Toggle menu</span>
-									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent align="end">
-									<DropdownMenuLabel>Actions</DropdownMenuLabel>
-									<AttributeDialog data={item}>
-										<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
-									</AttributeDialog>
-									<ConfirmDialog
-										title={`Delete ${item.name}?`}
-										description="This action is permanent and cannot be undone."
-										onConfirm={() => deleteAttributeType(item.id)}
-									>
-										<DropdownMenuItem preventSelect className="text-destructive">
-											Delete
-										</DropdownMenuItem>
-									</ConfirmDialog>
-								</DropdownMenuContent>
-							</DropdownMenu>
+							<TableActions
+								data={item}
+								EditComponent={AttributeDialog}
+								onDelete={(data) => deleteAttributeType(data.id)}
+								itemName={item.name}
+								revalidateQuery="attributes"
+							/>
 						</TableCell>
 					</TableRow>
 				))}

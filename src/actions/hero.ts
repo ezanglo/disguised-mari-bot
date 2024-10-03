@@ -45,7 +45,7 @@ export const updateHero = async (payload: HeroFormSchema) => {
 		where: eq(heroes.id, payload.id || '')
 	})
 	if(!hero){
-		throw new Error("List item not found");
+		throw new Error("Hero not found");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -92,7 +92,7 @@ export const deleteHero = async (id: string) => {
 		where: eq(heroes.id, id)
 	})
 	if(!hero){
-		throw new Error("List item not found");
+		throw new Error("Hero not found");
 	}
 	
 	if(hero.discordEmote){

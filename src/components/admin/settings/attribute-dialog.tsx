@@ -5,6 +5,7 @@ import { AttributeForm, AttributeFormSchema } from "@/components/admin/settings/
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { attributeTypes } from "@/db/schema/types";
+import { useQueryClient } from "@tanstack/react-query";
 import { InferSelectModel } from "drizzle-orm";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -18,6 +19,7 @@ export function AttributeDialog({
 	data,
 	children
 }: AttributeDialogProps) {
+	const queryClient = useQueryClient();
 	const [open, setOpen] = useState(false);
 	
 	const handleSubmit = async (formData: AttributeFormSchema) => {
@@ -33,6 +35,7 @@ export function AttributeDialog({
 
 			if (result) {
 				toast.success(data ? "Attribute type updated": "Attribute type created")
+				queryClient.invalidateQueries({ queryKey: ['attributes'] })
 				setOpen(false)
 			}
 		} catch (error) {

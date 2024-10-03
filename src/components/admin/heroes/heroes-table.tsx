@@ -3,19 +3,10 @@
 import { deleteHero } from "@/actions/hero";
 import { HeroDialog } from "@/components/admin/heroes/hero-dialog";
 import { CopyMarkdown } from "@/components/copy-markdown";
-import { Button } from "@/components/ui/button";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+import { TableActions } from "@/components/table-actions";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { heroes } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
-import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
 export type HeroType = InferSelectModel<typeof heroes>;
@@ -94,33 +85,12 @@ export function HeroesTable({
 							<CopyMarkdown prefix="hero" {...item} />
 						</TableCell>
 						<TableCell className="text-right">
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button
-										aria-haspopup="true"
-										size="icon"
-										variant="ghost"
-									>
-										<MoreHorizontal className="h-4 w-4" />
-										<span className="sr-only">Toggle menu</span>
-									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent align="end">
-									<DropdownMenuLabel>Actions</DropdownMenuLabel>
-									<HeroDialog data={item}>
-										<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
-									</HeroDialog>
-									<ConfirmDialog
-										title={`Delete ${item.name}?`}
-										description="This action is permanent and cannot be undone."
-										onConfirm={() => deleteHero(item.id)}
-									>
-										<DropdownMenuItem preventSelect className="text-destructive">
-											Delete
-										</DropdownMenuItem>
-									</ConfirmDialog>
-								</DropdownMenuContent>
-							</DropdownMenu>
+							<TableActions
+								data={item}
+								EditComponent={HeroDialog}
+								onDelete={(data) => deleteHero(data.id)}
+								itemName={item.name}
+							/>
 						</TableCell>
 					</TableRow>
 				))}

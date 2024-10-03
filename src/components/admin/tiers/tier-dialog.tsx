@@ -5,6 +5,7 @@ import { TierForm, TierFormSchema } from "@/components/admin/tiers/tier-form";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { tierTypes } from "@/db/schema/types";
+import { useQueryClient } from "@tanstack/react-query";
 import { InferSelectModel } from "drizzle-orm";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -19,6 +20,7 @@ export function TierDialog({
 	children
 }: TierDialogProps) {
 	const [open, setOpen] = useState(false);
+	const queryClient = useQueryClient();
 	
 	const handleSubmit = async (formData: TierFormSchema) => {
 		try {
@@ -33,6 +35,7 @@ export function TierDialog({
 
 			if (result) {
 				toast.success(data ? "Tier type updated": "Tier type created")
+				queryClient.invalidateQueries({ queryKey: ['tiers'] })
 				setOpen(false)
 			}
 		} catch (error) {

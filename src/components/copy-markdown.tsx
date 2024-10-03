@@ -61,7 +61,7 @@ export function CopyMarkdown({
 					</Button>
 				</TooltipTrigger>
 				<TooltipContent className="flex flex-col items-center justify-center">
-					<Image src={image || ''} alt={''} width={25} height={25}/>
+					{image && <Image src={image || ''} alt={''} width={25} height={25}/>}
 					<p>{markdown}</p>
 				</TooltipContent>
 			</Tooltip>

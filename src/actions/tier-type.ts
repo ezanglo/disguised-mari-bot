@@ -60,7 +60,7 @@ export const updateTierType = async (payload: TierFormSchema) => {
 		where: eq(tierTypes.id, payload.id || '')
 	})
 	if(!tierType){
-		throw new Error("List item not found");
+		throw new Error("Tier type not found");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -107,7 +107,7 @@ export const deleteTierType = async (id: string) => {
 		where: eq(tierTypes.id, id)
 	})
 	if(!tierType){
-		throw new Error("List item not found");
+		throw new Error("Tier type not found");
 	}
 	
 	if(tierType.discordEmote){

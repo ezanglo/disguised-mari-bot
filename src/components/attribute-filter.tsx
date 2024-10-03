@@ -10,15 +10,15 @@ import React from 'react'
 
 export function AttributeFilter() {
 
-  const { data, isLoading } = useLists('attributes')  
+  const { data, isLoading } = useLists('attributes')
 
   const [selectedAttributes, setSelectedAttributes] = useQueryState('attributes',
     parseAsArrayOf(parseAsString)
-    .withDefault([])
-    .withOptions({
-      shallow: false,
-      clearOnDefault: true,
-    })
+      .withDefault([])
+      .withOptions({
+        shallow: false,
+        clearOnDefault: true,
+      })
   )
 
   if (isLoading) {
@@ -44,7 +44,7 @@ export function AttributeFilter() {
           aria-label={item.name}
           className="p-1 size-7"
         >
-          <Image src={item.image || ''} alt={item.name} width={100} height={100} />
+          {item.image && <Image src={item.image || ''} alt={item.name} width={100} height={100} className="size-5"/>}
         </ToggleGroupItem>
       ))}
     </ToggleGroup>

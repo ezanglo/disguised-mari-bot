@@ -3,20 +3,11 @@
 import { deleteContent } from "@/actions/content";
 import { ContentDialog } from "@/components/admin/contents/content-dialog";
 import { EnemyImageList } from "@/components/enemy-image-list";
+import { TableActions } from "@/components/table-actions";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { contentPhases } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
-import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
 export type ContentType = InferSelectModel<typeof contentPhases>;
@@ -90,33 +81,12 @@ export function ContentsTable({
 							</div>
 						</TableCell>
 						<TableCell className="text-right">
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button
-										aria-haspopup="true"
-										size="icon"
-										variant="ghost"
-									>
-										<MoreHorizontal className="h-4 w-4" />
-										<span className="sr-only">Toggle menu</span>
-									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent align="end">
-									<DropdownMenuLabel>Actions</DropdownMenuLabel>
-									<ContentDialog data={item}>
-										<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
-									</ContentDialog>
-									<ConfirmDialog
-										title={`Delete ${item.name}?`}
-										description="This action is permanent and cannot be undone."
-										onConfirm={() => deleteContent(item.id)}
-									>
-										<DropdownMenuItem preventSelect className="text-destructive">
-											Delete
-										</DropdownMenuItem>
-									</ConfirmDialog>
-								</DropdownMenuContent>
-							</DropdownMenu>
+							<TableActions
+								data={item}
+								EditComponent={ContentDialog}
+								onDelete={(data) => deleteContent(data.id)}
+								itemName={item.name}
+							/>
 						</TableCell>
 					</TableRow>
 				))}

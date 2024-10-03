@@ -45,7 +45,7 @@ export function TierFilter() {
           aria-label={item.name}
           className="p-1 size-7"
         >
-          <Image src={item.image || ''} alt={item.name} width={100} height={100} />
+          {item.image && <Image src={item.image || ''} alt={item.name} width={100} height={100} className="size-5"/>}
         </ToggleGroupItem>
       ))}
     </ToggleGroup>

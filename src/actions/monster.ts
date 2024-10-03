@@ -72,7 +72,7 @@ export const updateMonster = async (payload: MonsterFormSchema) => {
 		where: eq(monsters.id, payload.id || '')
 	})
 	if(!monster){
-		throw new Error("List item not found");
+		throw new Error("Monster not found");
 	}
 	
 	const response = await db.transaction(async (trx) => {
@@ -119,7 +119,7 @@ export const deleteMonster = async (id: string) => {
 		where: eq(monsters.id, id)
 	})
 	if(!monster){
-		throw new Error("List item not found");
+		throw new Error("Monster not found");
 	}
 	
 	if(monster.discordEmote){

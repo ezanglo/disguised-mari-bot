@@ -42,6 +42,7 @@ export function PetForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			...defaultValues,
+			code: 'pet.',
 			hero: searchParams.get("hero") || defaultValues?.hero || "",
 			tierType: searchParams.get("tierType") || defaultValues?.tierType || "",
 		},
@@ -113,7 +114,7 @@ export function PetForm({
 						<FormItem>
 							<FormLabel>Code</FormLabel>
 							<FormControl>
-								<Input  {...field}/>
+								<Input {...field}/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>

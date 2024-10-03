@@ -2,20 +2,11 @@
 
 import { deleteListItem } from "@/actions/list";
 import { ListItemDialog } from "@/components/admin/settings/list-item-dialog";
+import { TableActions } from "@/components/table-actions";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { listItems } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
-import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
 export type ListItemType = InferSelectModel<typeof listItems>;
@@ -58,8 +49,7 @@ export function ListItemsTable({
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
-									{item.image &&
-										<Image src={item.image} alt={item.name} width={100} height={100} className="size-5"/>}
+									{item.image && <Image src={item.image} alt={item.name} width={100} height={100} className="size-5"/>}
 									{item.name}
 									<Badge variant="outline">
 										{item.code}
@@ -72,33 +62,12 @@ export function ListItemsTable({
 								</Badge>
 							</TableCell>
 							<TableCell className="text-right">
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button
-											aria-haspopup="true"
-											size="icon"
-											variant="ghost"
-										>
-											<MoreHorizontal className="h-4 w-4"/>
-											<span className="sr-only">Toggle menu</span>
-										</Button>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent align="end">
-										<DropdownMenuLabel>Actions</DropdownMenuLabel>
-										<ListItemDialog data={item}>
-											<DropdownMenuItem preventSelect>Edit</DropdownMenuItem>
-										</ListItemDialog>
-										<ConfirmDialog
-											title={`Delete ${item.name}?`}
-											description="This action is permanent and cannot be undone."
-											onConfirm={() => deleteListItem(item.id)}
-										>
-											<DropdownMenuItem preventSelect className="text-destructive">
-												Delete
-											</DropdownMenuItem>
-										</ConfirmDialog>
-									</DropdownMenuContent>
-								</DropdownMenu>
+								<TableActions	
+									data={item}
+									EditComponent={ListItemDialog}
+									onDelete={(data) => deleteListItem(data.id)}
+									itemName={item.name}
+								/>
 							</TableCell>
 						</TableRow>
 					))}
