@@ -38,12 +38,18 @@ const ADMIN = {
 	},
 }
 
-const CHASER = {
-	BASE: '/chaser',
+const LINEUPS = {
+	BASE: '/lineups',
+	CREATE: '/lineups/create',
+}
+
+const PROFILE = {
+	BASE: (username: string) => `/${username}`,
 }
 
 export const ROUTES = {
 	BASE,
+	PROFILE,
 	ADMIN,
-	CHASER
+	LINEUPS
 }

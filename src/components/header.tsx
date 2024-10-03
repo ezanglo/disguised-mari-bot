@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { HeaderWrapper } from "@/components/header-wrapper";
 import { LoginButton } from "@/components/login-button";
 import { NavLinks } from "@/components/nav-links";
+import { ProfileLink } from "@/components/profile-link";
 import { Sidebar } from "@/components/sidebar";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,8 @@ export async function Header() {
 				<NavLinks/>
 			</div>
 			{user ? (
-				<div className="hidden md:block">
+				<div className="hidden md:flex flex-row items-center gap-2 w-full justify-end">
+					<ProfileLink user={user}/>
 					<UserMenu user={user}/>
 				</div>
 			): (

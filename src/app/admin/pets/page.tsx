@@ -1,4 +1,3 @@
-import { PetDialog } from "@/components/admin/pets/pet-dialog";
 import { PetFilters } from "@/components/admin/pets/pet-filters";
 import { PetsTable } from "@/components/admin/pets/pets-table";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { attributeTypes, classTypes, heroes, pets, tierTypes } from "@/db/schema
 import { and, asc, eq, getTableColumns, inArray } from "drizzle-orm";
 import { PlusIcon } from "lucide-react";
 import { createSearchParamsCache, parseAsArrayOf, parseAsString } from 'nuqs/server';
+import { PetDialog } from "src/components/admin/pets/pet-dialog";
 
 const searchParamsCache = createSearchParamsCache({
 	hero: parseAsString,
@@ -15,13 +15,13 @@ const searchParamsCache = createSearchParamsCache({
 	attributes: parseAsArrayOf(parseAsString),
 })
 
-type ContentsPageProps = {
+type PetsPageProps = {
 	searchParams: Record<string, string | string[] | undefined>
 }
 
-export default async function ContentsPage({
+export default async function PetsPage({
 	searchParams
-}: ContentsPageProps) {
+}: PetsPageProps) {
 	
 	const { hero, tiers, classes, attributes } = searchParamsCache.parse(searchParams)
 	const whereConditions = []

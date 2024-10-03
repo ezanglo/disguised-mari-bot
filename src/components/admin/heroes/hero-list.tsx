@@ -3,6 +3,7 @@ import { Card, CardHeader } from '@/components/ui/card'
 import { DEFAULT_IMAGE } from '@/constants/constants'
 import { db } from "@/db";
 import { attributeTypes, classTypes, heroes, tierTypes } from "@/db/schema";
+import { cn } from "@/lib/utils";
 import { and, asc, eq, getTableColumns, inArray } from "drizzle-orm";
 import Image from 'next/image'
 import React from 'react'
@@ -11,9 +12,15 @@ type HeroListProps = {
 	tiers?: string[] | null,
 	classes?: string[] | null,
 	attributes?: string[] | null,
+	className?: string,
 }
 
-export async function HeroList({ tiers, classes, attributes }: HeroListProps) {
+export async function HeroList({
+	tiers,
+	classes,
+	attributes,
+	className
+}: HeroListProps) {
 	const whereConditions = []
 
 	if (tiers && tiers.length > 0) {
@@ -41,7 +48,7 @@ export async function HeroList({ tiers, classes, attributes }: HeroListProps) {
 
 
 	return (
-		<div className="flex flex-wrap gap-2 md:gap-3">
+		<div className={cn("flex flex-wrap gap-2 md:gap-3", className)}>
 			{data.map((item, index) => (
 				<HeroDialog key={index} data={item}>
 					<Card className="overflow-hidden hover:scale-105 transition-all duration-300">
