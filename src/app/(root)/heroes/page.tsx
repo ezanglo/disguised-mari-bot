@@ -1,7 +1,5 @@
-import { HeroList } from "@/components/admin/heroes/hero-list";
 import { HeroListFilters } from "@/components/admin/heroes/hero-list-filters";
 import { FocusCards } from "@/components/ui/focus-cards";
-import { DEFAULT_IMAGE } from "@/constants/constants";
 import { db } from "@/db";
 import { attributeTypes, classTypes, heroes, tierTypes } from "@/db/schema";
 import { and, asc, eq, getTableColumns, inArray } from "drizzle-orm";
@@ -56,8 +54,13 @@ export default async function HeroesPage({
 		<main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
 			<HeroListFilters className="justify-center"/>
 			<FocusCards cards={data?.map(item => ({
-				title: item.displayName,
+				title: item.name,
+				color: item.color || '',
 				src: item.thumbnail || '',
+				icon: item.image || '',
+				tierType: item.tierImage || '',
+				classType: item.classImage || '',
+				attributeType: item.attributeImage || '',
 			}))}/>
 		</main>
 	)

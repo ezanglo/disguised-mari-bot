@@ -53,15 +53,15 @@ export function WikiImageSelector({
 										key={index}
 										variant="outline"
 										className={cn(
-											"w-[100px] h-[150] overflow-hidden",
+											"w-[100px] h-[150px] overflow-hidden",
 											selectedImage === image.image && "bg-muted-foreground"
 										)}
 										onClick={() => setSelectedImage(image.image)}
 									>
 										<Image
-											src={image.image}
+											src={`${image.image}/revision/latest/scale-to-width-down/300`}
 											alt={''}
-											className="object-cover w-full h-full"
+											className="object-cover w-full h-full "
 											width={500}
 											height={500}
 										/>
