@@ -71,7 +71,7 @@ export default function AddHeroPage({ }: AddHeroPageProps) {
           ))}
         </div>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 overflow-auto">
         {hero && <HeroCard wikiHero={hero}/>}
         {hero && <SkillCard wikiHero={hero}/>}
       </div>

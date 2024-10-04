@@ -11,7 +11,7 @@ export default middleware((req) => {
 	
 	const isLandingPage = req.nextUrl.pathname === ROUTES.BASE
 	const isAdminRoute = nextUrl.pathname.startsWith(ROUTES.ADMIN.BASE)
-	const isChaserRoute = nextUrl.pathname.startsWith(ROUTES.CHASER.BASE)
+	const isChaserRoute = nextUrl.pathname.startsWith(ROUTES.PROFILE.USER)
 	const canViewAdmin = isAuthorized(auth?.user)
 	
 	if (!isLoggedIn && !isLandingPage) {
@@ -21,11 +21,11 @@ export default middleware((req) => {
 	if (isAdminRoute) {
     return canViewAdmin
         ? undefined // Allow access to admin route
-        : Response.redirect(new URL(ROUTES.CHASER.BASE, nextUrl));
+        : Response.redirect(new URL(ROUTES.PROFILE.USER, nextUrl));
 }
 	
 	if (isLoggedIn && !canViewAdmin && !isChaserRoute) {
-		return Response.redirect(new URL(ROUTES.CHASER.BASE, nextUrl))
+		return Response.redirect(new URL(ROUTES.PROFILE.USER, nextUrl))
 	}
 })
 

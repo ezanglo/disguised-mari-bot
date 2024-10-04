@@ -1,11 +1,12 @@
-import { HeroDialog } from '@/components/admin/heroes/hero-dialog'
 import { Card, CardHeader } from '@/components/ui/card'
 import { DEFAULT_IMAGE } from '@/constants/constants'
+import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { attributeTypes, classTypes, heroes, tierTypes } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { and, asc, eq, getTableColumns, inArray } from "drizzle-orm";
 import Image from 'next/image'
+import Link from "next/link";
 import React from 'react'
 
 type HeroListProps = {
@@ -22,7 +23,7 @@ export async function HeroList({
 	className
 }: HeroListProps) {
 	const whereConditions = []
-
+	
 	if (tiers && tiers.length > 0) {
 		whereConditions.push(inArray(heroes.tierType, tiers))
 	}
@@ -32,25 +33,25 @@ export async function HeroList({
 	if (attributes && attributes.length > 0) {
 		whereConditions.push(inArray(heroes.attributeType, attributes))
 	}
-
+	
 	const data = await db
-		.select({
-			...getTableColumns(heroes),
-			tierImage: tierTypes.image,
-			classImage: classTypes.image,
-			attributeImage: attributeTypes.image,
-		}).from(heroes)
-		.leftJoin(tierTypes, eq(heroes.tierType, tierTypes.code))
-		.leftJoin(classTypes, eq(heroes.classType, classTypes.code))
-		.leftJoin(attributeTypes, eq(heroes.attributeType, attributeTypes.code))
-		.where(and(...whereConditions))
-		.orderBy(asc(heroes.createdAt));
-
-
+	.select({
+		...getTableColumns(heroes),
+		tierImage: tierTypes.image,
+		classImage: classTypes.image,
+		attributeImage: attributeTypes.image,
+	}).from(heroes)
+	.leftJoin(tierTypes, eq(heroes.tierType, tierTypes.code))
+	.leftJoin(classTypes, eq(heroes.classType, classTypes.code))
+	.leftJoin(attributeTypes, eq(heroes.attributeType, attributeTypes.code))
+	.where(and(...whereConditions))
+	.orderBy(asc(heroes.createdAt));
+	
+	
 	return (
 		<div className={cn("flex flex-wrap gap-2 md:gap-3", className)}>
 			{data.map((item, index) => (
-				<HeroDialog key={index} data={item}>
+				<Link key={index} href={ROUTES.ADMIN.HEROES.HERO(item.code)}>
 					<Card className="overflow-hidden hover:scale-105 transition-all duration-300">
 						<CardHeader className="p-0 space-y-0 relative">
 							<Image
@@ -80,7 +81,7 @@ export async function HeroList({
 							</div>
 						</CardHeader>
 					</Card>
-				</HeroDialog>
+				</Link>
 			))}
 		</div>
 	)

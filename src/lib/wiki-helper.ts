@@ -717,7 +717,7 @@ function extractChaserSkill($: cheerio.CheerioAPI, type: string | undefined) {
 							}
 						} else {
 							chaserSkill.upgrades?.push({
-								upgradeType: 'cs',
+								upgradeType: 'csr',
 								description,
 								image: additionalEffectImages[additionalEffectImages.length - 1]
 							});

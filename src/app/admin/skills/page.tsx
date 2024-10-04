@@ -10,7 +10,8 @@ import { createSearchParamsCache, parseAsString } from 'nuqs/server';
 
 const searchParamsCache = createSearchParamsCache({
 	hero: parseAsString,
-	upgradeType: parseAsString
+	upgradeType: parseAsString,
+	skillType: parseAsString,
 })
 
 type SkillPageProps = {
@@ -21,7 +22,7 @@ export default async function SkillPage({
 	searchParams
 }: SkillPageProps) {
 
-	const { hero, upgradeType } = searchParamsCache.parse(searchParams)
+	const { hero, upgradeType, skillType } = searchParamsCache.parse(searchParams)
 
 	const whereConditions = []
 	if (hero) {
@@ -29,6 +30,9 @@ export default async function SkillPage({
 	}
 	if(upgradeType) {
 		whereConditions.push(eq(skills.upgradeType, upgradeType))
+	}
+	if(skillType) {
+		whereConditions.push(eq(skills.skillType, skillType))
 	}
 
 	const upgradeTypes = aliasedTable(listItems, 'upgradeTypes')

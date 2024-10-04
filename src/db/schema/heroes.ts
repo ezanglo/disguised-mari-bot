@@ -10,6 +10,7 @@ export const heroes = pgTable("hero", {
 	color: text("color"),
 	image: text("image"),
 	discordEmote: text("discord_emote"),
+	thumbnail: text("thumbnail"),
 	tierType: text("tier_type").notNull()
 	.references(() => tierTypes.code),
 	classType: text("class_type").notNull()

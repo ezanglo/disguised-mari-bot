@@ -9,7 +9,9 @@ import { heroes } from "@/db/schema";
 import { fetchImageBase64, GetDiscordEmoteName, toCode } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { UTApi } from "uploadthing/server";
 import { getAuthorizedUser } from "./base";
+import { HeroType } from "@/components/admin/heroes/heroes-table";
 
 
 export const insertHero = async (payload: HeroFormSchema) => {
@@ -101,7 +103,6 @@ export const updateHero = async (payload: HeroFormSchema) => {
 	return response;
 }
 
-
 export const deleteHero = async (id: string) => {
 	const user = await getAuthorizedUser();
 	if(!user){
@@ -121,5 +122,35 @@ export const deleteHero = async (id: string) => {
 	
 	const response = await db.delete(heroes).where(eq(heroes.id, id)).returning();
 	revalidatePath(ROUTES.ADMIN.HEROES.BASE);
+	return response;
+}
+
+const utapi = new UTApi();
+export const updateHeroThumbnail = async (hero: HeroType, image: string) => {
+	const user = await getAuthorizedUser();
+	if(!user){
+    throw new Error("Unauthorized");
+	}
+
+	const UTBASE_URL = 'https://utfs.io/a/1te70qyjma/';
+	if(hero.thumbnail && hero.thumbnail.startsWith(UTBASE_URL)){
+		const file = hero.thumbnail.replace(UTBASE_URL, '')
+		await utapi.deleteFiles(file);
+	}
+	
+	const uploadedFile = await utapi.uploadFilesFromUrl({
+		url: `${image}/revision/latest/scale-to-width-down/800`,
+		name: `${hero.code}-thumbnail`,
+	});
+	if (!uploadedFile.data) {
+		throw new Error("Failed to upload image");
+	}
+	
+	const response = await db.update(heroes).set({
+		thumbnail: uploadedFile.data.appUrl,
+		updatedBy: user.id,
+	}).where(eq(heroes.code, hero.code || '')).returning();
+	
+	revalidatePath(ROUTES.ADMIN.HEROES.HERO(hero.code));
 	return response;
 }

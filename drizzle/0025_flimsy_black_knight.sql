@@ -1,0 +1,1 @@
+ALTER TABLE "hero" ADD COLUMN "thumbnail" text;

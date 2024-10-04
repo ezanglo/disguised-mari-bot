@@ -6,7 +6,7 @@ import { attributeTypes, classTypes, heroes, pets, tierTypes } from "@/db/schema
 import { and, asc, eq, getTableColumns, inArray } from "drizzle-orm";
 import { PlusIcon } from "lucide-react";
 import { createSearchParamsCache, parseAsArrayOf, parseAsString } from 'nuqs/server';
-import { PetDialog } from "src/components/admin/pets/pet-dialog";
+import { PetDialog } from "@/components/admin/pets/pet-dialog";
 
 const searchParamsCache = createSearchParamsCache({
 	hero: parseAsString,

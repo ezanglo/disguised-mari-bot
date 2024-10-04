@@ -33,10 +33,10 @@ export function SkillCard({
 
 	let name = toCode(wikiHero.name);
 	const pageParts = wikiHero.wikiPage?.split('/')
-	if(pageParts && pageParts.length > 1){
+	if (pageParts && pageParts.length > 1 && pageParts.at(-1)?.toLowerCase() !== 'dimensional_chaser') {
 		name += toCode(pageParts.at(-1))
 	}
-
+	
 	const { data, isLoading } = useLists(`heroes/${name}`)
 
 	const { data: traits } = useLists('traits')
@@ -72,7 +72,7 @@ export function SkillCard({
 			let sp = skill.sp ? parseInt(skill.sp.match(/\d+/)?.[0] || '0') : null;
 			let cooldown = skill.cooldown ? parseInt(skill.cooldown.match(/\d+/)?.[0] || '0') : null;
 
-			if (['s1', 's2', 'pass', 'ss'].includes(skillType)) {
+			if (['s1', 's2', 'pass', 'ss', 'cs'].includes(skillType)) {
 				switch (upgradeType) {
 					case 'lb':
 						const lbSkill = skill.upgrades?.find((upgrade) => upgrade.upgradeType === upgradeType);
@@ -82,7 +82,7 @@ export function SkillCard({
 							description = lbSkill.description;
 						}
 						break;
-					case 'cs':
+					case 'csr':
 						const csSkill = skill.upgrades?.find((upgrade) => upgrade.upgradeType === upgradeType);
 						if (csSkill) {
 							image = csSkill.image;
@@ -142,10 +142,12 @@ export function SkillCard({
 	const handleBulkInsert = async () => {
 		try {
 			for (const skill of skills) {
-				await handleInsert(skill);
-				if (skill.upgrades) {
-					for (const upgrade of skill.upgrades) {
-						await handleInsert(skill, upgrade);
+				if (skill.skillType === 'cs') {
+					await handleInsert(skill);
+					if (skill.upgrades) {
+						for (const upgrade of skill.upgrades) {
+							await handleInsert(skill, upgrade);
+						}
 					}
 				}
 			}

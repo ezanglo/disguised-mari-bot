@@ -123,10 +123,10 @@ export function HeroCard({
         {hero && (
           <div className="flex flex-row flex-wrap gap-2 p-2 border rounded-sm mt-2">
             {(heroData.icons as GalleryData[]).map((item, index) => (
-              <Button key={index} className="size-14 p-0" variant="outline" onClick={() => handleUpdateImage(item.image)}>
+              <Button key={index} className="size-8 p-0" variant="outline" onClick={() => handleUpdateImage(item.image)}>
                 <Image
                   src={item.image || DEFAULT_IMAGE}
-                  className="object-cover size-10 object-cover"
+                  className="object-cover size-6"
                   title={item.label}
                   alt={''} width={500} height={500}
                 />

@@ -8,6 +8,7 @@ const ADMIN = {
 	HEROES: {
 		BASE: '/admin/heroes',
 		ADD: '/admin/heroes/add',
+		HERO: (heroCode: string) => `/admin/heroes/${heroCode}`,
 	},
 	SKILLS: {
 		BASE: '/admin/skills',
@@ -44,6 +45,7 @@ const LINEUPS = {
 }
 
 const PROFILE = {
+	USER: '/profile',
 	BASE: (username: string) => `/${username}`,
 }
 
