@@ -6,7 +6,7 @@ import { DISCORD_EMOTE_URL } from "@/constants/constants";
 import { ROUTES } from "@/constants/routes";
 import { db } from "@/db";
 import { listItems, lists } from "@/db/schema";
-import { GetDiscordEmoteName } from "@/lib/utils";
+import { GetDiscordEmoteName, toCode } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { getAuthorizedUser } from "./base";
@@ -74,8 +74,7 @@ export const insertListItem = async (payload: ListItemFormSchema) => {
 		}).returning().then((res) => res[0] ?? null);
 		
 		if (payload.image) {
-			const emoteName = GetDiscordEmoteName(listGroup.name, payload.name, result.id);
-			
+			const emoteName = GetDiscordEmoteName(toCode(listGroup.name), payload.name, result.id);
 			const image = await UploadDiscordEmote({
 				name: emoteName,
 				image: payload.image,

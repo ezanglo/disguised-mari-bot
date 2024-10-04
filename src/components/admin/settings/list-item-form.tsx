@@ -1,5 +1,6 @@
 "use client";
 
+import { FileInput } from "@/components/file-input";
 import { ListGroupSelect } from "@/components/list-group-select";
 import { SubmitButton } from "@/components/submit-button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -7,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { listItems } from "@/db/schema/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,6 +17,7 @@ const formSchema = createInsertSchema(listItems, {
 	name: z.string().min(1),
 	listId: z.string().min(1),
 	code: z.string().min(1),
+	image: z.string().optional(),
 })
 
 export type ListItemFormSchema = z.infer<typeof formSchema>
@@ -88,6 +91,22 @@ export function ListItemForm({
 							<FormLabel>Code</FormLabel>
 							<FormControl>
 								<Input {...field} />
+							</FormControl>
+							<FormMessage/>
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="image"
+					render={({field}) => (
+						<FormItem>
+							<div className="flex flex-row gap-2 items-center">
+								<FormLabel>Image</FormLabel>
+								{field.value && <Image src={field.value} alt={''} width={100} height={100} className="size-4"/>}
+							</div>
+							<FormControl>
+								<FileInput onValueChange={field.onChange}/>
 							</FormControl>
 							<FormMessage/>
 						</FormItem>
