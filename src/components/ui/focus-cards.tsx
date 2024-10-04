@@ -1,10 +1,9 @@
 "use client";
-import { Card } from "@/components/ui/card";
 import { cn, hexToRgb } from "@/lib/utils";
 import Image from "next/image";
 import React, { useState } from "react";
 
-export const Card = React.memo(
+export const CardItem = React.memo(
 	({
 		card,
 		index,
@@ -24,7 +23,7 @@ export const Card = React.memo(
 				hovered !== null && hovered !== index && "blur-sm scale-[0.98] opacity-50",
 			)}
 			style={{
-				backgroundColor: (hovered === index && card.color) 
+				backgroundColor: (hovered === index && card.color)
 					? `rgba(${hexToRgb(card.color)}, 0.2)` // Add 50% opacity
 					: 'transparent'
 			}}
@@ -84,7 +83,7 @@ export const Card = React.memo(
 	)
 );
 
-Card.displayName = "Card";
+CardItem.displayName = "CardItem";
 
 type Card = {
 	title: string;
@@ -96,13 +95,13 @@ type Card = {
 	color?: string;
 };
 
-export function FocusCards({ cards }: { cards: Card[] }) {
+export function FocusCards({cards}: { cards: Card[] }) {
 	const [hovered, setHovered] = useState<number | null>(null);
-
+	
 	return (
 		<div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-4 mx-auto md:px-8 w-full max-w-6xl">
 			{cards.map((card, index) => (
-				<Card
+				<CardItem
 					key={card.title}
 					card={card}
 					index={index}
