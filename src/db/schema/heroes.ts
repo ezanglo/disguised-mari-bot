@@ -25,7 +25,7 @@ export const heroes = pgTable("hero", {
 export const pets = pgTable("pet", {
 	id: uuid("id").primaryKey().defaultRandom(),
 	hero: text("hero").notNull()
-	.references(() => heroes.code, {onDelete: "cascade"}),
+	.references(() => heroes.code, {onDelete: "cascade", onUpdate: "cascade"}),
 	tierType: text("tier_type").notNull()
 	.references(() => tierTypes.code),
 	name: text("name").notNull(),
@@ -45,7 +45,7 @@ export const pets = pgTable("pet", {
 export const skills = pgTable("skill", {
 	id: uuid("id").primaryKey().defaultRandom(),
 	hero: text("hero").notNull()
-	.references(() => heroes.code, {onDelete: "cascade"}),
+	.references(() => heroes.code, {onDelete: "cascade", onUpdate: "cascade"}),
 	skillType: text("skill_type").notNull()
 	.references(() => listItems.code),
 	upgradeType: text("upgrade_type").notNull()

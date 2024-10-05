@@ -26,7 +26,7 @@ export function WikiImageSelector({
 	
 	const {data, isLoading} = useQuery({
 		queryKey: ['wiki-heroes', heroCode],
-		queryFn: () => fetch(`/api/wiki/heroes/${heroCode}`).then(res => res.json()),
+		queryFn: () => fetch(`/api/wiki/heroes/${heroCode.replace('_','/')}`).then(res => res.json()),
 	});
 	
 	const gallery: GalleryType = !isLoading ? data?.gallery || {} : {}

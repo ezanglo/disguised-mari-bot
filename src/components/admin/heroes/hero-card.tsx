@@ -23,10 +23,12 @@ export function HeroCard({
   wikiHero
 }: HeroCardProps) {
 
+  console.log(wikiHero);
+
   let name = toCode(wikiHero.name);
   const pageParts = wikiHero.wikiPage?.split('/')
   if (pageParts && pageParts.length > 1 && pageParts.at(-1)?.toLowerCase() !== 'dimensional_chaser') {
-    name += toCode(pageParts.at(-1))
+    name += `_${toCode(pageParts.at(-1))}`
   }
   
   const { data, isLoading } = useLists(`heroes/${name}`)
