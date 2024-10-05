@@ -1,4 +1,4 @@
-import { getChaserSkills, getDetails, getGallery, getSkills, getSoulImprintSkills } from '@/lib/wiki-helper';
+import { getDetails, getGallery, getSkills, getSoulImprintSkills } from '@/lib/wiki-helper';
 
 export const dynamic = 'force-static'
 
@@ -7,8 +7,6 @@ async function getHeroDetails(hero: string[], newHero: boolean = false) {
     const { title, details } = await getDetails(hero, newHero);
     const gallery = await getGallery(hero, newHero);
     let skills = await getSkills(hero, newHero);
-    const chaserSkills = await getChaserSkills(hero, newHero);
-    const soulImprintSkills = await getSoulImprintSkills(hero, newHero);
 
     const icons = gallery['icons']
     let icon = gallery['icons']?.find((icon: any) => icon.type === 'Soul Imprint')?.image || '';
@@ -24,26 +22,6 @@ async function getHeroDetails(hero: string[], newHero: boolean = false) {
     }
 
     const koreanName = title?.[1]
-
-    if(chaserSkills.length > 0){
-      skills = [...skills, ...chaserSkills]
-    }
-
-    if(soulImprintSkills.length > 0){
-      soulImprintSkills.forEach((skill: any) => {
-        const existingSkill = skills.find((s: any) => s.skillType === skill.skillType);
-        if (existingSkill) {
-          if(!existingSkill.upgrades){
-            existingSkill.upgrades = []
-          }
-          existingSkill.upgrades?.push({
-            upgradeType: 'si',
-            description: skill.description,
-            image: skill.image
-          });
-        }
-      });
-    }
 
     return {
       name,

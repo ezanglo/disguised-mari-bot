@@ -142,12 +142,10 @@ export function SkillCard({
 	const handleBulkInsert = async () => {
 		try {
 			for (const skill of skills) {
-				if (skill.skillType === 'cs') {
-					await handleInsert(skill);
-					if (skill.upgrades) {
-						for (const upgrade of skill.upgrades) {
-							await handleInsert(skill, upgrade);
-						}
+				await handleInsert(skill);
+				if (skill.upgrades) {
+					for (const upgrade of skill.upgrades) {
+						await handleInsert(skill, upgrade);
 					}
 				}
 			}

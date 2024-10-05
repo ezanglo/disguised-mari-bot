@@ -38,7 +38,7 @@ function getPageName(hero: string[], newHero: boolean = false) {
 		data.push('Dimensional_Chaser');
 	}
 	if (upgrade) {
-		data.push(upgrade);
+		data.push(upgrade.toUpperCase());
 	}
 	return data.join('/');
 }
@@ -49,8 +49,8 @@ function getImageString(image?: string) {
 
 export async function getGallery(hero: string[], newHero: boolean = false) {
 	const gallerySection = await getSection(hero, "Gallery", newHero);
-	if(!gallerySection){
-		return { 'icons' : []}
+	if (!gallerySection) {
+		return { 'icons': [] }
 	}
 	const data = await fetchWikiData({
 		action: "parse",
@@ -115,7 +115,7 @@ function extractFlatGallery($: cheerio.CheerioAPI) {
 export async function getHeroIcon(hero: string[], newHero: boolean = false) {
 
 	const gallerySection = await getSection(hero, "Gallery", newHero);
-	if(!gallerySection){
+	if (!gallerySection) {
 		return '';
 	}
 
@@ -344,13 +344,13 @@ export async function getSection(hero: string[], section: string, newHero: boole
 export async function getSkills(hero: string[], newHero: boolean = false) {
 	const [_, type] = hero;
 	const skillSection = await getSection(hero, "Skills", newHero);
-	if(!skillSection){
+	if (!skillSection) {
 		return [];
 	}
+
 	const skillData = await fetchWikiData({
 		action: "parse",
 		page: getPageName(hero, newHero),
-		section: skillSection.index,
 		prop: "text",
 	}, newHero);
 
@@ -368,32 +368,30 @@ export async function getSkills(hero: string[], newHero: boolean = false) {
 		}
 	});
 
-	return extractedSkills;
-}
-
-export async function getChaserSkills(hero: string[], newHero: boolean = false) {
-	const [_, type] = hero;
-	const extractedSkills = [];
-	const chaserSection = await getSection(hero, "Chaser Skill", newHero);
-	if(!chaserSection){
-		return [];
+	let chaserSkill = extractChaserSkill($);
+	if(!chaserSkill) {
+		chaserSkill = extractFlatChaserSkill($)
 	}
-	const chaserSkillData = await fetchWikiData({
-		action: "parse",
-		page: getPageName(hero, newHero),
-		section: chaserSection.index,
-		prop: "text",
-	}, newHero);
 
-	const chaserSkills = chaserSkillData.parse.text['*'];
-	const $ = cheerio.load(chaserSkills);
-	
-	const chaserSkill = $('.tabber.wds-tabber').length > 0
-		? extractChaserSkill($, type)
-		: extractFlatChaserSkill($, type);
-
-	if (chaserSkill.name) {
+	if (chaserSkill && chaserSkill?.name) {
 		extractedSkills.push(chaserSkill);
+	}
+
+	const soulImprintSkills = extractSoulImprintSkill($);
+	if(soulImprintSkills.length > 0){
+		soulImprintSkills.forEach((skill: any) => {
+			const existingSkill = extractedSkills.find((s: any) => s.skillType === skill.skillType);
+			if (existingSkill) {
+				if(!existingSkill.upgrades){
+					existingSkill.upgrades = []
+				}
+				existingSkill.upgrades?.push({
+					upgradeType: 'si',
+					description: skill.description,
+					image: skill.image
+				});
+			}
+		});
 	}
 
 	return extractedSkills;
@@ -403,7 +401,7 @@ export async function getSoulImprintSkills(hero: string[], newHero: boolean = fa
 	const [_, type] = hero;
 	const extractedSkills = [];
 	const soulImprintSection = await getSection(hero, "Soul Imprint", newHero);
-	if(!soulImprintSection){
+	if (!soulImprintSection) {
 		return [];
 	}
 	const soulImprintData = await fetchWikiData({
@@ -426,7 +424,13 @@ function extractSoulImprintSkill($: cheerio.CheerioAPI) {
 
 	const passiveSkill: string[] = [];
 
-	$('table.wikitable').eq(0).find('tbody tr').each((index, row) => {
+	// Find the Skills heading
+	const skillsHeading = $('h2:has(span#Soul_Imprint)');
+
+	// Find the first wikitable after the Skills heading
+	const skillsTable = skillsHeading.nextAll('table.wikitable').first();
+
+	skillsTable.find('tbody tr').each((index, row) => {
 		const $row = $(row)
 		const $cells = $row.find('td, th');
 
@@ -523,8 +527,13 @@ function processSkillType(skillType: string) {
 function extractFlatSkills($: cheerio.CheerioAPI) {
 	const extractedSkills: SkillData[] = [];
 	let currentCategory = '';
+	// Find the Skills heading
+	const skillsHeading = $('h2:has(span#Skills)');
 
-	$('table.wikitable').eq(0).find('tbody tr').each((index, row) => {
+	// Find the first wikitable after the Skills heading
+	const skillsTable = skillsHeading.nextAll('table.wikitable').first();
+
+	skillsTable.find('tbody tr').each((index, row) => {
 		const $row = $(row)
 		const $cells = $row.find('td, th');
 
@@ -566,7 +575,13 @@ function extractTabbedSkills($: cheerio.CheerioAPI) {
 	let currentCategory = '';
 	let currentSkill: SkillData | null = null;
 
-	$('.tabber.wds-tabber').eq(0).find('.wds-tab__content').each((tabIndex, tabContent) => {
+	// Find the Skills heading
+	const skillsHeading = $('h2:has(span#Skills)');
+
+	// Find the first tabber after the Skills heading
+	const skillsTabber = skillsHeading.nextAll('.tabber.wds-tabber').first();
+
+	skillsTabber.find('.wds-tab__content').each((tabIndex, tabContent) => {
 		const isUpgraded = tabIndex === 1;
 		$(tabContent).find('table.wikitable').each((_, table) => {
 			$(table).find('tbody tr').each((index, row) => {
@@ -636,7 +651,7 @@ function extractTabbedSkills($: cheerio.CheerioAPI) {
 	return extractedSkills;
 }
 
-function extractChaserSkill($: cheerio.CheerioAPI, type: string | undefined) {
+function extractChaserSkill($: cheerio.CheerioAPI) {
 	const chaserSkill: SkillData = {
 		name: '',
 		skillType: 'cs',
@@ -648,7 +663,13 @@ function extractChaserSkill($: cheerio.CheerioAPI, type: string | undefined) {
 		upgrades: [],
 	};
 
-	$('.tabber.wds-tabber').eq(0).find('.wds-tab__content').each((tabIndex, tabContent) => {
+	// Find the Chaser Skill heading
+	const chaserSkillHeading = $('h3:has(span#Chaser_Skill)');
+
+	// Find the first tabber after the Chaser Skill heading
+	const chaserSkillTabber = chaserSkillHeading.nextAll('.tabber.wds-tabber').first();
+	
+	chaserSkillTabber.find('.wds-tab__content').each((tabIndex, tabContent) => {
 		const isPvP = tabIndex === 1;
 		$(tabContent).find('table.wikitable').each((_, table) => {
 			let currentCategory = '';
@@ -731,7 +752,7 @@ function extractChaserSkill($: cheerio.CheerioAPI, type: string | undefined) {
 	return chaserSkill;
 }
 
-function extractFlatChaserSkill($: cheerio.CheerioAPI, type: string | undefined) {
+function extractFlatChaserSkill($: cheerio.CheerioAPI) {
 	const chaserSkill: SkillData = {
 		name: '',
 		skillType: 'cs',
@@ -742,64 +763,67 @@ function extractFlatChaserSkill($: cheerio.CheerioAPI, type: string | undefined)
 		cooldown: 'N/A',
 		upgrades: [],
 	};
+	// Find the Chaser Skill heading
+	const chaserSkillHeading = $('h2:has(span#Chaser_Skill)');
 
-	$('table.wikitable').each((_, table) => {
-		let currentCategory = '';
-		let additionalEffectImages = [] as string[];
-		let upgradedImage = '';
+	// Find the first wikitable after the Chaser Skill heading
+	const chaserSkillTable = chaserSkillHeading.nextAll('table.wikitable').first();
 
-		$(table).find('tbody tr').each((_, row) => {
-			const $row = $(row);
-			const $cells = $row.find('td, th');
+	let currentCategory = '';
+	let additionalEffectImages = [] as string[];
+	let upgradedImage = '';
 
-			if ($cells.length === 1 && $cells.attr('colspan')) {
-				currentCategory = $cells.text().trim();
-				return;
-			}
+	chaserSkillTable.find('tbody tr').each((_, row) => {
+		const $row = $(row);
+		const $cells = $row.find('td, th');
 
-			if ($cells.filter('th[scope="col"]').length > 0) {
-				return;
-			}
+		if ($cells.length === 1 && $cells.attr('colspan')) {
+			currentCategory = $cells.text().trim();
+			return;
+		}
 
-			switch (currentCategory) {
-				case 'DEFAULT':
-					chaserSkill.image = $row.find('td').eq(0).find('img').attr('data-src') || $row.find('td').eq(0).find('img').attr('src') || '';
-					chaserSkill.image = getImageString(chaserSkill.image);
-					chaserSkill.name = $row.find('td').eq(1).find('b').text().trim();
-					chaserSkill.description = $row.find('td').last().html() || '';
-					break;
-				case 'UPGRADED':
-					if ($cells.length === 4) {
-						upgradedImage = $row.find('td').eq(0).find('img').attr('data-src') || $row.find('td').eq(0).find('img').attr('src') || '';
-						return;
-					}
+		if ($cells.filter('th[scope="col"]').length > 0) {
+			return;
+		}
 
-					let code = $row.find('td').eq($cells.length === 4 ? 2 : 0).text().trim();
-					if (code !== 'LVL 3') {
-						return;
-					}
+		switch (currentCategory) {
+			case 'DEFAULT':
+				chaserSkill.image = $row.find('td').eq(0).find('img').attr('data-src') || $row.find('td').eq(0).find('img').attr('src') || '';
+				chaserSkill.image = getImageString(chaserSkill.image);
+				chaserSkill.name = $row.find('td').eq(1).find('b').text().trim();
+				chaserSkill.description = $row.find('td').last().html() || '';
+				break;
+			case 'UPGRADED':
+				if ($cells.length === 4) {
+					upgradedImage = $row.find('td').eq(0).find('img').attr('data-src') || $row.find('td').eq(0).find('img').attr('src') || '';
+					return;
+				}
 
-					const upgradedDescription = $row.find('td').last().html() || '';
-					chaserSkill.image = getImageString(upgradedImage) || '';
-					chaserSkill.description = upgradedDescription;
-					break;
-				case 'ADDITIONAL EFFECT':
-					if ($cells.length === 3) {
-						additionalEffectImages = $row.find('td').eq(0).find('img').map((_, img) => {
-							return getImageString($(img).attr('data-src') || $(img).attr('src') || '');
-						}).get();
-						return;
-					}
+				let code = $row.find('td').eq($cells.length === 4 ? 2 : 0).text().trim();
+				if (code !== 'LVL 3') {
+					return;
+				}
 
-					const description = $row.find('td').last().html() || '';
-					chaserSkill.upgrades?.push({
-						upgradeType: 'cs',
-						description,
-						image: additionalEffectImages[additionalEffectImages.length - 1]
-					});
-					break;
-			}
-		});
+				const upgradedDescription = $row.find('td').last().html() || '';
+				chaserSkill.image = getImageString(upgradedImage) || '';
+				chaserSkill.description = upgradedDescription;
+				break;
+			case 'ADDITIONAL EFFECT':
+				if ($cells.length === 3) {
+					additionalEffectImages = $row.find('td').eq(0).find('img').map((_, img) => {
+						return getImageString($(img).attr('data-src') || $(img).attr('src') || '');
+					}).get();
+					return;
+				}
+
+				const description = $row.find('td').last().html() || '';
+				chaserSkill.upgrades?.push({
+					upgradeType: 'cs',
+					description,
+					image: additionalEffectImages[additionalEffectImages.length - 1]
+				});
+				break;
+		}
 	});
 
 	return chaserSkill;
