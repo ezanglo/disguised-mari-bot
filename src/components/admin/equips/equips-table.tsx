@@ -59,7 +59,7 @@ export function EquipsTable({
 										alt={item.gearType}
 										width={100}
 										height={100}
-										className="size-4"
+										className="size-16 rounded-lg"
 									/>
 								)}
 								<span>{item.name}</span>

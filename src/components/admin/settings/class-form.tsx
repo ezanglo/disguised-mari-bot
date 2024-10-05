@@ -47,9 +47,6 @@ export function ClassForm({
 		if(valid){
 			onSubmit?.(form.getValues())
 		}
-		else {
-			form.reset();
-		}
 	}
 	
 	return (

@@ -66,7 +66,7 @@ export function PetsTable({
 									alt={item.name}
 									width={100}
 									height={100}
-									className="size-5"
+									className="size-16 rounded-lg"
 								/>
 								{item.name}
 							</div>

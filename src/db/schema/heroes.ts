@@ -1,4 +1,4 @@
-import { attributeTypes, classTypes, listItems, tierTypes } from "@/db/schema/types";
+import { attributeTypes, classTypes, equipTypes, listItems, tierTypes } from "@/db/schema/types";
 import { timestampColumns } from "@/db/schema/users";
 import { boolean, integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
 
@@ -11,6 +11,8 @@ export const heroes = pgTable("hero", {
 	image: text("image"),
 	discordEmote: text("discord_emote"),
 	thumbnail: text("thumbnail"),
+	exclusiveWeapon: uuid("exclusive_weapon")
+	.references(() => equipTypes.id, { onDelete: "set null"}),
 	tierType: text("tier_type").notNull()
 	.references(() => tierTypes.code),
 	classType: text("class_type").notNull()

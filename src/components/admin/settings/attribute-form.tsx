@@ -44,9 +44,6 @@ export function AttributeForm({
 		if(valid){
 			onSubmit?.(form.getValues())
 		}
-		else {
-			form.reset();
-		}
 	}
 	
 	return (

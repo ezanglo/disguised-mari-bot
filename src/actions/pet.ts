@@ -51,14 +51,14 @@ export const insertPet = async (payload: PetFormSchema) => {
 	return response;
 }
 
-export const updatePet = async (payload: PetFormSchema) => {
+export const updatePet = async (payload: Partial<PetFormSchema>) => {
 	const user = await getAuthorizedUser();
 	if (!user) {
 		throw new Error("Unauthorized");
 	}
 
 	const pet = await db.query.pets.findFirst({
-		where: eq(pets.id, payload.id || '')
+		where: eq(pets.code, payload.code || '')
 	})
 	if (!pet) {
 		throw new Error("Trait type not found");
@@ -66,9 +66,10 @@ export const updatePet = async (payload: PetFormSchema) => {
 
 	const response = await db.transaction(async (trx) => {
 
-		const emoteName = GetDiscordEmoteName('hero', payload.name, pet.id);
+		let emoteName = GetDiscordEmoteName('hero', pet.name, pet.id);
 
-		if (pet.discordEmote && payload.name !== pet.name) {
+		if (pet.discordEmote && payload.name && payload.name !== pet.name) {
+			emoteName = GetDiscordEmoteName('hero', payload.name, pet.id);
 			await UpdateDiscordEmoteName(pet.discordEmote, emoteName);
 		}
 
@@ -88,11 +89,10 @@ export const updatePet = async (payload: PetFormSchema) => {
 			}
 		}
 
-
 		return trx.update(pets).set({
 			...payload,
 			updatedBy: user.id,
-		}).where(eq(pets.id, payload.id || '')).returning();
+		}).where(eq(pets.code, payload.code || '')).returning();
 	});
 
 	revalidatePath(ROUTES.ADMIN.TRAITS.BASE);

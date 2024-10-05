@@ -55,7 +55,7 @@ export const insertHero = async (payload: HeroFormSchema) => {
 	return response;
 }
 
-export const updateHero = async (payload: HeroFormSchema) => {
+export const updateHero = async (payload: Partial<HeroFormSchema>) => {
 	const user = await getAuthorizedUser();
 	if(!user){
     throw new Error("Unauthorized");
@@ -69,9 +69,10 @@ export const updateHero = async (payload: HeroFormSchema) => {
 	}
 	
 	const response = await db.transaction(async (trx) => {
-		const emoteName = GetDiscordEmoteName('hero', payload.name, hero.id);
+		let emoteName = GetDiscordEmoteName('hero', hero.name, hero.id);
 		
-		if(hero.discordEmote && payload.name !== hero.name){
+		if(hero.discordEmote && payload.name && payload.name !== hero.name){
+			emoteName = GetDiscordEmoteName('hero', payload.name, hero.id);
 			await UpdateDiscordEmoteName(hero.discordEmote, emoteName);
 		}
 

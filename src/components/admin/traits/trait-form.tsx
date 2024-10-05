@@ -50,9 +50,6 @@ export function TraitForm({
 		if(valid){
 			onSubmit?.(form.getValues())
 		}
-		else {
-			form.reset();
-		}
 	}
 	
 	return (

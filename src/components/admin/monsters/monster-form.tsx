@@ -50,9 +50,6 @@ export function MonsterForm({
 		if(valid){
 			onSubmit?.(form.getValues())
 		}
-		else {
-			form.reset();
-		}
 	}
 	
 	return (

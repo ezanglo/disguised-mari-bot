@@ -70,8 +70,6 @@ export function ContentForm({
 		const valid = await form.trigger();
 		if (valid) {
 			onSubmit?.(form.getValues())
-		} else {
-			form.reset();
 		}
 	}
 

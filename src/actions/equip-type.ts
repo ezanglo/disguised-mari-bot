@@ -19,8 +19,7 @@ export const insertEquip = async (payload: EquipFormSchema) => {
 	
 	const response = await db.transaction(async (trx) => {
 		const result = await trx.insert(equipTypes).values({
-			classType: payload.classType,
-			gearType: payload.gearType,
+			...payload,
 			createdBy: user.id,
 		}).returning().then((res) => res[0] ?? null);
 

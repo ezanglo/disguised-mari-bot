@@ -14,8 +14,6 @@ import { useSearchParams } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
-type EnemyType = typeof enemyTypeEnum.enumValues[number];
-
 const formSchema = createInsertSchema(pets, {
 	name: z.string().min(1),
 	hero: z.string().min(1),
@@ -41,7 +39,7 @@ export function PetForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			...defaultValues,
-			code: 'pet.',
+			name: defaultValues?.name || '',
 			hero: searchParams.get("hero") || defaultValues?.hero || "",
 			tierType: searchParams.get("tierType") || defaultValues?.tierType || "",
 		},
@@ -54,8 +52,6 @@ export function PetForm({
 		const valid = await form.trigger();
 		if (valid) {
 			onSubmit?.(form.getValues())
-		} else {
-			form.reset();
 		}
 	}
 
@@ -111,7 +107,7 @@ export function PetForm({
 						<FormItem>
 							<FormLabel>Code</FormLabel>
 							<FormControl>
-								<Input {...field} value={field.value || `pet.${hero}`}/>
+								<Input value={field.value || `pet.${hero}`} onChange={field.onChange}/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>

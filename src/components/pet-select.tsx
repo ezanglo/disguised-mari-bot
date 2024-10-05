@@ -11,12 +11,14 @@ type ClassSelectProps = {
 	value?: string,
 	onValueChange?: (value?: string) => void,
 	className?: string,
+	children?: React.ReactNode,
 }
 
 export function PetSelect({
 	value,
 	onValueChange,
-	className
+	className,
+	children
 }: ClassSelectProps) {
 	
 	const {data, isLoading} = useLists('pets')
@@ -35,6 +37,7 @@ export function PetSelect({
 			options={options}
 			value={value}
 			onValueChange={onValueChange}
+			trigger={children}
 		/>
 	)
 }
