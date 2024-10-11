@@ -170,7 +170,7 @@ export function HeroDetails({
               {skill.upgrades.map((upgrade, index) => {
                 const currentSkill = getCurrentSkill(skill.skill, upgrade);
                 return (
-                  <HoverCard>
+                  <HoverCard key={index}>
                     <HoverCardTrigger asChild>
                       <Button
                         variant="outline"
