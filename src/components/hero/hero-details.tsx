@@ -38,11 +38,11 @@ export function HeroDetails({
 }: HeroDetailsProps) {
 
   const skillMap = [
-    { skill: 's1', label: 'Skill 1', upgrades: ['base', 'lb', 'si'] },
-    { skill: 's2', label: 'Skill 2', upgrades: ['base', 'lb', 'si'] },
-    { skill: 'pass', label: 'Passive', upgrades: ['base', 'lb', 'si'] },
+    { skill: 's1', label: 'Skill 1', upgrades: ['base', 'si'] },
+    { skill: 's2', label: 'Skill 2', upgrades: ['base', 'si'] },
+    { skill: 'pass', label: 'Passive', upgrades: ['base','si'] },
     { skill: 'ss', label: 'Special', upgrades: ['base'] },
-    { skill: 'cs', label: 'Chaser', upgrades: ['base', 'csr', 'si'] },
+    { skill: 'cs', label: 'Chaser', upgrades: ['base', 'si'] },
   ]
 
 
@@ -162,7 +162,6 @@ export function HeroDetails({
           <div className="grid grid-cols-4 gap-3 items-center justify-end text-xs text-center">
             <span></span>
             <span>Base</span>
-            <span>Upgrade</span>
             <span>Imprint</span>
           </div>
           {skillMap.map((skill, skillIndex) => (
