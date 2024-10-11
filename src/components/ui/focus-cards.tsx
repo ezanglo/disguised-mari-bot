@@ -1,6 +1,7 @@
 "use client";
 import { cn, hexToRgb } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 
 export const CardItem = React.memo(
@@ -74,7 +75,7 @@ export const CardItem = React.memo(
 						className="md:size-6 size-5"
 					/>
 				</div>
-				<span className="font-semibold text-lg md:text-2xl">{card.title}</span>
+				<span className="font-semibold text-lg md:text-xl">{card.title}</span>
 			</div>
 		</div>
 	)
@@ -84,6 +85,7 @@ CardItem.displayName = "CardItem";
 
 type Card = {
 	title: string;
+	heroCode: string;
 	src?: string;
 	icon?: string;
 	tierType?: string;
@@ -98,13 +100,14 @@ export function FocusCards({ cards }: { cards: Card[] }) {
 	return (
 		<div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-6 gap-4 mx-auto md:px-8 w-full max-w-6xl">
 			{cards.map((card, index) => (
-				<CardItem
-					key={index}
-					card={card}
-					index={index}
-					hovered={hovered}
-					setHovered={setHovered}
-				/>
+				<Link href={`/heroes/${card.heroCode}`} key={index}>
+					<CardItem
+						card={card}
+						index={index}
+						hovered={hovered}
+						setHovered={setHovered}
+					/>
+				</Link>
 			))}
 		</div>
 	);

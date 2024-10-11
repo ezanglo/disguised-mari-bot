@@ -61,6 +61,7 @@ export default async function HeroesPage({
 	
 	const heroData = data?.map(item => ({
 		title: item.name,
+		heroCode: item.code,
 		color: item.color || '',
 		src: item.thumbnail || '',
 		icon: item.image || '',

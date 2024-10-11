@@ -22,6 +22,7 @@ type HeroPageProps = {
 
 export default async function HeroPage({
 	params,
+	searchParams
 }: HeroPageProps) {
 	const whereConditions = []
 
@@ -67,10 +68,11 @@ export default async function HeroPage({
 		.orderBy(asc(skills.hero), asc(skillTypes.order), asc(upgradeTypes.order));
 
 	return (
-		<div className="flex flex-1 flex-col gap-4 p-4 lg:p-6 h-full mb-4 overflow-hidden">
-			<HeroDetails
+		<div className="flex flex-1 flex-col gap-4 p-4 lg:p-6 h-full mb-4 overflow-hidden max-w-6xl mx-auto">
+      <HeroDetails 
         hero={hero} 
         heroSkills={heroSkills} 
+        readonly={true}
       />
 		</div>
 	)

@@ -33,8 +33,6 @@ export function ExclusiveWeaponSelect({
 		value: item.id,
 		image: item.image,
 	})) : []
-
-	console.log({options})
 	
 	return (
 		<Combobox
