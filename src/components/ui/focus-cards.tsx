@@ -53,31 +53,28 @@ export const CardItem = React.memo(
 					<span>{card.title}</span>
 				</div>
 			)}
-			<div
-				className={cn(
-					hovered === index ? "opacity-100" : "opacity-0"
-				)}
-			>
-				<div className="absolute bottom-0 left-0 flex flex-col gap-1 bg-background/50 w-full p-2">
-					<div className="flex items-center gap-1 w-full">
-						<Image
-							src={card.tierType || ""}
-							alt={card.title} width={32} height={32}
-							className="size-6"
-						/>
-						<Image
-							src={card.classType || ""}
-							alt={card.title} width={32} height={32}
-							className="size-6"
-						/>
-						<Image
-							src={card.attributeType || ""}
-							alt={card.title} width={32} height={32}
-							className="size-6"
-						/>
-					</div>
-					<span className="font-semibold text-2xl">{card.title}</span>
+			<div className={cn(
+				"absolute bottom-0 left-0 flex flex-col gap-1 bg-background/50 w-full p-2",
+				hovered === index ? "bg-background/90 " : "bg-background/50 "
+			)}>
+				<div className="flex items-center gap-1 w-full">
+					<Image
+						src={card.tierType || ""}
+						alt={card.title} width={32} height={32}
+						className="md:size-6 size-5"
+					/>
+					<Image
+						src={card.classType || ""}
+						alt={card.title} width={32} height={32}
+						className="md:size-6 size-5"
+					/>
+					<Image
+						src={card.attributeType || ""}
+						alt={card.title} width={32} height={32}
+						className="md:size-6 size-5"
+					/>
 				</div>
+				<span className="font-semibold text-lg md:text-2xl">{card.title}</span>
 			</div>
 		</div>
 	)
@@ -95,11 +92,11 @@ type Card = {
 	color?: string;
 };
 
-export function FocusCards({cards}: { cards: Card[] }) {
+export function FocusCards({ cards }: { cards: Card[] }) {
 	const [hovered, setHovered] = useState<number | null>(null);
-	
+
 	return (
-		<div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-4 mx-auto md:px-8 w-full max-w-6xl">
+		<div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-6 gap-4 mx-auto md:px-8 w-full max-w-6xl">
 			{cards.map((card, index) => (
 				<CardItem
 					key={index}
