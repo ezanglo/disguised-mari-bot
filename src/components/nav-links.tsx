@@ -1,14 +1,15 @@
 "use client";
 
+import { ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export const links = [
-	{ label: 'Home', href: '/' },
-	{ label: 'Heroes', href: '/heroes' },
-	{ label: 'Pets', href: '/pets' },
-	{ label: 'Lineups', href: '/lineups' }
+	{ label: 'Home', href: ROUTES.BASE },
+	{ label: 'Heroes', href: ROUTES.HEROES.BASE },
+	{ label: 'Equips', href: ROUTES.EQUIPS.BASE },
+	{ label: 'Lineups', href: ROUTES.LINEUPS.BASE }
 ]
 
 export function NavLinks() {

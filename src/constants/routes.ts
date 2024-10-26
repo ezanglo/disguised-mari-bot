@@ -39,9 +39,18 @@ const ADMIN = {
 	},
 }
 
+const HEROES = {
+	BASE: '/heroes',
+}
+
 const LINEUPS = {
 	BASE: '/lineups',
 	CREATE: '/lineups/create',
+}
+
+const EQUIPS = {
+	BASE: '/equips',
+	CREATE: '/equips/create',
 }
 
 const PROFILE = {
@@ -53,5 +62,7 @@ export const ROUTES = {
 	BASE,
 	PROFILE,
 	ADMIN,
-	LINEUPS
+	HEROES,
+	LINEUPS,
+	EQUIPS,
 }
